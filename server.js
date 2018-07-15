@@ -1,9 +1,9 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const historyFallback = require('connect-history-api-fallback');
-const morgan = require('morgan');
+import express from 'express';
+import bodyParser from 'body-parser';
+import historyFallback from 'connect-history-api-fallback';
+import morgan from 'morgan';
 
-const authConfig = require('./server/config/auth.config');
+import authConfig from './server/config/auth.config';
 
 const { NODE_ENV = 'development', PORT = 8080 } = process.env;
 
@@ -19,13 +19,13 @@ app.set('authExpireMinutes', authConfig.authExpireMinutes);
 // use morgan to log requests to the console
 app.use(morgan('dev'));
 
-// set up routing
-// var apiRouter = require('./router')(app);
-app.use(historyFallback());
-
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From Express' });
 });
+
+// set up routing
+// var apiRouter = require('./router')(app);
+app.use(historyFallback());
 
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files
