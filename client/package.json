@@ -28,7 +28,6 @@
     "react-dom": "^16.4.1",
     "react-scripts": "^1.1.4"
   },
-  "proxy": "http://localhost:8080/",
   "devDependencies": {
     "@storybook/react": "^3.4.8",
     "@storybook/addon-actions": "^3.4.8",
@@ -36,5 +35,6 @@
     "@storybook/addons": "^3.4.8",
     "babel-core": "^6.26.3",
     "babel-runtime": "^6.26.0"
-  }
+  },
+  "proxy": "http://localhost:8080/"
 }
