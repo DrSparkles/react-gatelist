@@ -1,6 +1,12 @@
 {
-  "name": "react-express-mobx",
+  "name": "ncrf-gatelist",
   "version": "1.0.0",
+  "description": "Gatelist site for Nor Cal Ren Faire",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DrSparkles/react-gatelist"
+  },
+  "license": "SEE LICENSE IN license.md",
   "scripts": {
     "client": "cd client && npm start",
     "start-server": "npm-run-all -p build server",
