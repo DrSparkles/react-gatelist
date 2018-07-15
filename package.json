@@ -1,0 +1,31 @@
+{
+  "name": "react-express-mobx",
+  "version": "1.0.0",
+  "scripts": {
+    "client": "cd client && npm start",
+    "server": "nodemon server.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "connect-history-api-fallback": "^1.5.0",
+    "express": "^4.16.3",
+    "immutable": "^3.8.2",
+    "jsonwebtoken": "^8.3.0",
+    "moment": "^2.22.2",
+    "mongodb": "^3.1.1",
+    "monk": "^6.0.6",
+    "morgan": "^1.9.0",
+    "require-directory": "^2.1.1",
+    "superagent": "^3.8.3",
+    "superagent-promise": "^1.1.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "concurrently": "^3.6.0",
+    "mocha": "^5.2.0",
+    "pow-mongodb-fixtures": "^0.14.0",
+    "sinon": "^6.1.3"
+  }
+}
