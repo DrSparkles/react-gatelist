@@ -3,7 +3,7 @@ import React from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
 import { inject, observer } from 'mobx-react';
 
-//import mainStyles from '../../../styles/masterStyle.less';
+import mainStyles from '../../../styles/masterStyle.css';
 
 import Header from '../../Header';
 import Home from '../Home';
@@ -32,7 +32,7 @@ export default class Layout extends React.Component {
   render(){
     if (this.props.commonStore.appLoaded) {
       return (
-        <div id='Layout'>
+        <div id='layout'>
           <Header />
           <Switch>
             <Route path="/login" component={Login} />
