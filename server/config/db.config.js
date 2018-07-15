@@ -1,13 +1,13 @@
 
 const dbConfig = {
   test: {
-    connection: 'localhost:27017/branchtasks_test'
+    connection: 'localhost:27017/gatelist_test'
   },
   development: {
-    connection: 'localhost:27017/branchtasks'
+    connection: 'localhost:27017/gatelist_dev'
   },
   production: {
-    connection: 'localhost:27017/branchtasks'
+    connection: 'localhost:27017/gatelist'
   }
 };
 

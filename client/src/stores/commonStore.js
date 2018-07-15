@@ -9,7 +9,7 @@ class CommonStore {
    * Application name
    * @type {string}
    */
-  @observable appName = 'Blank';
+  @observable appName = 'NCRF Gatelist';
 
   /**
    * User logged in token
