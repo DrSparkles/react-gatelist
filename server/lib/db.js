@@ -6,7 +6,9 @@ import monk from 'monk';
  * Connect to our database
  * @type {Promise<"monk".IMonkManager> & "monk".IMonkManager}
  */
-export const db = monk(dbConfig.connection);
+
+//console.log('dbConfigs', dbConfig);
+export const db = monk(dbConfig.connection.host);
 
 /**
  * Given an id in a json object, return an ObjectId

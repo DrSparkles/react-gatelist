@@ -1,3 +1,4 @@
 .css
 /build
 /client/build
+.env

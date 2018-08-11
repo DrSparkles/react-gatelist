@@ -23,7 +23,7 @@ export default class Login extends React.Component {
     this.props.authStore.reset();
   }
 
-  handleUsernameChange = e => this.props.authStore.setUsername(e.target.value);
+  handleEmailChange = e => this.props.authStore.setEmail(e.target.value);
   handlePasswordChange = e => this.props.authStore.setPassword(e.target.value);
   handleSubmitForm = (e) => {
     e.preventDefault();
@@ -54,10 +54,10 @@ export default class Login extends React.Component {
 
                 <div className="form-group">
                   <input
-                    type="username"
-                    placeholder="User Name"
-                    value={values.username}
-                    onChange={this.handleUsernameChange}
+                    type="email"
+                    placeholder="Email"
+                    value={values.email}
+                    onChange={this.handleEmailChange}
                     className="form-control form-control-sm"
                   />
                 </div>

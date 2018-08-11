@@ -1,3 +1,6 @@
+// load environment variables
+require('dotenv').config();
+
 import express from 'express';
 import bodyParser from 'body-parser';
 import historyFallback from 'connect-history-api-fallback';

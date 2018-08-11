@@ -23,11 +23,15 @@ class User {
    * @returns {*}
    */
   createNew(userValues, cb){
-    const { email, password } = userValues;
+    const { firstName, lastName, groupName, email, password,  } = userValues;
 
     // make sure our values are set
-    if (email === undefined || email === "" || password === undefined || password === ""){
-      return returnSimpleError("email and password must not be blank.", 400, cb);
+    if (firstName === undefined || firstName === "" ||
+        lastName === undefined || lastName === "" ||
+        groupName === undefined || groupName === "" ||
+        email === undefined || email === "" ||
+        password === undefined || password === ""){
+      return returnSimpleError("all fields are required.", 400, cb);
     }
 
     // make sure the user is unique
@@ -40,7 +44,7 @@ class User {
 
       // save our user with hashed password
       let hash = bcrypt.hashSync(password, 10);
-      this.user_collection.insert({email, password: hash}, (err, doc) => {
+      this.user_collection.insert({firstname: firstName, lastname: lastName, groupname: groupName, email, password: hash}, (err, doc) => {
         return returnSimpleResult(err, doc, cb);
       });
     });

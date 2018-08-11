@@ -1,4 +1,5 @@
-const fixtures = require('pow-mongodb-fixtures').connect('branchtasks_test');
+import { dbConfig } from '../../config/db.config';
+const fixtures = require('pow-mongodb-fixtures').connect(dbConfig.test.host);
 import requireDirectory from 'require-directory';
 
 const fixtureData = requireDirectory(module);

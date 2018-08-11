@@ -9,7 +9,7 @@
   "license": "SEE LICENSE IN license.md",
   "scripts": {
     "client": "cd client && npm start",
-    "start-server": "npm-run-all -p build server",
+    "start-server": "npm-run-all -s build server",
     "server": "nodemon build/server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run start-server\" \"npm run client\"",
     "build": "webpack --config webpack.config.js"
@@ -19,6 +19,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "connect-history-api-fallback": "^1.5.0",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "immutable": "^3.8.2",
     "jsonwebtoken": "^8.3.0",

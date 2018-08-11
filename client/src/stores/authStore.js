@@ -107,6 +107,7 @@ class AuthStore {
   }
 
   /**
+   * firstName, lastName, email, password, groupName
    * Register a new user given the store values
    * @returns {Promise<any>}
    */
@@ -114,7 +115,7 @@ class AuthStore {
     this.inProgress = true;
     this.errors = undefined;
     return agent.Auth
-      .register(this.values.email, this.values.password)
+      .register(this.values.firstName, this.values.lastName, this.values.groupName, this.values.email, this.values.password)
       .then(( user ) => {
         commonStore.setToken(user.result.token);
       })

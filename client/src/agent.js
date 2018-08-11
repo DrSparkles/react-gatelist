@@ -93,11 +93,11 @@ const Auth = {
   current: () => {
     return requests.get('/users/user')
   },
-  login: (username, password) => {
-    return requests.post('/users/authenticate', { username, password })
+  login: (email, password) => {
+    return requests.post('/users/authenticate', { email, password })
   },
-  register: (firstName, lastName, email, password, groupName) => {
-    return requests.post('/users', { firstName, lastName, email, password, groupName})
+  register: (firstName, lastName, groupName, email, password) => {
+    return requests.post('/users', { firstName, lastName, groupName, email, password })
   },
   save: user => {
     return requests.put('/user', { user })
