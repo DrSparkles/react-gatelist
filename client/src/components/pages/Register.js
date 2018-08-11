@@ -34,8 +34,16 @@ export default class Register extends React.Component {
     });
   }
 
-  handleUsernameChange = (ev) => {
-    this.props.authStore.setUsername(ev.target.value);
+  handleFirstNameChange = (ev) => {
+    this.props.authStore.setFirstName(ev.target.value);
+  };
+
+  handleLastNameChange = (ev) => {
+    this.props.authStore.setLastName(ev.target.value);
+  };
+
+  handleEmailChange = (ev) => {
+    this.props.authStore.setEmail(ev.target.value);
   };
 
   handlePasswordChange = (ev) => {
@@ -54,6 +62,10 @@ export default class Register extends React.Component {
     }
 
     this.setState({passwordValidationClass: passwordValidationClass});
+  };
+
+  handleGroupName = (ev) => {
+    this.props.authStore.setGroupName(ev.target.value);
   };
 
   handleSubmitForm = (ev) => {
@@ -84,12 +96,41 @@ export default class Register extends React.Component {
               <div className="form-group">
 
                 <div className="form-group">
-
                   <input
-                    type="username"
-                    placeholder="User Name"
-                    value={values.username}
-                    onChange={this.handleUsernameChange}
+                    type="text"
+                    placeholder="First Name"
+                    value={values.firstName}
+                    onChange={this.handleFirstNameChange}
+                    className="form-control form-control-sm"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <input
+                    type="text"
+                    placeholder="Last Name"
+                    value={values.lastName}
+                    onChange={this.handleLastNameChange}
+                    className="form-control form-control-sm"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <input
+                    type="text"
+                    placeholder="Group Name"
+                    value={values.groupName}
+                    onChange={this.handleGroupName}
+                    className="form-control form-control-sm"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <input
+                    type="text"
+                    placeholder="Email (also login / username)"
+                    value={values.email}
+                    onChange={this.handleEmailChange}
                     className="form-control form-control-sm"
                   />
                 </div>

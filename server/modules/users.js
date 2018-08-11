@@ -15,7 +15,7 @@ class User {
   /**
    * Create a new user in the system
    * {
-   *    username: STRING,
+   *    email: STRING,
    *    password: STRING
    * }
    * @param {object} userValues
@@ -23,24 +23,24 @@ class User {
    * @returns {*}
    */
   createNew(userValues, cb){
-    const { username, password } = userValues;
+    const { email, password } = userValues;
 
     // make sure our values are set
-    if (username === undefined || username === "" || password === undefined || password === ""){
-      return returnSimpleError("Username and password must not be blank.", 400, cb);
+    if (email === undefined || email === "" || password === undefined || password === ""){
+      return returnSimpleError("email and password must not be blank.", 400, cb);
     }
 
     // make sure the user is unique
-    this.user_collection.find({username}, (err, userDoc) => {
+    this.user_collection.find({email}, (err, userDoc) => {
       if (err) return returnSimpleError(err, 400, cb);
 
       if (userDoc.length){
-        return returnSimpleError("That username already exists; please try another!", 400, cb);
+        return returnSimpleError("That email already exists; please try another!", 400, cb);
       }
 
       // save our user with hashed password
       let hash = bcrypt.hashSync(password, 10);
-      this.user_collection.insert({username, password: hash}, (err, doc) => {
+      this.user_collection.insert({email, password: hash}, (err, doc) => {
         return returnSimpleResult(err, doc, cb);
       });
     });
@@ -48,9 +48,9 @@ class User {
   }
 
   /**
-   * Authenticate a user given username and password
+   * Authenticate a user given email and password
    * {
-   *    username: STRING,
+   *    email: STRING,
    *    password: STRING
    * }
    * @param userValues
@@ -59,26 +59,26 @@ class User {
    */
   authenticate(userValues, cb){
 
-    const { username, password } = userValues;
+    const { email, password } = userValues;
 
     // make sure our values are set
-    if (username === undefined || username === "" || password === undefined || password === ""){
-      return returnSimpleError("Username and password must not be blank.", 400, cb);
+    if (email === undefined || email === "" || password === undefined || password === ""){
+      return returnSimpleError("email and password must not be blank.", 400, cb);
     }
 
-    // check to see if the username existss
-    this.user_collection.findOne({username}, (err, userDoc) => {
+    // check to see if the email existss
+    this.user_collection.findOne({email}, (err, userDoc) => {
       if (err) return returnSimpleResult(err, doc, cb);
 
       // and return if it does not exist
-      if (!userDoc) return returnSimpleError("User " + username + " not found.", 400, cb);
+      if (!userDoc) return returnSimpleError("User " + email + " not found.", 400, cb);
 
       // else compare the hashed password to what was sent
       if(bcrypt.compareSync(password, userDoc.password)) {
 
         const payload = {
           _id: userDoc._id,
-          username
+          email
         };
 
         // return the token
@@ -106,17 +106,17 @@ class User {
     if (!payload){
       return returnSimpleError("Could not derive user from auth token.", 400, cb);
     }
-    return this.getUserByUsername(payload, cb);
+    return this.getUserByEmail(payload, cb);
   }
 
   /**
-   * Fetch a user by the username
-   * @param username
+   * Fetch a user by the email
+   * @param email
    * @param cb
    */
-  getUserByUsername(username, cb){
-    this.user_collection.findOne({username: username.username}, ['_id', 'username'], (err, user) => {
-      if (!user) return returnSimpleError("User " + username + " not found.", 400, cb);
+  getUserByEmail(email, cb){
+    this.user_collection.findOne({email: email.email}, ['_id', 'email'], (err, user) => {
+      if (!user) return returnSimpleError("User " + email + " not found.", 400, cb);
       return returnSimpleResult(err, {user}, cb)
     });
   }
@@ -126,7 +126,7 @@ class User {
    * @param cb
    */
   getAll(cb){
-    this.user_collection.find({}, ["_id", "username"], (err, docs) => {
+    this.user_collection.find({}, ["_id", "email"], (err, docs) => {
       return returnSimpleResult(err, docs, cb);
     });
   }

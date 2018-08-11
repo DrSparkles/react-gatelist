@@ -23,19 +23,38 @@ class AuthStore {
 
   /**
    * Logged in user
-   * @type {{username: string, password: string}}
+   * @type {{firstName: string, lastName: string, email: string, password: string, groupName: string}}
    */
   @observable values = {
-    username: '',
+    firstName: '',
+    lastName: '',
+    email: '',
     password: '',
+    groupName: ''
   };
 
   /**
-   * Setter for username
-   * @param {string} username
+   * Set first name
+   * @param {string} firstName
    */
-  @action setUsername(username) {
-    this.values.username = username;
+  @action setFirstName(firstName){
+    this.values.firstName = firstName;
+  }
+
+  /**
+   * Set last name
+   * @param {string} lastName
+   */
+  @action setLastName(lastName){
+    this.values.lastName = lastName;
+  }
+
+  /**
+   * Setter for email
+   * @param {string} email
+   */
+  @action setEmail(email) {
+    this.values.email = email;
   }
 
   /**
@@ -47,11 +66,22 @@ class AuthStore {
   }
 
   /**
+   * Setter for group name
+   * @param {string} groupName
+   */
+  @action setGroupName(groupName) {
+    this.values.groupName = groupName;
+  }
+
+  /**
    * Clear the logged in user, particularly for the sign in or registration form
    */
   @action reset() {
-    this.values.username = '';
+    this.values.firstName = '';
+    this.values.lastName = '';
+    this.values.email = '';
     this.values.password = '';
+    this.values.groupName = '';
   }
 
   /**
@@ -62,7 +92,7 @@ class AuthStore {
     this.inProgress = true;
     this.errors = undefined;
     return agent.Auth
-      .login(this.values.username, this.values.password)
+      .login(this.values.email, this.values.password)
       .then ((userToken) => {
         commonStore.setToken(userToken.result.token);
       })
@@ -84,7 +114,7 @@ class AuthStore {
     this.inProgress = true;
     this.errors = undefined;
     return agent.Auth
-      .register(this.values.username, this.values.password)
+      .register(this.values.email, this.values.password)
       .then(( user ) => {
         commonStore.setToken(user.result.token);
       })

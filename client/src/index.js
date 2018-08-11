@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'mobx-react';
 import { HashRouter } from 'react-router-dom';
 
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import Layout from "./components/pages/Layout";
 
 import commonStore from './stores/commonStore';
