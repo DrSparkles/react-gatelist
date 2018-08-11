@@ -6,8 +6,6 @@ import monk from 'monk';
  * Connect to our database
  * @type {Promise<"monk".IMonkManager> & "monk".IMonkManager}
  */
-
-//console.log('dbConfigs', dbConfig);
 export const db = monk(dbConfig.connection.host);
 
 /**

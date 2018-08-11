@@ -3,10 +3,10 @@ import { db, returnSimpleResult, returnSimpleError, getId } from '../lib/db';
 /**
  * Handle user auth
  */
-class TaskList {
+class Settings {
 
   constructor(){
-    this.task_collection = db.get('tasklist');
+    this.task_collection = db.get('settings');
   }
 
   /**

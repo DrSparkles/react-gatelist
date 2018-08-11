@@ -96,8 +96,8 @@ const Auth = {
   login: (email, password) => {
     return requests.post('/users/authenticate', { email, password })
   },
-  register: (firstName, lastName, groupName, email, password) => {
-    return requests.post('/users', { firstName, lastName, groupName, email, password })
+  register: (firstName, lastName, groupName, email, password, department) => {
+    return requests.post('/users', { firstName, lastName, groupName, email, password, department })
   },
   save: user => {
     return requests.put('/user', { user })

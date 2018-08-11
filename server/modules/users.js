@@ -2,6 +2,7 @@ import { db, returnSimpleResult, returnSimpleError, getIdFromJSON } from '../lib
 import authConfig from '../config/auth.config';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import Settings from './settings';
 
 /**
  * Handle user auth
@@ -10,6 +11,7 @@ class User {
 
   constructor(){
     this.user_collection = db.get('users');
+
   }
 
   /**
@@ -23,14 +25,15 @@ class User {
    * @returns {*}
    */
   createNew(userValues, cb){
-    const { firstName, lastName, groupName, email, password,  } = userValues;
+    const { firstName, lastName, groupName, email, password, department } = userValues;
 
     // make sure our values are set
     if (firstName === undefined || firstName === "" ||
         lastName === undefined || lastName === "" ||
         groupName === undefined || groupName === "" ||
         email === undefined || email === "" ||
-        password === undefined || password === ""){
+        password === undefined || password === "",
+        department === undefined || department === ""){
       return returnSimpleError("all fields are required.", 400, cb);
     }
 
@@ -42,9 +45,22 @@ class User {
         return returnSimpleError("That email already exists; please try another!", 400, cb);
       }
 
-      // save our user with hashed password
+      // hash our password for security
       let hash = bcrypt.hashSync(password, 10);
-      this.user_collection.insert({firstname: firstName, lastname: lastName, groupname: groupName, email, password: hash}, (err, doc) => {
+
+      const insertQuery = {
+        firstname: firstName,
+        lastname: lastName,
+        groupname: groupName,
+        email,
+        password: hash,
+        department,
+        num_gatelist_slots: 10,
+        user_type: 'user'
+      };
+
+      // save our user with hashed password
+      this.user_collection.insert(insertQuery, (err, doc) => {
         return returnSimpleResult(err, doc, cb);
       });
     });

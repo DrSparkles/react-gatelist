@@ -1,4 +1,4 @@
-console.log('dbConfig process', process.env);
+
 const dbConfig = {
   connection: {
     host: process.env.MONGO_HOST,

@@ -30,7 +30,8 @@ class AuthStore {
     lastName: '',
     email: '',
     password: '',
-    groupName: ''
+    groupName: '',
+    department: 'ent'
   };
 
   /**
@@ -115,7 +116,7 @@ class AuthStore {
     this.inProgress = true;
     this.errors = undefined;
     return agent.Auth
-      .register(this.values.firstName, this.values.lastName, this.values.groupName, this.values.email, this.values.password)
+      .register(this.values.firstName, this.values.lastName, this.values.groupName, this.values.email, this.values.password, this.values.department)
       .then(( user ) => {
         commonStore.setToken(user.result.token);
       })
