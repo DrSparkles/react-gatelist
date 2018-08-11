@@ -64,10 +64,6 @@ export default class Register extends React.Component {
     this.setState({passwordValidationClass: passwordValidationClass});
   };
 
-  handleGroupName = (ev) => {
-    this.props.authStore.setGroupName(ev.target.value);
-  };
-
   handleSubmitForm = (ev) => {
     ev.preventDefault();
     this.props.authStore
@@ -111,16 +107,6 @@ export default class Register extends React.Component {
                     placeholder="Last Name"
                     value={values.lastName}
                     onChange={this.handleLastNameChange}
-                    className="form-control form-control-sm"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <input
-                    type="text"
-                    placeholder="Group Name"
-                    value={values.groupName}
-                    onChange={this.handleGroupName}
                     className="form-control form-control-sm"
                   />
                 </div>

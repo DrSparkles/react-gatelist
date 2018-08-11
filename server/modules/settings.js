@@ -15,10 +15,12 @@ class Settings {
    * @returns {*}
    */
   getAllSettings(cb){
+
     this.task_collection.find({}, (err, doc) => {
       if (err) return returnSimpleError(err, 400, cb);
       return returnSimpleResult(err, doc, cb);
     });
+
   }
 
   updateSetting(settingName, settingValue, cb){
@@ -83,4 +85,4 @@ class Settings {
    */
 }
 
-export default new TaskList();
+export default new Settings();

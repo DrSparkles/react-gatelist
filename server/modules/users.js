@@ -2,7 +2,6 @@ import { db, returnSimpleResult, returnSimpleError, getIdFromJSON } from '../lib
 import authConfig from '../config/auth.config';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import Settings from './settings';
 
 /**
  * Handle user auth
@@ -11,7 +10,6 @@ class User {
 
   constructor(){
     this.user_collection = db.get('users');
-
   }
 
   /**
@@ -25,15 +23,13 @@ class User {
    * @returns {*}
    */
   createNew(userValues, cb){
-    const { firstName, lastName, groupName, email, password, department } = userValues;
+    const { firstName, lastName, email, password } = userValues;
 
     // make sure our values are set
     if (firstName === undefined || firstName === "" ||
         lastName === undefined || lastName === "" ||
-        groupName === undefined || groupName === "" ||
         email === undefined || email === "" ||
-        password === undefined || password === "",
-        department === undefined || department === ""){
+        password === undefined || password === ""){
       return returnSimpleError("all fields are required.", 400, cb);
     }
 
@@ -51,12 +47,9 @@ class User {
       const insertQuery = {
         firstname: firstName,
         lastname: lastName,
-        groupname: groupName,
         email,
         password: hash,
-        department,
-        num_gatelist_slots: 10,
-        user_type: 'user'
+        user_type: 'user',
       };
 
       // save our user with hashed password
