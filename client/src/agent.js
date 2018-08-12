@@ -147,5 +147,6 @@ const Settings = {
 
 export default {
   Auth,
-  Groups
+  Groups,
+  Settings
 };
