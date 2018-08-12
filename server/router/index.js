@@ -5,6 +5,7 @@
 module.exports = function(app){
 
   app.use('/api/users', require('./routes/users'));
-  // app.use('/api/lists', require('./routes/tasklist'));
+  app.use('/api/groups', require('./routes/groups'));
+  app.use('/api/settings', require('./routes/settings'));
 
 };

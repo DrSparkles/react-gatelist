@@ -45,11 +45,11 @@ class User {
       let hash = bcrypt.hashSync(password, 10);
 
       const insertQuery = {
-        firstname: firstName,
-        lastname: lastName,
+        firstName,
+        lastName,
         email,
         password: hash,
-        user_type: 'user',
+        userType: 'user',
       };
 
       // save our user with hashed password

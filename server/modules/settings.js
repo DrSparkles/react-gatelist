@@ -1,88 +1,137 @@
 import { db, returnSimpleResult, returnSimpleError, getId } from '../lib/db';
 
-/**
- * Handle settings
- */
 class Settings {
 
   constructor(){
-    this.task_collection = db.get('settings');
+    this.settings_collection = db.get('settings');
+  }
+
+  getSiteSettings(){
+
+    this.settings_collection.find({}, (err, docs) => {
+      if (err) return returnSimpleError(err, 400, cb);
+
+      return returnSimpleResult(null, docs, cb);
+    });
   }
 
   /**
-   * Fetch settings from the database
+   * Fetch a setting by a specific key, which is be passed in
+   * @param key
+   * @param value
+   * @param cb
+   */
+  getSettingByKeyValue(key, value, cb){
+
+    const query = {};
+    if (key === 'settingId' || key === 'settingId'){
+      query[key] = getId(value);
+    }
+    else {
+      query[key] = value;
+    }
+
+    this.settings_collection.find(query, (err, docs) => {
+      if (err) return returnSimpleError(err, 400, cb);
+
+      return returnSimpleResult(null, docs, cb);
+    });
+  }
+
+  /**
+   * Update setting.  The entire setting object is updated at once so special casing doesn't have to be
+   * done to update specific fields - ergo all fields must be passed in through the values object
+   * @param settingId
+   * @param values
    * @param cb
    * @returns {*}
    */
-  getAllSettings(cb){
+  updateSetting(settingId, values, cb){
 
-    this.task_collection.find({}, (err, doc) => {
-      if (err) return returnSimpleError(err, 400, cb);
-      return returnSimpleResult(err, doc, cb);
-    });
+    const { startWeekend, numWeeks, defaultNumGLSlots } = values;
 
-  }
-
-  updateSetting(settingName, settingValue, cb){
-
-    // const query = {_id: getId(listId)};
-    const updateQuery = {
-      $set: {listname: listData.listname}
-    };
-    this.task_collection.update(query, updateQuery, (err, doc) => {
-      if (err) return returnSimpleError(err, 400, cb);
-      return returnSimpleResult(err, doc, cb);
-    });
-  }
-
-  deleteSetting(listId, cb){
-    // if no userId error out
-    if (listId === undefined || listId === ""){
-      return returnSimpleError("Must have a list id to delete the entries.", 400, cb);
+    if (settingId === undefined || settingId === '' ||
+        startWeekend === undefined || startWeekend === '' ||
+        numWeeks === undefined || numWeeks === '' ||
+        defaultNumGLSlots === undefined || defaultNumGLSlots === ''){
+      return returnSimpleError("Missing required information to edit settings", 400, cb);
     }
 
-    // else return our data
-    const listObjectId = getId(listId);
-    this.task_collection.remove({_id: listObjectId}, (err, doc) => {
+    const query = {_id: getId(settingId)};
+    const updateQuery = {
+      $set: {
+        startWeekend: startWeekend,
+        numWeeks: numWeeks,
+        defaultNumGLSlots: defaultNumGLSlots
+      }
+    };
+    this.settings_collection.update(query, updateQuery, (err, doc) => {
       if (err) return returnSimpleError(err, 400, cb);
       return returnSimpleResult(err, doc, cb);
     });
-  }
 
+  }
 
   /**
-   * Create a list for a given user
-   * {
-   *    listname: STRING
-   * }
-   * @param userId
-   * @param listValues
+   * Delete setting
+   * @param settingId
    * @param cb
-
-   createNew(userId, listValues, cb){
-
-    if (userId === undefined || userId === ""){
-      return returnSimpleError("Must have a user id to create a new list.", 400, cb);
+   * @returns {*}
+   */
+  deleteSetting(settingId, cb){
+    if (settingId === undefined || settingId === ""){
+      return returnSimpleError("Must have a setting id to delete the entry.", 400, cb);
     }
 
-    if (listValues.listname === undefined || listValues.listname === ""){
-      return returnSimpleError("Must have a list name to create a new list.", 400, cb);
-    }
-
-    const { listname } = listValues;
-    const userObjectId = getId(userId);
-
-    const listQuery = {
-      userId: userObjectId,
-      listname: listname,
-      tasks: []
-    };
-    this.task_collection.insert(listQuery, (err, doc) => {
+    const settingObjId = getId(settingId);
+    this.settings_collection.remove({_id: settingObjId}, (err, doc) => {
       if (err) return returnSimpleError(err, 400, cb);
       return returnSimpleResult(err, doc, cb);
+    });
+  }
+
+  /**
+   * Create a new setting after checking that all required values are present and a user
+   * with that name doesn't already exist
+   * @param userId
+   * @param settingValues
+   * @param cb
+   * @returns {*}
+
+   createNew(userId, settingValues, cb){
+    const { settingName, numGLSlots, department } = settingValues;
+
+    if (userId === undefined || userId === '' ||
+        settingName === undefined || settingName === '' ||
+        numGLSlots === undefined || numGLSlots === '' ||
+        department === undefined || department === ''){
+      return returnSimpleError("all fields are required.", 400, cb);
+    }
+
+    this.settings_collection.find({settingName}, (err, settingsDoc) => {
+
+      if (err) return returnSimpleError(err, 400, cb);
+
+      if (settingsDoc.length){
+        return returnSimpleError("That setting already exists!", 400, cb);
+      }
+
+      const insertQuery = {
+        userId,
+        settingName,
+        numGLSlots,
+        department
+      };
+
+      this.settings_collection.insert(insertQuery, (err, doc) => {
+        if (err) return returnSimpleError(err, 400, cb);
+        return returnSimpleResult(null, doc, cb);
+      });
+
     });
   }
    */
+
 }
 
 export default new Settings();

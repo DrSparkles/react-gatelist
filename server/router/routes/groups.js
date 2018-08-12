@@ -1,8 +1,6 @@
-import tasksModule from "../../modules/tasks";
-
 const express = require('express');
 const router = express.Router();
-import taskListsModule from '../../modules/tasklist';
+import groupsModule from '../../modules/groups';
 import authMiddleware from '../../lib/tokenAuth.middleware';
 import { errorHandler } from "../../lib/db";
 
@@ -12,40 +10,55 @@ import { errorHandler } from "../../lib/db";
 router.use(authMiddleware);
 
 router.route('/')
+  /**
+   * Create New
+   */
   .post((req, res) => {
     const { body } = req;
     const userId = req.decoded._id;
-    taskListsModule.createNew(userId, body, (err, docs) => {
+    groupsModule.createNew(userId, body, (err, docs) => {
       if (err) return errorHandler(err, res);
       return res.json(docs);
     });
   })
+  /**
+   * Get user's groups
+   */
   .get((req, res) => {
-    taskListsModule.getUsersLists(req.decoded._id, (err, docs) => {
+    groupsModule.getUsersGroups(req.decoded._id, (err, docs) => {
       if (err) return errorHandler(err, res);
       return res.json(docs);
     });
   });
 
 router.route('/:_id')
+  /**
+   * Get by group id
+   */
   .get((req, res) => {
-    const listId = req.params._id;
-    taskListsModule.getList(listId, (err, docs) => {
+    const groupId = req.params._id;
+    groupsModule.getGroupByKeyValue('groupId', groupId, (err, docs) => {
       if (err) return errorHandler(err, res);
       return res.json(docs);
     });
   })
+  /**
+   * Delete by group id
+   */
   .delete((req, res) => {
-    const listId = req.params._id;
-    taskListsModule.deleteList(listId, (err, docs) => {
+    const groupId = req.params._id;
+    groupsModule.deleteGroup(groupId, (err, docs) => {
       if (err) return errorHandler(err, res);
       return res.json(docs);
     });
   })
+  /**
+   * Edit by group id
+   */
   .put((req, res) => {
     const { _id }  = req.params;
     const update = req.body;
-    taskListsModule.updateList(_id, req.decoded._id, update, (err, docs) => {
+    groupsModule.updateGroup(_id, update, (err, docs) => {
       if (err) return errorHandler(err, res);
       return res.json(docs);
     });

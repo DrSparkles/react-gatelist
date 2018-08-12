@@ -23,15 +23,13 @@ class AuthStore {
 
   /**
    * Logged in user
-   * @type {{firstName: string, lastName: string, email: string, password: string, groupName: string}}
+   * @type {{firstName: string, lastName: string, email: string, password: string}}
    */
   @observable values = {
     firstName: '',
     lastName: '',
     email: '',
-    password: '',
-    groupName: '',
-    department: 'ent'
+    password: ''
   };
 
   /**
@@ -67,14 +65,6 @@ class AuthStore {
   }
 
   /**
-   * Setter for group name
-   * @param {string} groupName
-   */
-  @action setGroupName(groupName) {
-    this.values.groupName = groupName;
-  }
-
-  /**
    * Clear the logged in user, particularly for the sign in or registration form
    */
   @action reset() {
@@ -82,7 +72,6 @@ class AuthStore {
     this.values.lastName = '';
     this.values.email = '';
     this.values.password = '';
-    this.values.groupName = '';
   }
 
   /**
@@ -116,7 +105,7 @@ class AuthStore {
     this.inProgress = true;
     this.errors = undefined;
     return agent.Auth
-      .register(this.values.firstName, this.values.lastName, this.values.groupName, this.values.email, this.values.password, this.values.department)
+      .register(this.values.firstName, this.values.lastName, this.values.email, this.values.password)
       .then(( user ) => {
         commonStore.setToken(user.result.token);
       })

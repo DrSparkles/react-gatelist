@@ -96,82 +96,56 @@ const Auth = {
   login: (email, password) => {
     return requests.post('/users/authenticate', { email, password })
   },
-  register: (firstName, lastName, groupName, email, password, department) => {
-    return requests.post('/users', { firstName, lastName, groupName, email, password, department })
+  register: (firstName, lastName, email, password) => {
+    return requests.post('/users', { firstName, lastName, email, password })
   },
   save: user => {
     return requests.put('/user', { user })
   }
 };
 
-const List = {
+const Groups = {
   createNew: (saveData) => {
-    return requests.post('/lists', saveData);
+    return requests.post('/groups', saveData);
   },
-  getAllForUser: () => {
-    return requests.get('/lists');
-  },
-  getEntry: (listId) => {
-    const url = "/lists/" + listId;
+  getUsersGroups: () => {
+    const url = "/groups";
     return requests.get(url);
   },
-  editEntry: (listId, saveData) => {
-    const url = '/lists/' + listId;
+  getGroup: (groupId) => {
+    const url = "/groups/" + groupId;
+    return requests.get(url);
+  },
+  editGroup: (groupId, saveData) => {
+    const url = "/groups/" + groupId;
     return requests.put(url, saveData);
   },
-  deleteEntry: (listId) => {
-    const url = "/lists/" + listId;
+  deleteGroup: (groupId) => {
+    const url = "/groups/" + groupId;
     return requests.del(url);
   }
 };
 
-const Task = {
-  createNew: (listId, saveData) => {
-    const url = "/lists/" + listId + "/tasks";
-    return requests.post(url, saveData);
+const Settings = {
+  getSiteSettings: () => {
+    const url = "/settings";
+    return requests.get(url);
   },
-  editEntry: (listId, taskId, saveData) => {
-    const url = '/lists/' + listId + "/tasks/" + taskId;
+  getSetting: (settingId) => {
+    const url = "/settings/" + settingId;
+    return requests.get(url);
+  },
+  editSettings: (settingId, saveData) => {
+    const url = "/settings/" + settingId;
     return requests.put(url, saveData);
   },
-  deleteEntry: (listId, taskId) => {
-    const url = "/lists/" + listId + "/tasks/" + taskId;
+  deleteSetting: (settingId) => {
+    const url = "/settings/" + settingId;
     return requests.del(url);
   }
 };
-
-/**
- * Blood Pressure routes
- * @type {{getAll: function(), getAllForUser: function(*), getEntry: function(*), createNew: function(*=), editEntry: function(*=), deleteEntry: function(*)}}
-
-const BP = {
-  getAll: () => {
-    return requests.get('/bp');
-  },
-  getAllForUser: (userId) => {
-    const url = '/bp/user/' + userId;
-    return requests.get(url);
-  },
-  getEntry: (bpId) => {
-    const url = "/bp/" + bpId;
-    return requests.get(url);
-  },
-  createNew: (saveData) => {
-    return requests.post('/bp', saveData);
-  },
-  editEntry: (saveData) => {
-    const url = '/bp/' + saveData._id;
-    return requests.put(url, saveData);
-  },
-  deleteEntry: (_id) => {
-    const url = '/bp/' + _id;
-    return requests.del(url);
-  }
-};
- */
 
 export default {
   Auth,
-  List,
-  Task
+  Groups
 };

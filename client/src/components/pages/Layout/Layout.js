@@ -9,6 +9,8 @@ import Header from '../../Header';
 import Home from '../Home';
 import Login from '../Login';
 import Register from '../Register';
+import PrivateRoute from "../../PrivateRoute";
+import Groups from "../Groups";
 
 @inject('commonStore', 'userStore')
 @withRouter
@@ -37,6 +39,7 @@ export default class Layout extends React.Component {
           <Switch>
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
+            <PrivateRoute path="/add-group" component={Groups} />
             <Route path="/list/:listId/tasks/:taskId?" component={Home} />
             <Route path="/list/:listId?" component={Home} />
             <Route path="/" component={Home} />
