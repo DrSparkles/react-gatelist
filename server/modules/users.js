@@ -128,7 +128,7 @@ class User {
    * @param cb
    */
   getUserByEmail(email, cb){
-    this.user_collection.findOne({email: email.email}, ['_id', 'email'], (err, user) => {
+    this.user_collection.findOne({email: email.email}, ['_id', 'firstName', 'lastName', 'email', 'userType'], (err, user) => {
       if (!user) return returnSimpleError("User " + email + " not found.", 400, cb);
       return returnSimpleResult(err, {user}, cb)
     });

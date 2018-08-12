@@ -3,6 +3,7 @@ import React from "react";
 import { Switch, Route, withRouter } from "react-router-dom";
 import { inject, observer } from 'mobx-react';
 
+/* eslint-disable */
 import mainStyles from '../../../styles/masterStyle.css';
 
 import Header from '../../Header';
@@ -11,6 +12,10 @@ import Login from '../Login';
 import Register from '../Register';
 import PrivateRoute from "../../PrivateRoute";
 import Groups from "../Groups";
+import Profile from "../Profile";
+import Settings from "../Settings";
+import Users from "../Users";
+import Gatelist from "../Gatelist";
 
 @inject('commonStore', 'userStore')
 @withRouter
@@ -40,8 +45,11 @@ export default class Layout extends React.Component {
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
             <PrivateRoute path="/add-group" component={Groups} />
-            <Route path="/list/:listId/tasks/:taskId?" component={Home} />
-            <Route path="/list/:listId?" component={Home} />
+            <PrivateRoute path="/groups/:groupId?" component={Groups} />
+            <PrivateRoute path="/profile" component={Profile} />
+            <PrivateRoute path="/settings" component={Settings} />
+            <PrivateRoute path="/users" component={Users} />
+            <PrivateRoute path="/gatelist" component={Gatelist} />
             <Route path="/" component={Home} />
           </Switch>
         </div>

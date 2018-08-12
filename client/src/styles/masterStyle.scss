@@ -16,3 +16,16 @@ body {
   margin: 0 auto 0 auto;
   height:100%;
 }
+
+.main-nav {
+  margin:0;
+  padding:0;
+  float: right;
+}
+
+.main-nav li {
+  list-style:none;
+  display:inline;
+  padding:0 10px 0 10px;
+  margin:0;
+}

@@ -6,7 +6,7 @@ class Settings {
     this.settings_collection = db.get('settings');
   }
 
-  getSiteSettings(){
+  getSiteSettings(cb){
 
     this.settings_collection.find({}, (err, docs) => {
       if (err) return returnSimpleError(err, 400, cb);

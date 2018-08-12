@@ -19,9 +19,9 @@ export default class MainNav extends React.Component {
   render(){
     return (
       <div>
+        <div>Is logged in: {this.props.authStore.isLoggedIn} / {this.props.authStore.isLoggedIn ? 'was true' : 'was false'}</div>
         <LoggedOutView currentUser={this.props.userStore.currentUser} />
-
-        <LoggedInView currentUser={this.props.userStore.currentUser} onLogout={this.handleClickLogout} />
+        <LoggedInView isSuperAdmin={this.props.userStore.isSuperAdmin} isAdmin={this.props.userStore.isAdmin} currentUser={this.props.userStore.currentUser} onLogout={this.handleClickLogout} />
       </div>
     );
   }
@@ -30,20 +30,9 @@ export default class MainNav extends React.Component {
 const LoggedOutView = props => {
   if (!props.currentUser) {
     return (
-      <ul className='nav'>
-
-        <li className="nav-item">
-          <Link to="/login" className="nav-link">
-            Sign in
-          </Link>
-        </li>
-
-        <li className="nav-item">
-          <Link to="/register" className="nav-link">
-            Sign up
-          </Link>
-        </li>
-
+      <ul className='main-nav'>
+        <li><Link to="/login">Sign in</Link></li>
+        <li><Link to="/register">Sign up</Link></li>
       </ul>
     );
   }
@@ -53,14 +42,46 @@ const LoggedOutView = props => {
 const LoggedInView = props => {
   if (props.currentUser) {
     return (
-      <ul className='nav'>
-
-        <li className="nav-item">
-          <a href='#' onClick={props.onLogout} className="nav-link">Log Out</a>
-        </li>
-      </ul>
+      <div>
+        <SuperAdminOptions isSuperAdmin={props.isSuperAdmin} isAdmin={props.isAdmin} />
+        <AdminOptions isSuperAdmin={props.isSuperAdmin} isAdmin={props.isAdmin} />
+        <ul className='main-nav'>
+          <li><Link to='/profile'>Profile</Link></li>
+          <li><Link to='# ' onClick={props.onLogout}>Log Out</Link></li>
+        </ul>
+        <br clear='all' />
+      </div>
     );
   }
+  return null;
+};
 
+const AdminOptions = props => {
+  if (props.isAdmin || props.isSuperAdmin){
+    return (
+      <div>
+        <ul className='main-nav'>
+          <li><Link to='/gatelist'>Gatelist</Link></li>
+          <li><Link to='/groups'>Groups</Link></li>
+        </ul>
+        <br clear='all' />
+      </div>
+    );
+  }
+  return null;
+};
+
+const SuperAdminOptions = props => {
+  if (props.isSuperAdmin){
+    return (
+      <div>
+        <ul className='main-nav'>
+          <li><Link to='/settings'>Settings</Link></li>
+          <li><Link to='/users'>Users</Link></li>
+        </ul>
+        <br clear='all' />
+      </div>
+    );
+  }
   return null;
 };

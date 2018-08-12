@@ -1,5 +1,7 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import agent from '../agent';
+import authStore from './authStore';
+import settingsStore from "./settingStore";
 
 /**
  * Handle user actions and state
@@ -15,6 +17,14 @@ class UserStore {
    * @type {object}
    */
   @observable currentUser;
+
+  @computed get isAdmin(){
+    return this.currentUser && this.currentUser.userType !== undefined && this.currentUser.userType === 'admin';
+  }
+
+  @computed get isSuperAdmin(){
+    return this.currentUser && this.currentUser.userType !== undefined && this.currentUser.userType === 'superadmin';
+  }
 
   /**
    * Loading state for fetching the user; true if we're accessing the db, false if we've fetched the user
@@ -38,9 +48,18 @@ class UserStore {
     return agent.Auth
       .current()
       .then(action((user) => {
-        return this.currentUser = user.result.user;
+        console.log('userstore pull user current user', user.result.user);
+        this.userType = user.result.user.userType;
+        this.currentUser = user.result.user;
       }))
-      .finally(action(() => { this.loadingUser = false; }))
+      .then(() => {
+        settingsStore.loadSettings();
+      })
+      .finally(action(() => {
+        console.log('in finally');
+        authStore.setUserLoggedIn(true);
+        this.loadingUser = false;
+      }))
   }
 
   /**

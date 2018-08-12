@@ -1,7 +1,8 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import agent from '../agent';
 import userStore from './userStore';
 import commonStore from './commonStore';
+import settingsStore from './settingStore';
 
 /**
  * Store for handling user auth
@@ -13,6 +14,16 @@ class AuthStore {
    * @type {boolean}
    */
   @observable inProgress = false;
+
+  @observable userLoggedIn = false;
+
+  @action setUserLoggedIn(loggedInState){
+    this.userLoggedIn = loggedInState;
+  }
+
+  @computed get isLoggedIn(){
+    return this.userLoggedIn;
+  }
 
   /**
    * Container for any errors returned from the save process, used for
@@ -93,7 +104,9 @@ class AuthStore {
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action(() => { this.inProgress = false; }));
+      .finally(action(() => {
+        this.inProgress = false;
+      }));
   }
 
   /**
@@ -116,7 +129,9 @@ class AuthStore {
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action(() => { this.inProgress = false; }));
+      .finally(action(() => {
+        this.inProgress = false;
+      }));
   }
 
   /**
@@ -126,6 +141,7 @@ class AuthStore {
   @action logout() {
     commonStore.setToken(undefined);
     userStore.forgetUser();
+    this.setUserLoggedIn(false);
     return Promise.resolve();
   }
 }

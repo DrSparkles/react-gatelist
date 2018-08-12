@@ -14,6 +14,7 @@ const API_ROOT = '/api';
  */
 const handleErrors = err => {
   if (err && err.response && err.response.status === 401) {
+
     authStore.logout();
   }
   return err;
@@ -32,12 +33,13 @@ const responseBody = res => {
  * Simple testing function to examine payloads
  * @param res
  * @returns {any}
- */
+
 const responseBodyTesting = res => {
   console.log("DBAGENT TESTING res.text", JSON.parse(res.text));
   console.log("RES", res);
   return JSON.parse(res.text);
 };
+ */
 
 /**
  * Set up superagent to use token authentication

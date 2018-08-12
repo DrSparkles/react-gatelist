@@ -3,7 +3,7 @@
  */
 
 import React from "react";
-import moment from "moment";
+//import moment from "moment";
 import { inject, observer } from 'mobx-react';
 
 @inject('commonStore', 'userStore')
