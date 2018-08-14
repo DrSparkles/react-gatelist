@@ -1,16 +1,14 @@
 /**
- * Groups page
+ * Manage Groups page
  */
 
 import React from "react";
 //import moment from "moment";
 import { inject, observer } from 'mobx-react';
 
-import Group from "../group";
-
 @inject('commonStore', 'userStore')
 @observer
-export default class Groups extends React.Component {
+export default class ManageGroups extends React.Component {
 
   componentDidMount() {
 
@@ -22,9 +20,8 @@ export default class Groups extends React.Component {
    */
   render(){
     return (
-      <div id='Group'>
-        <h1>My Groups</h1>
-        <Group />
+      <div id='ManageGroups'>
+        <h2>Manage Groups</h2>
       </div>
     );
   }

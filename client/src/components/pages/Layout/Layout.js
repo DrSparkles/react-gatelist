@@ -16,6 +16,7 @@ import Profile from "../Profile";
 import Settings from "../Settings";
 import Users from "../Users";
 import Gatelist from "../Gatelist";
+import ManageGroups from "../ManageGroups";
 
 @inject('commonStore', 'userStore')
 @withRouter
@@ -47,6 +48,7 @@ export default class Layout extends React.Component {
             <PrivateRoute path="/add-group" component={Groups} />
             <PrivateRoute path="/groups/:groupId?" component={Groups} />
             <PrivateRoute path="/profile" component={Profile} />
+            <PrivateRoute path="/manage-groups/:groupId?" component={ManageGroups} />
             <PrivateRoute path="/settings" component={Settings} />
             <PrivateRoute path="/users" component={Users} />
             <PrivateRoute path="/gatelist" component={Gatelist} />

@@ -11,11 +11,15 @@ import Layout from "./components/pages/Layout";
 import commonStore from './stores/commonStore';
 import authStore from './stores/authStore';
 import userStore from './stores/userStore';
+import groupStore from './stores/groupStore';
+import settingStore from './stores/settingStore';
 
 const stores = {
   commonStore,
   authStore,
-  userStore
+  userStore,
+  groupStore,
+  settingStore
 };
 
 const app = document.getElementById("root");

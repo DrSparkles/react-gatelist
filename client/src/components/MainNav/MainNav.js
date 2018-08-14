@@ -46,7 +46,8 @@ const LoggedInView = props => {
         <SuperAdminOptions isSuperAdmin={props.isSuperAdmin} isAdmin={props.isAdmin} />
         <AdminOptions isSuperAdmin={props.isSuperAdmin} isAdmin={props.isAdmin} />
         <ul className='main-nav'>
-          <li><Link to='/profile'>Profile</Link></li>
+          <li><Link to='/groups'>My Groups</Link></li>
+          <li><Link to='/profile'>My Profile</Link></li>
           <li><Link to='# ' onClick={props.onLogout}>Log Out</Link></li>
         </ul>
         <br clear='all' />
@@ -62,7 +63,7 @@ const AdminOptions = props => {
       <div>
         <ul className='main-nav'>
           <li><Link to='/gatelist'>Gatelist</Link></li>
-          <li><Link to='/groups'>Groups</Link></li>
+          <li><Link to='/manage-groups'>Manage Groups</Link></li>
         </ul>
         <br clear='all' />
       </div>

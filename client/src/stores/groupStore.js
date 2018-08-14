@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 import agent from '../agent';
 import Group from './dataStores/Group';
-import Settings from 'settingStore';
+import settingStore from './settingStore';
 
 class GroupStore {
 
@@ -62,10 +62,10 @@ class GroupStore {
 
   @action saveNewGroup(){
     this.isSavingGroup = true;
-
+    const defaultNumGLSlots = settingStore.settingValues.defaultNumGLSlots;
     const saveData = {
       groupName: this.newGroup.groupName,
-      numGLSlots: this.newGroup.numGLSlots,
+      numGLSlots: defaultNumGLSlots,
       userId: this.newGroup.userId,
       department: 'ent'
     };
