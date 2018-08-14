@@ -1,19 +1,17 @@
 import React from "react";
 import { inject, observer } from 'mobx-react';
 import ListErrors from "../ListErrors";
+import queryString from 'query-string';
 
-@inject('groupStore')
+@inject('groupStore', 'routerStore')
 @observer
 export default class Group extends React.Component {
 
-  constructor(props){
-    super(props);
-  }
-
   componentWillMount(){
-    // const parsed = queryString.parse(this.props.location);
-    // console.log('parsed', parsed);
+    const parsed = queryString.parse(this.props.routerStore.location.pathname);
+    console.log('parsed', parsed);
 
+    console.log('routerStore', this.props.routerStore);
     console.log('props', this.props);
     console.log('match', this.props.match);
     console.log('location', this.props.location);
@@ -22,12 +20,28 @@ export default class Group extends React.Component {
     this.props.groupStore.loadCurrentGroup(groupId);
   }
 
-  handleGroupName = () => {
-
+  handleGroupName = (ev) => {
+    this.props.groupStore.newGroup.groupName = ev.target.value;
   };
 
-  handleSubmitForm = () => {
+  handleSubmitForm = (ev) => {
+    ev.preventDefault();
 
+    // do not allow saving if the fields are blank
+    // visual differentiation on the save button would be handy...
+    const groupName = this.props.groupStore.newGroup.groupName || this.props.groupStore.currentGroup.groupName;
+    if (groupName === ""){
+      return false;
+    }
+
+    this.props.listRegistryStore.saveList()
+    // this isn't loading when I expect; needs sorting out!
+      .then(() => {
+        if (this.props.switchToList && this.props.listRegistryStore.newListId){
+          this.props.history.push("/list/" + this.props.listRegistryStore.newListId);
+          this.props.listRegistryStore.newListId = undefined;
+        }
+      });
   };
 
   render(){

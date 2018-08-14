@@ -22,16 +22,17 @@ import groupStore from './stores/groupStore';
 import settingStore from './stores/settingStore';
 
 const browserHistory = createBrowserHistory();
-const routingStore = new RouterStore();
+const routerStore = new RouterStore();
 
-const history = syncHistoryWithStore(browserHistory, routingStore);
+const history = syncHistoryWithStore(browserHistory, routerStore);
 
 const stores = {
   commonStore,
   authStore,
   userStore,
   groupStore,
-  settingStore
+  settingStore,
+  routerStore
 };
 
 const app = document.getElementById("root");
