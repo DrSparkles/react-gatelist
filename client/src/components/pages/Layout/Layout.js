@@ -1,6 +1,9 @@
-
-import React from "react";
-import { Switch, Route, withRouter } from "react-router-dom";
+import {
+  Route,
+  withRouter,
+  Switch
+} from 'react-router-dom'
+import React from 'react';
 import { inject, observer } from 'mobx-react';
 
 /* eslint-disable */
@@ -38,6 +41,10 @@ export default class Layout extends React.Component {
   }
 
   render(){
+
+    // const { location, push, goBack } = this.props.routing;
+    // console.log(this.props.routing);
+
     if (this.props.commonStore.appLoaded) {
       return (
         <div id='layout'>

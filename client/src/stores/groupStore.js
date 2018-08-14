@@ -5,11 +5,17 @@ import settingStore from './settingStore';
 
 class GroupStore {
 
-  @observable currentGroup = {};
+  @observable currentGroup = {
+    groupId: 0,
+    groupName: '',
+    numGLSlots: 0,
+    userId: ''
+  };
 
   @observable usersGroups = observable.map();
 
   @observable newGroup = {
+    groupId: 0,
     groupName: '',
     numGLSlots: 0,
     userId: ''
@@ -20,6 +26,25 @@ class GroupStore {
   @observable errors;
 
   @observable deleteGroupId = '';
+
+  /**
+   * Given a group id, load the currenet group from the user group map
+   * @param groupId
+   */
+  @action loadCurrentGroup(groupId){
+    if (!groupId){
+      this.currentGroup = {
+        groupId: '',
+        groupName: '',
+        numGLSlots: '',
+        userId: ''
+      };
+    }
+    else {
+      this.currentGroup = this.usersGroups.get(groupId);
+    }
+    return this.currentGroup;
+  }
 
   /**
    * @returns {Promise<any>}
