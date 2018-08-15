@@ -11,7 +11,7 @@ const btnStyle = {
 /**
  * Login form
  */
-@inject('authStore')
+@inject('authStore','groupStore', 'routerStore')
 @withRouter
 @observer
 export default class Login extends React.Component {
@@ -29,7 +29,19 @@ export default class Login extends React.Component {
     e.preventDefault();
     this.props.authStore
       .login()
-      .then(() => this.props.history.replace('/'));
+      .then(() => {
+
+        // if user has no groups, go to the page to add groups...
+        if (this.props.groupStore.getNumUserGroups === 0){
+          this.props.routerStore.location.push('/groups');
+        }
+
+        // otherwise go to the home page
+        else {
+          //this.props.history.replace('/');
+          this.props.routerStore.location.push('/');
+        }
+      });
   };
 
   render() {

@@ -1,22 +1,18 @@
 import React from "react";
 import { inject, observer } from 'mobx-react';
 import ListErrors from "../ListErrors";
-import queryString from 'query-string';
 
-@inject('groupStore', 'routerStore')
+@inject('groupStore', 'routerStore', 'userStore', 'settingStore')
 @observer
-export default class Group extends React.Component {
+export class GroupForm extends React.Component {
 
   componentWillMount(){
-    const parsed = queryString.parse(this.props.routerStore.location.pathname);
-    console.log('parsed', parsed);
+    const path = this.props.routerStore.location.pathname;
+    const pathPieces = path.split("/");
+    console.log(path);
+    console.log(pathPieces);
 
-    console.log('routerStore', this.props.routerStore);
-    console.log('props', this.props);
-    console.log('match', this.props.match);
-    console.log('location', this.props.location);
-
-    const groupId = '';
+    const groupId = (pathPieces.length > 2) ? pathPieces[pathPieces.length - 1] : '';
     this.props.groupStore.loadCurrentGroup(groupId);
   }
 
@@ -29,18 +25,20 @@ export default class Group extends React.Component {
 
     // do not allow saving if the fields are blank
     // visual differentiation on the save button would be handy...
-    const groupName = this.props.groupStore.newGroup.groupName || this.props.groupStore.currentGroup.groupName;
+    const groupName = this.props.groupStore.newGroup.groupName;
     if (groupName === ""){
       return false;
     }
 
-    this.props.listRegistryStore.saveList()
-    // this isn't loading when I expect; needs sorting out!
+    this.props.groupStore.currentGroup.numGLSlots = this.props.settingStore.settingValues.defaultNumGLSlots;
+    this.props.groupStore.currentGroup.userId = this.props.userStore.currentUser.userId;
+
+    this.props.groupStore.saveGroup()
       .then(() => {
-        if (this.props.switchToList && this.props.listRegistryStore.newListId){
-          this.props.history.push("/list/" + this.props.listRegistryStore.newListId);
-          this.props.listRegistryStore.newListId = undefined;
-        }
+        // if (this.props.switchToList && this.props.listRegistryStore.newListId){
+        //   this.props.history.push("/list/" + this.props.listRegistryStore.newListId);
+        //   this.props.listRegistryStore.newListId = undefined;
+        // }
       });
   };
 
@@ -62,13 +60,13 @@ export default class Group extends React.Component {
                 <input
                   type="text"
                   placeholder="Group Name"
-                  value={currentGroup.groupName}
+                  value={this.props.groupStore.newGroup.groupName}
                   onChange={this.handleGroupName}
                   className="form-control form-control-sm"
                 />
               </div>
 
-              <input type='hidden' name='numGLSlots' value='currentGroup.numGLSlots' />
+              <input type='hidden' id='numGLSlots' name='numGLSlots' value={this.props.groupStore.newGroup.numGLSlots} />
 
               <div className="form-group text-center">
                 <button

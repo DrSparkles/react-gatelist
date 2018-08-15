@@ -33,7 +33,7 @@ class Groups {
       }
 
       const insertQuery = {
-        userId,
+        userId: getId(userId),
         groupName,
         numGLSlots,
         department
@@ -53,11 +53,9 @@ class Groups {
    * @param cb
    */
   getUsersGroups(userId, cb){
-
     const query = {userId: getId(userId)};
     this.groups_collection.find(query, (err, docs) => {
       if (err) return returnSimpleError(err, 400, cb);
-
       return returnSimpleResult(null, docs, cb);
     });
   }

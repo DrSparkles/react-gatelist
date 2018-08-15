@@ -1,14 +1,12 @@
 /**
  * Groups page
  */
-
 import React from "react";
-//import moment from "moment";
 import { inject, observer } from 'mobx-react';
 
-import Group from "../group";
+import { GroupForm, GroupList } from "../Groups";
 
-@inject('commonStore', 'userStore')
+@inject('groupStore')
 @observer
 export default class Groups extends React.Component {
 
@@ -21,11 +19,29 @@ export default class Groups extends React.Component {
    * @returns {*}
    */
   render(){
+
+    const numGroups = this.props.groupStore.getNumUserGroups;
+
     return (
       <div id='Group'>
         <h1>My Groups</h1>
-        <Group />
+        <CreateGroupMessage displayMessage={numGroups < 1} />
+        <GroupForm />
+        <GroupList />
       </div>
     );
   }
 }
+
+const CreateGroupMessage = (props) => {
+  if (props.displayMessage){
+    return (
+      <div className='groups-notification-message'>
+        Before you can add your gatelist, please add your group.
+      </div>
+    );
+  }
+  else {
+    return null;
+  }
+};

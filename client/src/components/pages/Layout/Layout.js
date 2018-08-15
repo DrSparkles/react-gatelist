@@ -21,7 +21,7 @@ import Users from "../Users";
 import Gatelist from "../Gatelist";
 import ManageGroups from "../ManageGroups";
 
-@inject('commonStore', 'userStore')
+@inject('commonStore', 'userStore', 'settingStore')
 @withRouter
 @observer
 export default class Layout extends React.Component {
@@ -58,7 +58,7 @@ export default class Layout extends React.Component {
             <PrivateRoute path="/manage-groups/:groupId?" component={ManageGroups} />
             <PrivateRoute path="/settings" component={Settings} />
             <PrivateRoute path="/users" component={Users} />
-            <PrivateRoute path="/gatelist" component={Gatelist} />
+            <PrivateRoute path="/gatelist/:groupId?" component={Gatelist} />
             <Route path="/" component={Home} />
           </Switch>
         </div>

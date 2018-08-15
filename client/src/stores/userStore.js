@@ -1,7 +1,8 @@
 import { observable, action, computed } from 'mobx';
 import agent from '../agent';
 import authStore from './authStore';
-import settingsStore from "./settingStore";
+import settingStore from "./settingStore";
+import groupStore from "./groupStore";
 
 /**
  * Handle user actions and state
@@ -53,7 +54,10 @@ class UserStore {
         this.currentUser = user.result.user;
       }))
       .then(() => {
-        settingsStore.loadSettings();
+        settingStore.loadSettings();
+        groupStore.loadUsersGroups();
+        console.log('settingStore in pullUser', settingStore.settingValues);
+        console.log('groupStore in pullUser', groupStore.getUserGroups);
       })
       .finally(action(() => {
         console.log('in finally');

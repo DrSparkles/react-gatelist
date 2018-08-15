@@ -23,7 +23,7 @@ class SettingStore {
     return agent.Settings
       .getSiteSettings()
       .then(action((settings) => {
-        const settingData = settings.result;
+        const settingData = settings.result[0];
         this.settingValues.settingsId = settingData._id;
         this.settingValues.startWeekend = settingData.startWeekend;
         this.settingValues.numWeeks = settingData.numWeeks;
@@ -35,6 +35,8 @@ class SettingStore {
       }))
       .finally(action(() => {
         this.loadingSettings = false;
+        console.log('finished loading settings', this.settingValues);
+        console.log(this.settingValues.defaultNumGLSlots);
       }));
   }
 

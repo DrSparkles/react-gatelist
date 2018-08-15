@@ -1,7 +1,8 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed, values } from 'mobx';
 import agent from '../agent';
 import Group from './dataStores/Group';
 import settingStore from './settingStore';
+
 
 class GroupStore {
 
@@ -15,7 +16,6 @@ class GroupStore {
   @observable usersGroups = observable.map();
 
   @observable newGroup = {
-    groupId: 0,
     groupName: '',
     numGLSlots: 0,
     userId: ''
@@ -26,6 +26,14 @@ class GroupStore {
   @observable errors;
 
   @observable deleteGroupId = '';
+
+  @computed get getNumUserGroups(){
+    return this.usersGroups.size;
+  }
+
+  @computed get getUserGroups(){
+    return values(this.usersGroups);
+  }
 
   /**
    * Given a group id, load the currenet group from the user group map
@@ -54,6 +62,7 @@ class GroupStore {
     return agent.Groups
       .getUsersGroups()
       .then(action((groups) => {
+        console.log('groups in loadUsersGroups', groups);
         this.usersGroups.clear();
         const userGroupData = groups.result;
         userGroupData.forEach((group) => {
@@ -103,7 +112,10 @@ class GroupStore {
       }))
       .finally(action(() => {
         this.clearNewSaveData();
-        this.isSavingGroup = false;
+        this.loadUsersGroups()
+          .finally(() => {
+            this.isSavingGroup = false;
+          });
       }));
   }
 

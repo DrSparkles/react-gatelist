@@ -10,7 +10,6 @@ class Settings {
 
     this.settings_collection.find({}, (err, docs) => {
       if (err) return returnSimpleError(err, 400, cb);
-
       return returnSimpleResult(null, docs, cb);
     });
   }
