@@ -20,6 +20,7 @@ import authStore from './stores/authStore';
 import userStore from './stores/userStore';
 import groupStore from './stores/groupStore';
 import settingStore from './stores/settingStore';
+import gatelistStore from './stores/gatelistStore';
 
 const browserHistory = createBrowserHistory();
 const routerStore = new RouterStore();
@@ -32,6 +33,7 @@ const stores = {
   userStore,
   groupStore,
   settingStore,
+  gatelistStore,
   routerStore
 };
 

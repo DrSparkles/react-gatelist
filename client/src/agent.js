@@ -2,6 +2,8 @@ import superagentPromise from 'superagent-promise';
 import _superagent from 'superagent';
 import commonStore from './stores/commonStore';
 import authStore from './stores/authStore';
+import async from 'async';
+
 
 const superagent = superagentPromise(_superagent, global.Promise);
 const API_ROOT = '/api';
@@ -88,8 +90,8 @@ const requests = {
 };
 
 /**
- * Auth routes
- * @type {{current: function(), login: function(*=, *=), register: function(*, *), save: function(*)}}
+ * Auth
+ * @type {{current: (function(): *), login: (function(*, *): *), register: (function(*, *, *, *): *), save: (function(*): *)}}
  */
 const Auth = {
   current: () => {
@@ -146,9 +148,37 @@ const Settings = {
     return requests.del(url);
   }
 };
+/*
+
+ */
+const SettingsData = (callback) => {
+  async.parallel({
+    user: (cb) => {
+      Auth.current()
+        .then((user) => {
+          return cb(null, user);
+        });
+    },
+    settings: (cb) => {
+      Settings.getSiteSettings()
+        .then((settings) => {
+          return cb(null, settings);
+        });
+    },
+    groups: (cb) => {
+      Groups.getUsersGroups()
+        .then((groups) => {
+          return cb(null, groups);
+        });
+    }
+  }, (err, results) => {
+    return callback(err, results);
+  });
+};
 
 export default {
   Auth,
   Groups,
-  Settings
+  Settings,
+  SettingsData
 };

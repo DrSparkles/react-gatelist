@@ -3,6 +3,7 @@ import agent from '../agent';
 import authStore from './authStore';
 import settingStore from "./settingStore";
 import groupStore from "./groupStore";
+import promise from 'promise';
 
 /**
  * Handle user actions and state
@@ -46,6 +47,26 @@ class UserStore {
    */
   @action pullUser() {
     this.loadingUser = true;
+    return new Promise((resolve, reject) => {
+      agent.SettingsData((err, results) => {
+      if (err){
+        console.log(err);
+        return reject(err);
+      }
+
+      if (results.user === undefined || results.settings === undefined || results.groups === undefined){
+        return reject('Pieces of the data returned were missing!');
+      }
+
+      console.log('pull user results', results);
+      this.currentUser = results.user.result.user;
+      settingStore.setSettingData(results.settings.result[0]);
+      groupStore.setUserGroups(results.groups.result);
+      authStore.setUserLoggedIn(true);
+      this.loadingUser = false;
+      return resolve();
+    })});
+    /*
     return agent.Auth
       .current()
       .then(action((user) => {
@@ -64,6 +85,7 @@ class UserStore {
         authStore.setUserLoggedIn(true);
         this.loadingUser = false;
       }))
+      */
   }
 
   /**

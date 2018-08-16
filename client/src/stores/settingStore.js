@@ -40,6 +40,13 @@ class SettingStore {
       }));
   }
 
+  @action setSettingData(settingData){
+    this.settingValues.settingsId = settingData._id;
+    this.settingValues.startWeekend = settingData.startWeekend;
+    this.settingValues.numWeeks = settingData.numWeeks;
+    this.settingValues.defaultNumGLSlots = settingData.defaultNumGLSlots;
+  }
+
   @action saveSettings() {
     this.isSavingSettings = true;
     return agent.Settings

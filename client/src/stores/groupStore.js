@@ -65,16 +65,7 @@ class GroupStore {
         console.log('groups in loadUsersGroups', groups);
         this.usersGroups.clear();
         const userGroupData = groups.result;
-        userGroupData.forEach((group) => {
-          this.usersGroups.set(
-            group._id,
-            new Group(
-              group._id,
-              group.groupName,
-              group.numGLSlots,
-              group.department
-            ));
-        });
+
       }))
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.message;
@@ -83,6 +74,19 @@ class GroupStore {
       .finally(action(() => {
         this.loadingGroups = false;
       }));
+  }
+
+  @action setUserGroups(userGroupData){
+    userGroupData.forEach((group) => {
+      this.usersGroups.set(
+        group._id,
+        new Group(
+          group._id,
+          group.groupName,
+          group.numGLSlots,
+          group.department
+        ));
+    });
   }
 
   @action saveGroup(){

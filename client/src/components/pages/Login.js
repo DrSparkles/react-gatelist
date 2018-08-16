@@ -33,13 +33,13 @@ export default class Login extends React.Component {
 
         // if user has no groups, go to the page to add groups...
         if (this.props.groupStore.getNumUserGroups === 0){
-          this.props.routerStore.location.push('/groups');
+          this.props.routerStore.push('/groups');
         }
 
         // otherwise go to the home page
         else {
           //this.props.history.replace('/');
-          this.props.routerStore.location.push('/');
+          this.props.routerStore.push('/');
         }
       });
   };
