@@ -4,7 +4,7 @@
 import React from "react";
 // import moment from "moment";
 import { inject, observer } from 'mobx-react';
-import { GatelistPanels } from '../Gatelist';
+import { GatelistPanels } from '../GatelistExpansionPanel';
 
 @inject('commonStore', 'userStore')
 @observer

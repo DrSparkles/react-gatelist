@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -18,14 +17,18 @@ const styles = theme => ({
 });
 
 @withStyles(styles)
-class GLWeekPanel {
+class GLWeekPanel extends React.Component {
 
   render(){
-    const { classes } = this.props;
+
+    const { week, index } = this.props;
+
+    console.log('index', index);
+
     return (
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography className={classes.heading}>Expansion Panel 1</Typography>
+          <Typography>Week {index + 1} - {week}</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <Typography>
@@ -37,9 +40,5 @@ class GLWeekPanel {
     );
   }
 }
-
-GLWeekPanel.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 export { GLWeekPanel };

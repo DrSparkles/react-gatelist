@@ -13,10 +13,10 @@ export default class Home extends React.Component {
   componentWillMount() {
     // if user has no groups, go to the page to add groups...
     console.log('this.props.groupStore.getNumUserGroups', this.props.groupStore.getNumUserGroups);
-    if (this.props.groupStore.getNumUserGroups === 0){
-      console.log('had no groups so pushing to groups page');
-      this.props.routerStore.push('/groups');
-    }
+    // if (this.props.groupStore.getNumUserGroups === 0){
+    //   console.log('had no groups so pushing to groups page');
+    //   this.props.routerStore.push('/groups');
+    // }
   }
 
 

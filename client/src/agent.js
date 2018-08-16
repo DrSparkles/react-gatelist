@@ -148,9 +148,7 @@ const Settings = {
     return requests.del(url);
   }
 };
-/*
 
- */
 const SettingsData = (callback) => {
   async.parallel({
     user: (cb) => {
