@@ -65,7 +65,7 @@ class GroupStore {
         console.log('groups in loadUsersGroups', groups);
         this.usersGroups.clear();
         const userGroupData = groups.result;
-
+        this.setUserGroups(userGroupData);
       }))
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.message;
@@ -76,7 +76,7 @@ class GroupStore {
       }));
   }
 
-  @action setUserGroups(userGroupData){
+  setUserGroups(userGroupData){
     userGroupData.forEach((group) => {
       this.usersGroups.set(
         group._id,

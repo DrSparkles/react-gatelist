@@ -149,6 +149,29 @@ const Settings = {
   }
 };
 
+const Gatelist = {
+  getGatelist: () => {
+    const url = "/gatelist";
+    return requests.get(url);
+  },
+  getUserGatelist: (userId) => {
+    const url = "/gatelist/user/" + userId;
+    return requests.get(url);
+  },
+  saveGatelist: (data) => {
+    const url = "/gatelist";
+    return requests.post(url);
+  },
+  editGatelist: (gatelistId, data) => {
+    const url = "/gatelist/" + gatelistId;
+    return requests.put(url, data);
+  },
+  deleteSetting: (gatelistId) => {
+    const url = "/gatelist/" + gatelistId;
+    return requests.del(url);
+  }
+};
+
 const SettingsData = (callback) => {
   async.parallel({
     user: (cb) => {
@@ -178,5 +201,6 @@ export default {
   Auth,
   Groups,
   Settings,
+  Gatelist,
   SettingsData
 };
