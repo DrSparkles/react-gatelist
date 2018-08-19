@@ -31,6 +31,42 @@ router.route('/')
     });
   });
 
+router.route('/user/:_id')
+  /**
+   * Get user's gatelists
+   */
+  .get((req, res) => {
+    gatelistModule.getUsersGatelists(req.decoded._id, (err, docs) => {
+      if (err) return errorHandler(err, res);
+      return res.json(docs);
+    });
+  });
+
+router.route('/group/:_id')
+  /**
+   * Get group's gatelists
+   */
+  .get((req, res) => {
+    const groupId = req.params._id;
+    gatelistModule.getGroupsGatelists(groupId, (err, docs) => {
+      if (err) return errorHandler(err, res);
+      return res.json(docs);
+    });
+  });
+
+router.route('/group/:_id/week/:number')
+/**
+ * Get group's gatelists
+ */
+  .get((req, res) => {
+    const groupId = req.params._id;
+    const weekNum = req.params.number;
+    gatelistModule.getGroupsGatelistsByWeek(groupId, weekNum, (err, docs) => {
+      if (err) return errorHandler(err, res);
+      return res.json(docs);
+    });
+  });
+
 router.route('/:_id')
 /**
  * Get by gatelist id

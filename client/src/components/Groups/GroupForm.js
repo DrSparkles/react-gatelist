@@ -1,6 +1,7 @@
 import React from "react";
 import { inject, observer } from 'mobx-react';
 import ListErrors from "../ListErrors";
+import './style.css';
 
 @inject('groupStore', 'routerStore', 'userStore', 'settingStore')
 @observer
@@ -44,10 +45,10 @@ export class GroupForm extends React.Component {
 
   render(){
 
-    const { currentGroup, errors, inProgress } = this.props.groupStore;
+    const { errors, inProgress } = this.props.groupStore;
 
     return (
-      <div>
+      <div id='GroupForm'>
         <div className="row">
 
           <div className="col-md-6 offset-md-3 col-xs-12">
@@ -73,7 +74,7 @@ export class GroupForm extends React.Component {
                   onClick={this.handleSubmitForm}
                   type="button"
                   disabled={inProgress}
-                  className="btn btn-sm">
+                  className="btn btn-sm group-save-button">
                   Save Group
                 </button>
               </div>

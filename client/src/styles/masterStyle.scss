@@ -9,7 +9,7 @@ body {
 }
 
 #layout {
-  width:800px;
+  width:1000px;
   background-color: white;
   padding: 10px;
   text-align: left;
@@ -28,4 +28,10 @@ body {
   display:inline;
   padding:0 10px 0 10px;
   margin:0;
+}
+
+.groups-notification-message {
+  margin: 5px;
+  font-size: 14px;
+  font-weight: bold;
 }

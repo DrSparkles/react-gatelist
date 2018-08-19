@@ -1,0 +1,46 @@
+#GatelistForm {
+  display:block;
+  float: none;
+  margin: 0 0 5px 0;
+}
+
+#GatelistForm span {
+  margin: 0 0 0 10px;
+}
+
+#gatelist-form-container {
+  height: 75px;
+}
+
+.gatelist-form-fields .form-label {
+  margin: 0 5px 0 0;
+}
+
+.gatelist-form-table {
+  width: 100%;
+}
+
+.gatelist-form-controls button {
+  margin: 0 2px 0 2px;
+}
+
+.form-group {
+  margin: 0 5px 0 5px;
+}
+
+.icon {
+  padding: 0 5px 0 5px;
+  font-size: 36px !important;
+}
+
+.cancel-icon {
+  color: red;
+}
+
+.save-icon {
+  color: green;
+}
+
+.edit-icon {
+  color: blue;
+}

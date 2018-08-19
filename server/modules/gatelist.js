@@ -1,5 +1,7 @@
 import { db, returnSimpleResult, returnSimpleError, getId } from '../lib/db';
+import settings from './settings';
 import moment from "moment";
+
 class Gatelist {
 
   constructor(){
@@ -15,34 +17,92 @@ class Gatelist {
    * @returns {*}
    */
   createNew(userId, gatelistValues, cb){
-    const { firstName, lastName, date, minor, notes, groupId, addedBy } = gatelistValues;
+
+    console.log('create new', userId, gatelistValues);
+
+    const { firstName, lastName, date, minor, notes, groupId } = gatelistValues;
 
     if (firstName === undefined || firstName === '' ||
         lastName === undefined || lastName === '' ||
         date === undefined || date === '' ||
         minor === undefined || minor === '' ||
-        groupId === undefined || groupId === '' ||
-        addedBy === undefined || addedBy === ''
+        groupId === undefined || groupId === ''
     ){
+      console.log('createNew exiting due to empty values');
       return returnSimpleError("all fields are required.", 400, cb);
     }
 
     console.log('moment', moment().unix());
-
+    const groupObjId = getId(groupId);
+    const addedByObjId = getId(userId);
     const insertQuery = {
-      groupId: getId(groupId),
+      groupId: groupObjId,
       firstName,
       lastName,
-      date,
+      date: date,
       minor,
-      addedBy,
+      addedBy: addedByObjId,
       notes,
       createdDate: moment().unix()
     };
 
+    console.log('insertQuery', insertQuery);
+
     this.gatelists_collection.insert(insertQuery, (err, doc) => {
-      if (err) return returnSimpleError(err, 400, cb);
+      if (err) {
+        console.log('exiting due to insert error');
+        return returnSimpleError(err, 400, cb);
+      }
       return returnSimpleResult(null, doc, cb);
+    });
+
+  }
+
+  /**
+   * Get a specific user's gatelists
+   * @param groupId
+   * @param cb
+   */
+  getGroupsGatelists(groupId, cb){
+    const query = {groupId: getId(groupId)};
+    console.log('query', query);
+    this.gatelists_collection.find(query, (err, docs) => {
+      if (err) return returnSimpleError(err, 400, cb);
+
+      const gatelist = {};
+      for (let i = 0; i < docs.length; i++){
+        const glEntry = docs[i];
+
+        if (gatelist[glEntry.date] === undefined){
+          gatelist[glEntry.date] = [];
+        }
+
+        gatelist[glEntry.date].push(glEntry);
+      }
+
+      return returnSimpleResult(null, gatelist, cb);
+    });
+  }
+
+  /**
+   * Get a specific user's gatelists
+   * @param groupId
+   * @param weekNum
+   * @param cb
+   */
+  getGroupsGatelistsByWeek(groupId, weekNum, cb){
+
+    settings.getSiteSettings((err, sets) => {
+      if (err) return returnSimpleError(err, 400, cb);
+      const currentWeekStart = sets.result[0].startWeekend;
+      const queryWeekStart = moment(currentWeekStart).add(weekNum, 'weeks').format('YYYY-MM-DD');
+      const queryWeekEnd = moment(currentWeekStart).add((weekNum + 1), 'weeks').format('YYYY-MM-DD');
+      const query = {groupId: getId(groupId), date: {$gte: queryWeekStart, $lt: queryWeekEnd}};
+      console.log('query', query);
+      this.gatelists_collection.find(query, (err, docs) => {
+        if (err) return returnSimpleError(err, 400, cb);
+        return returnSimpleResult(null, docs, cb);
+      });
     });
 
   }
@@ -53,7 +113,8 @@ class Gatelist {
    * @param cb
    */
   getUsersGatelists(userId, cb){
-    const query = {userId: getId(userId)};
+    const query = {addedBy: getId(userId)};
+    console.log('query', query);
     this.gatelists_collection.find(query, (err, docs) => {
       if (err) return returnSimpleError(err, 400, cb);
       return returnSimpleResult(null, docs, cb);

@@ -1,29 +1,19 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import './style.css';
 
-const styles = theme => ({
-  root: {
-    width: '100%',
-  },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    fontWeight: theme.typography.fontWeightRegular,
-  },
-});
+import { GatelistForm } from '../GatelistForm';
+import {GatelistList} from "../GatelistList";
 
-@withStyles(styles)
 class GLWeekPanel extends React.Component {
 
   render(){
 
     const { week, index } = this.props;
-
-    console.log('index', index);
 
     return (
       <ExpansionPanel>
@@ -31,10 +21,10 @@ class GLWeekPanel extends React.Component {
           <Typography>Week {index + 1} - {week}</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-            sit amet blandit leo lobortis eget.
-          </Typography>
+          <div className='gatelist-week'>
+            <GatelistForm week={week} className='flex-row' />
+            <GatelistList week={week} className='flex-row' />
+          </div>
         </ExpansionPanelDetails>
       </ExpansionPanel>
     );

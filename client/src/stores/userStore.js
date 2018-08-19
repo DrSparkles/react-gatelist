@@ -3,7 +3,7 @@ import agent from '../agent';
 import authStore from './authStore';
 import settingStore from "./settingStore";
 import groupStore from "./groupStore";
-import promise from 'promise';
+// import promise from 'promise';
 
 /**
  * Handle user actions and state

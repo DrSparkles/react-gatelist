@@ -158,9 +158,14 @@ const Gatelist = {
     const url = "/gatelist/user/" + userId;
     return requests.get(url);
   },
+  getGroupsGatelist: (groupId) => {
+    const url = "/gatelist/group/" + groupId;
+    return requests.get(url);
+  },
   saveGatelist: (data) => {
+    console.log('save gatelist data', data);
     const url = "/gatelist";
-    return requests.post(url);
+    return requests.post(url, data);
   },
   editGatelist: (gatelistId, data) => {
     const url = "/gatelist/" + gatelistId;

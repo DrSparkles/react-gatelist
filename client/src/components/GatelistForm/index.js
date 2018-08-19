@@ -1,2 +1,2 @@
 export { GatelistForm } from './GatelistForm';
-export { GatelistFormRow } from './GatelistFormRow';
+export { GatelistFormFields } from './GatelistFormFields';

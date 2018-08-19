@@ -4,11 +4,27 @@
 import React from "react";
 import { inject, observer } from 'mobx-react';
 
+
 import { GroupForm, GroupList } from "../Groups";
 
 @inject('groupStore')
 @observer
 export default class Groups extends React.Component {
+
+  setupMessageText(numGroups){
+    const message = {hasMessage: false, text: ''};
+
+    if (numGroups < 1){
+      message.hasMessage = true;
+      message.text = "Before you can add your gatelist, please add your group.";
+    }
+    else if (numGroups > 0 && !this.props.groupStore.currentGroup.groupId) {
+      message.hasMessage = true;
+      message.text = "Please select a group to add your gatelist.";
+    }
+
+    return message;
+  }
 
   componentDidMount() {
 
@@ -21,11 +37,11 @@ export default class Groups extends React.Component {
   render(){
 
     const numGroups = this.props.groupStore.getNumUserGroups;
-
+console.log(this.setupMessageText(numGroups));
     return (
       <div id='Group'>
         <h1>My Groups</h1>
-        <CreateGroupMessage displayMessage={numGroups < 1} />
+        <CreateGroupMessage displayMessage={this.setupMessageText(numGroups)} />
         <GroupForm />
         <GroupList />
       </div>
@@ -34,10 +50,10 @@ export default class Groups extends React.Component {
 }
 
 const CreateGroupMessage = (props) => {
-  if (props.displayMessage){
+  if (props.displayMessage.hasMessage){
     return (
       <div className='groups-notification-message'>
-        Before you can add your gatelist, please add your group.
+        {props.displayMessage.text}
       </div>
     );
   }

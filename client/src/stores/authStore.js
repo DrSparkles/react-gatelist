@@ -2,8 +2,6 @@ import { observable, action, computed } from 'mobx';
 import agent from '../agent';
 import userStore from './userStore';
 import commonStore from './commonStore';
-import settingStore from './settingStore';
-import groupStore from './groupStore';
 
 /**
  * Store for handling user auth
