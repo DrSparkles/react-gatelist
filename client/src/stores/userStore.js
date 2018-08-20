@@ -59,33 +59,25 @@ class UserStore {
       }
 
       console.log('pull user results', results);
-      this.currentUser = results.user.result.user;
+      // this.currentUser = results.user.result.user;
+      this.currentUser = this.setCurrentUser(results.user.result.user);
+      console.log('pull user current user', this.currentUser);
       settingStore.setSettingData(results.settings.result[0]);
       groupStore.setUserGroups(results.groups.result);
       authStore.setUserLoggedIn(true);
       this.loadingUser = false;
       return resolve();
     })});
-    /*
-    return agent.Auth
-      .current()
-      .then(action((user) => {
-        console.log('userstore pull user current user', user.result.user);
-        this.userType = user.result.user.userType;
-        this.currentUser = user.result.user;
-      }))
-      .then(() => {
-        settingStore.loadSettings();
-        groupStore.loadUsersGroups();
-        console.log('settingStore in pullUser', settingStore.settingValues);
-        console.log('groupStore in pullUser', groupStore.getUserGroups);
-      })
-      .finally(action(() => {
-        console.log('in finally');
-        authStore.setUserLoggedIn(true);
-        this.loadingUser = false;
-      }))
-      */
+  }
+
+  setCurrentUser(userData){
+    const currentUser = {};
+    currentUser.userId = (userData._id) ? userData._id : userData.userId;
+    currentUser.firstName = userData.firstName;
+    currentUser.lastName = userData.lastName;
+    currentUser.email = userData.email;
+    currentUser.userType = userData.userType;
+    return currentUser;
   }
 
   /**

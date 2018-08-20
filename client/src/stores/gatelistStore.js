@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action } from 'mobx';
 import agent from '../agent';
 import { GatelistEntry } from './dataStores/GatelistEntry';
 import groupStore from './groupStore';
@@ -8,15 +8,19 @@ import moment from "moment";
 
 class GatelistStore {
 
-  @observable editGLEntry = null;
+  @observable editGLEntry = false;
 
   @observable addGLEntry = false;
 
   @observable loadingGatelist = false;
 
+  @observable deleteGatelistId = null;
+
   @observable errors;
 
   @observable gatelist = {};
+
+  @observable deleting;
 
   @observable currentGatelist = {
     gatelistId: null,
@@ -27,7 +31,22 @@ class GatelistStore {
     notes: ''
   };
 
+  setCurentGatelist = (week, gatelistId) => {
+    if (this.gatelist[week] !== undefined && this.gatelist[week][gatelistId] !== undefined){
+      const gatelist = this.gatelist[week][gatelistId];
+      this.currentGatelist.gatelistId = gatelist.gatelistId;
+      this.currentGatelist.firstName = gatelist.firstName;
+      this.currentGatelist.lastName = gatelist.lastName;
+      this.currentGatelist.date = gatelist.date;
+      this.currentGatelist.minor = gatelist.minor;
+      this.currentGatelist.notes = gatelist.notes;
+    }
+    return null;
+  };
+
   getNumSavedGatelistForWeek(week){
+    console.log('getNumSavedGatelistForWeek week', week);
+    console.log('getNumSavedGatelistForWeek this.gatelist', this.gatelist);
     const gl = this.gatelist[week];
     console.log("getNumSavedGatelistForWeek gl", gl);
     if (gl !== undefined){
@@ -56,8 +75,6 @@ class GatelistStore {
           settingStore.settingValues.numWeeks
         );
         const userGatelistData = gatelist.result;
-        console.log('loadGroupsGatelist gatelist', gatelist);
-        console.log('loadGroupsGatelist gatelist.result', gatelist.result);
         this.gatelist = this.setGroupsGatelistValues(this.gatelist, userGatelistData);
       }))
       .catch(action((err) => {
@@ -74,7 +91,6 @@ class GatelistStore {
       const week = moment(startWeekend).add(i, 'weeks').format('YYYY-MM-DD');
       gatelistHash[week] = {};
     }
-    console.log('setupGatelist gatelistHash', gatelistHash);
     return gatelistHash;
   }
 
@@ -83,11 +99,8 @@ class GatelistStore {
     for (let week in gatelistData){
       if (gatelistData.hasOwnProperty(week)) {
         const weeksList = gatelistData[week];
-        console.log('setGroupsGatelistValues week', week);
-        console.log('setGroupsGatelistValues weeksList', weeksList);
         for (let i = 0; i < weeksList.length; i++){
           const gatelist = weeksList[i];
-          console.log('setGroupsGatelistValues gatelist', gatelist);
           const glEntry = new GatelistEntry(
                 gatelist._id,
                 gatelist.firstName,
@@ -100,20 +113,20 @@ class GatelistStore {
                 gatelist.addedBy
               );
 
-          gatelistHash[week][gatelist.gatelistId] = glEntry;
+          gatelistHash[week][gatelist._id] = glEntry;
         }
       }
     }
-    console.log('setGroupsGatelistValues gatelistHash', gatelistHash);
     return gatelistHash;
   }
 
   @action saveGatelist(){
-    if (this.currentGatelist.gatelistId === null){
+    if (!this.currentGatelist.gatelistId){
       console.log('save new gatelist');
       return this.saveNewGatelist();
     }
     else {
+      console.log('editing existing gatelist!');
       return this.editGatelist();
     }
   }
@@ -142,6 +155,7 @@ class GatelistStore {
     this.isSavingGatelist = true;
     const saveData = this.getSaveData();
     saveData.gatelistId = this.currentGatelist.gatelistId;
+    console.log('saving this data!', saveData);
     return agent.Gatelist
       .editGatelist(this.currentGatelist.gatelistId, saveData)
       .catch(action((err) => {
@@ -158,6 +172,7 @@ class GatelistStore {
   }
 
   getSaveData(){
+    console.log('userStore.currentUser.userId', userStore.currentUser);
     return {
       firstName: this.currentGatelist.firstName,
       lastName: this.currentGatelist.lastName,
@@ -170,7 +185,8 @@ class GatelistStore {
   }
 
   @action deleteGatelist(){
-    return agent.Groups
+    this.deleting = true;
+    return agent.Gatelist
       .deleteGatelist(this.deleteGatelistId)
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.message;
@@ -181,6 +197,8 @@ class GatelistStore {
           this.clearCurrentGroup();
         }
         this.deleteGatelistId = '';
+        this.loadGroupsGatelist();
+        this.deleting = false;
       }));
   }
 

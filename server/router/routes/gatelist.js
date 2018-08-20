@@ -92,12 +92,21 @@ router.route('/:_id')
    * Edit by gatelist id
    */
   .put((req, res) => {
-    const { _id }  = req.params;
-    const update = req.body;
-    gatelistModule.updateGatelist(_id, update, (err, docs) => {
+    const gatelistId = req.params._id;
+    const body = req.body;
+    gatelistModule.updateGatelist(gatelistId, body, (err, docs) => {
       if (err) return errorHandler(err, res);
       return res.json(docs);
     });
   });
+
+  /*
+  const { body } = req;
+    const userId = req.decoded._id;
+    gatelistModule.createNew(userId, body, (err, docs) => {
+      if (err) return errorHandler(err, res);
+      return res.json(docs);
+    });
+   */
 
 module.exports = router;

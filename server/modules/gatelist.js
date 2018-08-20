@@ -154,22 +154,36 @@ class Gatelist {
    */
   updateGatelist(gatelistId, values, cb){
 
-    const { gatelistName, numGLSlots, userId } = values;
+    const { firstName, lastName, date, minor, notes, groupId, addedBy } = values;
+    // console.log('update gatelist values', values);
 
     if (gatelistId === undefined || gatelistId === '' ||
-      gatelistName === undefined || gatelistName === '' ||
-      numGLSlots === undefined || numGLSlots === '' ||
-      userId === undefined || userId === ''){
-      return returnSimpleError("Missing required information to edit gatelist", 400, cb);
+        firstName === undefined || firstName === '' ||
+        lastName === undefined || lastName === '' ||
+        date === undefined || date === '' ||
+        minor === undefined || (minor !== true && minor !== false) ||
+        groupId === undefined || groupId === ''
+    ){
+      // console.log('updateGatelist exiting due to empty values');
+      return returnSimpleError("all fields are required.", 400, cb);
     }
+
+    // console.log('moment', moment().unix());
+    const addedByObjId = getId(addedBy);
+    const editQuery = {
+      firstName,
+      lastName,
+      date: date,
+      minor,
+      addedBy: addedByObjId,
+      notes
+    };
+
+    // console.log('editQuery', editQuery);
 
     const query = {_id: getId(gatelistId)};
     const updateQuery = {
-      $set: {
-        gatelistName: gatelistName,
-        numGLSlots: numGLSlots,
-        userId: userId
-      }
+      $set: editQuery
     };
     this.gatelists_collection.update(query, updateQuery, (err, doc) => {
       if (err) return returnSimpleError(err, 400, cb);

@@ -168,10 +168,11 @@ const Gatelist = {
     return requests.post(url, data);
   },
   editGatelist: (gatelistId, data) => {
+    console.log(data);
     const url = "/gatelist/" + gatelistId;
     return requests.put(url, data);
   },
-  deleteSetting: (gatelistId) => {
+  deleteGatelist: (gatelistId) => {
     const url = "/gatelist/" + gatelistId;
     return requests.del(url);
   }

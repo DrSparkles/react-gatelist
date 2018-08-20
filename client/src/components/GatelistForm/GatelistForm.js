@@ -4,42 +4,45 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import './style.css';
 import {GatelistFormFields} from "./GatelistFormFields";
 
-@inject('userStore', 'groupStore', 'gatelistStore')
+@inject('userStore', 'groupStore', 'gatelistStore', 'interfaceStore')
 @observer
 export class GatelistForm extends React.Component {
 
+  week = this.props.week;
+  numSavedGLValues = this.props.gatelistStore.getNumSavedGatelistForWeek(this.week);
+  numGLSlots = this.props.groupStore.currentGroup.numGLSlots;
+
   handleAddGLClick = (ev) => {
-    console.log('Clicked to add!');
     this.props.gatelistStore.addGLEntry = true;
+
   };
 
   renderGLForm = () => {
-    if (this.props.gatelistStore.addGLEntry){
-      const week = this.props.week;
+    if (this.props.gatelistStore.addGLEntry || this.props.gatelistStore.editGLEntry){
       const gatelist = this.props.gatelistStore.currentGatelist;
-      return (
-        <GatelistFormFields index='0' week={week} gatelist={gatelist} />
-      );
+      if (this.props.interfaceStore.workingWithWeek === this.week){
+        return (
+          <GatelistFormFields index='0' week={this.week} gatelist={gatelist} />
+        );
+      }
+      else {
+        return null;
+      }
     }
   };
 
   isAddBtnDisabled = () => {
-    if (this.props.gatelistStore.addGLEntry){
-      return true;
-    }
-    return false;
+    return (this.props.gatelistStore.addGLEntry ||
+            this.props.gatelistStore.editGLEntry ||
+            this.numSavedGLValues === this.numGLSlots);
   };
 
   render() {
 
-    const week = this.props.week;
-    const numSavedGLValues = this.props.gatelistStore.getNumSavedGatelistForWeek(week);
-    const numGLSlots = this.props.groupStore.currentGroup.numGLSlots;
-
     return (
       <div id='GatelistForm'>
         <button disabled={this.isAddBtnDisabled()} onClick={this.handleAddGLClick}><PersonAddIcon /></button>
-        <span>{numSavedGLValues} / {numGLSlots} saved gatelist members</span>
+        <span>{this.numSavedGLValues} / {this.numGLSlots} saved gatelist members</span>
         <div id='gatelist-form-container'>
           {this.renderGLForm()}
         </div>

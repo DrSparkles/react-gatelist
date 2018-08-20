@@ -27,6 +27,7 @@ export class GatelistFormFields extends React.Component {
     ev.preventDefault();
     console.log('Calcel Edit!!');
     this.props.gatelistStore.addGLEntry = false;
+    this.props.gatelistStore.editGLEntry = false;
     this.props.gatelistStore.clearCurrentGroup();
   };
 
@@ -40,6 +41,7 @@ export class GatelistFormFields extends React.Component {
     console.log('gatelist to save', this.props.gatelistStore.currentGatelist);
 
     this.props.gatelistStore.saveGatelist();
+    this.props.gatelistStore.addGLEntry = false;
 
     console.log('Save Edit!!');
   };
@@ -51,7 +53,8 @@ export class GatelistFormFields extends React.Component {
   render() {
 
     const index = this.props.index;
-    const { firstname, lastname, minor, notes } = this.props.gatelist;
+    const { firstName, lastName, minor, notes } = this.props.gatelist;
+    console.log('gatelistformfields gatelist', this.props.gatelist);
     return (
       <form className='form-inline gatelist-form-fields'>
         <table className='gatelist-form-table'>
@@ -64,7 +67,7 @@ export class GatelistFormFields extends React.Component {
                     id={this.getFieldId('firstName', index)}
                     type="text"
                     placeholder="Firstname"
-                    value={firstname}
+                    value={firstName}
                     onChange={this.handleFirstnameChange}
                     className="form-control form-control-sm"
                   />
@@ -77,7 +80,7 @@ export class GatelistFormFields extends React.Component {
                     id={this.getFieldId('lastName', index)}
                     type="text"
                     placeholder="Lastname"
-                    value={lastname}
+                    value={lastName}
                     onChange={this.handleLastnameChange}
                     className="form-control form-control-sm"
                   />
@@ -110,8 +113,8 @@ export class GatelistFormFields extends React.Component {
               </td>
               <td>
                 <div className="form-group gatelist-form-controls">
-                  <button onClick={this.handleCancelChangeBtn}><NotInterestedIcon className='icon cancel-icon'/></button>
                   <button onClick={this.handleSaveChangeBtn}><SaveIcon className='icon save-icon'/></button>
+                  <button onClick={this.handleCancelChangeBtn}><NotInterestedIcon className='icon cancel-icon'/></button>
                 </div>
               </td>
             </tr>

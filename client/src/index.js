@@ -21,6 +21,7 @@ import userStore from './stores/userStore';
 import groupStore from './stores/groupStore';
 import settingStore from './stores/settingStore';
 import gatelistStore from './stores/gatelistStore';
+import interfaceStore from './stores/interfaceStore';
 
 const browserHistory = createBrowserHistory();
 const routerStore = new RouterStore();
@@ -34,7 +35,8 @@ const stores = {
   groupStore,
   settingStore,
   gatelistStore,
-  routerStore
+  routerStore,
+  interfaceStore
 };
 
 const app = document.getElementById("root");
