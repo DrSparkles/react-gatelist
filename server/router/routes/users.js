@@ -40,6 +40,10 @@ router.use(authMiddleware);
 /**
  * Routes at /api/users
  */
+
+/**
+ * Get user account
+ */
 router.route('/user')
   .get((req, res) => {
     const userToken = req.get('x-access-token');
@@ -49,6 +53,9 @@ router.route('/user')
     });
   });
 
+/**
+ * Get all users
+ */
 router.route('/all')
   .get((req, res) => {
     usersModule.getAll((err, docs) => {

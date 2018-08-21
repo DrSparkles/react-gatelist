@@ -70,6 +70,19 @@ class UserStore {
     })});
   }
 
+  @action saveUser(){
+    this.loadingUser = true;
+    return agent.Auth
+      .save()
+      .catch(action((err) => {
+        this.errors = err.response && err.response.body && err.response.body.message;
+        throw err;
+      }))
+      .finally(action(() => {
+        this.loadingUser = false;
+      }));
+  }
+
   setCurrentUser(userData){
     const currentUser = {};
     currentUser.userId = (userData._id) ? userData._id : userData.userId;

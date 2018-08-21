@@ -2,6 +2,7 @@ import { withRouter, Link } from 'react-router-dom';
 import ListErrors from '../ListErrors';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import SBMessage from "../SBMessage/SBMessage";
 
 const btnStyle = {
   "backgroundColor": "5f0f0f",
@@ -44,11 +45,21 @@ export default class Login extends React.Component {
       });
   };
 
+  setUserSignedUpMessage = () => {
+    if (this.props.authStore.userJustRegistered){
+      this.props.authStore.userJustRegistered = false;
+      return (
+        <SBMessage msg="You've registered, please login!" />
+      );
+    }
+  };
+
   render() {
     const { values, errors, inProgress } = this.props.authStore;
 
     return (
       <div id="Login">
+        {this.setUserSignedUpMessage()}
         <div className="row">
 
           <div className="col-md-6 offset-md-3 col-xs-12">
@@ -90,7 +101,6 @@ export default class Login extends React.Component {
                     type="button"
                     disabled={inProgress}
                     className="btn-text btn btn-sm"
-                    style={btnStyle}
                   >
                     Sign in
                   </button>

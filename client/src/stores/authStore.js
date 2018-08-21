@@ -16,6 +16,8 @@ class AuthStore {
 
   @observable userLoggedIn = false;
 
+  @observable userJustRegistered = false;
+
   @action setUserLoggedIn(loggedInState){
     this.userLoggedIn = loggedInState;
   }
@@ -122,7 +124,7 @@ class AuthStore {
         commonStore.setToken(user.result.token);
       })
       .then(() => {
-        userStore.pullUser();
+        // userStore.pullUser();
       })
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.message;
@@ -130,6 +132,7 @@ class AuthStore {
       }))
       .finally(action(() => {
         this.inProgress = false;
+        this.userJustRegistered = true;
       }));
   }
 

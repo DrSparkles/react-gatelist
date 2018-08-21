@@ -103,7 +103,7 @@ const Auth = {
   register: (firstName, lastName, email, password) => {
     return requests.post('/users', { firstName, lastName, email, password })
   },
-  save: user => {
+  save: (user) => {
     return requests.put('/user', { user })
   }
 };

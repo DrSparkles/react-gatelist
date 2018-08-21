@@ -5,6 +5,7 @@
 import React from "react";
 // import moment from "moment";
 import { inject, observer } from 'mobx-react';
+import UserDetailsForm from "../UserDetailsForm/UserDetailsForm";
 
 @inject('commonStore', 'userStore')
 @observer
@@ -14,14 +15,26 @@ export default class Profile extends React.Component {
 
   }
 
+  handleSaveUser = (ev) => {
+    ev.preventDefault();
+    this.props.authStore
+      .saveUser();
+  };
+
   /**
    * Render our document!
    * @returns {*}
    */
   render(){
+
+    const user = this.props.userStore.currentUser;
+
     return (
       <div id='Profile'>
         <h2>Profile</h2>
+        <div className='profile-container'>
+          <UserDetailsForm user={user} handleSaveUser={this.handleSaveUser} />
+        </div>
       </div>
     );
   }
