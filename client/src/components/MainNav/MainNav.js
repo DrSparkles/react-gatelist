@@ -2,6 +2,7 @@ import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import { inject, observer } from 'mobx-react';
 
+import './style.css';
 
 /**
  * Primary site navigation; dependant on logged in status
@@ -11,6 +12,8 @@ import { inject, observer } from 'mobx-react';
 @observer
 export default class MainNav extends React.Component {
 
+  navClass = (this.props.navPlacement === 'header') ? 'main-nav' : 'footer-nav';
+
   handleClickLogout = () =>
     this.props.authStore
       .logout()
@@ -19,9 +22,8 @@ export default class MainNav extends React.Component {
   render(){
     return (
       <div>
-        <div>Is logged in: {this.props.authStore.isLoggedIn} / {this.props.authStore.isLoggedIn ? 'was true' : 'was false'}</div>
-        <LoggedOutView currentUser={this.props.userStore.currentUser} />
-        <LoggedInView isSuperAdmin={this.props.userStore.isSuperAdmin} isAdmin={this.props.userStore.isAdmin} currentUser={this.props.userStore.currentUser} onLogout={this.handleClickLogout} />
+        <LoggedOutView navClass={this.navClass} currentUser={this.props.userStore.currentUser} />
+        <LoggedInView navClass={this.navClass} isSuperAdmin={this.props.userStore.isSuperAdmin} isAdmin={this.props.userStore.isAdmin} currentUser={this.props.userStore.currentUser} onLogout={this.handleClickLogout} />
       </div>
     );
   }
@@ -30,7 +32,7 @@ export default class MainNav extends React.Component {
 const LoggedOutView = props => {
   if (!props.currentUser) {
     return (
-      <ul className='main-nav'>
+      <ul className={props.navClass}>
         <li><Link to="/login">Sign in</Link></li>
         <li><Link to="/register">Sign up</Link></li>
       </ul>
@@ -45,7 +47,7 @@ const LoggedInView = props => {
       <div>
         <SuperAdminOptions isSuperAdmin={props.isSuperAdmin} isAdmin={props.isAdmin} />
         <AdminOptions isSuperAdmin={props.isSuperAdmin} isAdmin={props.isAdmin} />
-        <ul className='main-nav'>
+        <ul className={props.navClass}>
           <li><Link to='/groups'>My Groups</Link></li>
           <li><Link to='/profile'>My Profile</Link></li>
           <li><Link to='# ' onClick={props.onLogout}>Log Out</Link></li>
@@ -61,7 +63,7 @@ const AdminOptions = props => {
   if (props.isAdmin || props.isSuperAdmin){
     return (
       <div>
-        <ul className='main-nav'>
+        <ul className={props.navClass}>
           <li><Link to='/gatelist'>Gatelist</Link></li>
           <li><Link to='/manage-groups'>Manage Groups</Link></li>
         </ul>
@@ -76,7 +78,7 @@ const SuperAdminOptions = props => {
   if (props.isSuperAdmin){
     return (
       <div>
-        <ul className='main-nav'>
+        <ul className={props.navClass}>
           <li><Link to='/settings'>Settings</Link></li>
           <li><Link to='/users'>Users</Link></li>
         </ul>

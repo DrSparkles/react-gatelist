@@ -1,6 +1,7 @@
+@import 'colors.scss';
 
 body {
-  background-color:#ccc;
+  background-color: $color-primary-4;
   text-align:center;
   margin:0;
   padding:0;
@@ -17,21 +18,51 @@ body {
   height:100%;
 }
 
-.main-nav {
-  margin:0;
-  padding:0;
-  float: right;
+#content {
+  padding: 15px;
 }
 
-.main-nav li {
-  list-style:none;
-  display:inline;
-  padding:0 10px 0 10px;
-  margin:0;
+a {
+  color: $color-secondary-2-3;
+  text-decoration: none;
+}
+
+a:hover {
+  color: $color-secondary-1-3;
+  text-decoration: underline;
+}
+
+h1, h2, h3, h4 {
+ color: $color-secondary-2-3;
+}
+
+.btn-text {
+  background-color: $color-secondary-2-1;
 }
 
 .groups-notification-message {
   margin: 5px;
   font-size: 14px;
   font-weight: bold;
+}
+
+.icon {
+  /*padding: 0 5px 0 5px; */
+  font-size: 30px !important;
+}
+
+.cancel-icon {
+  color: orangered;
+}
+
+.save-icon {
+  color: green;
+}
+
+.edit-icon {
+  color: blue;
+}
+
+.delete-icon {
+  color: red;
 }

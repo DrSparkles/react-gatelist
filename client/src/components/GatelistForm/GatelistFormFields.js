@@ -42,6 +42,7 @@ export class GatelistFormFields extends React.Component {
 
     this.props.gatelistStore.saveGatelist();
     this.props.gatelistStore.addGLEntry = false;
+    this.props.gatelistStore.editGLEntry = false;
 
     console.log('Save Edit!!');
   };
@@ -113,8 +114,8 @@ export class GatelistFormFields extends React.Component {
               </td>
               <td>
                 <div className="form-group gatelist-form-controls">
-                  <button onClick={this.handleSaveChangeBtn}><SaveIcon className='icon save-icon'/></button>
-                  <button onClick={this.handleCancelChangeBtn}><NotInterestedIcon className='icon cancel-icon'/></button>
+                  <button onClick={this.handleSaveChangeBtn} className='btn btn-sm'><SaveIcon className='icon save-icon'/></button>
+                  <button onClick={this.handleCancelChangeBtn} className='btn btn-sm'><NotInterestedIcon className='icon cancel-icon'/></button>
                 </div>
               </td>
             </tr>

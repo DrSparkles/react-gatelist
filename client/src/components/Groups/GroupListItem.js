@@ -19,8 +19,17 @@ export class GroupListItem extends React.Component {
     return (
       <tr>
         <td>{groupName}</td>
-        <td>{numGLSlots}</td>
-        <td><button name='selectGroup' id='selectGroup' value={groupId} onClick={this.handleSelectGroup}>Select</button></td>
+        <td className='center-cell'>{numGLSlots}</td>
+        <td className='center-cell'>
+          <button
+            id='selectGroup'
+            name='selectGroup'
+            value={groupId}
+            className='btn-text btn btn-sm'
+            onClick={this.handleSelectGroup}>
+              Select
+          </button>
+        </td>
       </tr>
     );
   }

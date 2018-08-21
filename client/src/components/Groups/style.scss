@@ -1,5 +1,16 @@
+@import '../../styles/colors.scss';
+
 #GroupForm {
   margin: 0 0 5px 0;
+}
+
+thead tr {
+  background-color: $color-secondary-1-2;
+  color: #FFF;
+}
+
+.center-cell {
+  text-align: center;
 }
 
 .group-save-button {

@@ -37,10 +37,10 @@ export default class Groups extends React.Component {
   render(){
 
     const numGroups = this.props.groupStore.getNumUserGroups;
-console.log(this.setupMessageText(numGroups));
+    console.log(this.setupMessageText(numGroups));
     return (
       <div id='Group'>
-        <h1>My Groups</h1>
+        <h2>My Groups</h2>
         <CreateGroupMessage displayMessage={this.setupMessageText(numGroups)} />
         <GroupForm />
         <GroupList />

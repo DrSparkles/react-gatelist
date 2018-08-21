@@ -41,7 +41,7 @@ export class GatelistForm extends React.Component {
 
     return (
       <div id='GatelistForm'>
-        <button disabled={this.isAddBtnDisabled()} onClick={this.handleAddGLClick}><PersonAddIcon /></button>
+        <button disabled={this.isAddBtnDisabled()} onClick={this.handleAddGLClick} className='btn btn-sm'><PersonAddIcon /></button>
         <span>{this.numSavedGLValues} / {this.numGLSlots} saved gatelist members</span>
         <div id='gatelist-form-container'>
           {this.renderGLForm()}

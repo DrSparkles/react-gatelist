@@ -31,13 +31,13 @@ export class GatelistListItem extends React.Component {
 
     return (
       <tr className='gatelist-row'>
-        <td colSpan='2'>{this.firstName} {this.lastName}</td>
-        <td>{this.minor}</td>
-        <td>{this.notes}</td>
-        <td>
+        <td colSpan='2' width='45%'>{this.firstName} {this.lastName}</td>
+        <td width='10%'>{this.minor}</td>
+        <td width='25%'>{this.notes}</td>
+        <td width='20%'>
           <div className="form-group gatelist-form-controls">
-            <button onClick={this.handleEditClick}><EditIcon className='icon edit-icon' /></button>
-            <button onClick={this.handleDeleteClick}><DeleteForeverIcon className='icon delete-icon' /></button>
+            <button className='btn btn-sm' onClick={this.handleEditClick}><EditIcon className='icon edit-icon' /></button>
+            <button className='btn btn-sm' onClick={this.handleDeleteClick}><DeleteForeverIcon className='icon delete-icon' /></button>
           </div>
         </td>
       </tr>

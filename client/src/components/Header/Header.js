@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
+import './style.css';
+
 import MainNav from '../MainNav';
 
 /**
@@ -14,12 +16,12 @@ class Header extends React.Component {
     return (
       <div id='Header'>
         <nav className="navbar navbar-light">
-          <h1>
+          <h1 className='header-title'>
             <Link to="/">
               {this.props.commonStore.appName}
             </Link>
           </h1>
-          <MainNav />
+          <MainNav navPlacement='header' />
         </nav>
       </div>
     );

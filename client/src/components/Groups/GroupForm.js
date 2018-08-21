@@ -74,7 +74,7 @@ export class GroupForm extends React.Component {
                   onClick={this.handleSubmitForm}
                   type="button"
                   disabled={inProgress}
-                  className="btn btn-sm group-save-button">
+                  className="btn-text btn btn-sm group-save-button">
                   Save Group
                 </button>
               </div>

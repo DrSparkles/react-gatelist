@@ -20,6 +20,7 @@ import Settings from "../Settings";
 import Users from "../Users";
 import Gatelist from "../Gatelist";
 import ManageGroups from "../ManageGroups";
+import Footer from "../../Footer/Footer";
 
 @inject('commonStore', 'userStore', 'settingStore')
 @withRouter
@@ -49,18 +50,21 @@ export default class Layout extends React.Component {
       return (
         <div id='layout'>
           <Header />
-          <Switch>
-            <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
-            <PrivateRoute path="/add-group" component={Groups} />
-            <PrivateRoute path="/groups/:groupId?" component={Groups} />
-            <PrivateRoute path="/profile" component={Profile} />
-            <PrivateRoute path="/manage-groups/:groupId?" component={ManageGroups} />
-            <PrivateRoute path="/settings" component={Settings} />
-            <PrivateRoute path="/users" component={Users} />
-            <PrivateRoute path="/gatelist/:groupId?" component={Gatelist} />
-            <Route exact path="/" component={Home} />
-          </Switch>
+          <div id='content'>
+            <Switch>
+              <Route path="/login" component={Login} />
+              <Route path="/register" component={Register} />
+              <PrivateRoute path="/add-group" component={Groups} />
+              <PrivateRoute path="/groups/:groupId?" component={Groups} />
+              <PrivateRoute path="/profile" component={Profile} />
+              <PrivateRoute path="/manage-groups/:groupId?" component={ManageGroups} />
+              <PrivateRoute path="/settings" component={Settings} />
+              <PrivateRoute path="/users" component={Users} />
+              <PrivateRoute path="/gatelist/:groupId?" component={Gatelist} />
+              <Route exact path="/" component={Home} />
+            </Switch>
+          </div>
+          <Footer />
         </div>
       );
     }

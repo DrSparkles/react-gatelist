@@ -20,9 +20,9 @@ export class GroupList extends React.Component {
       <table id='group-list' className='table'>
         <thead>
           <tr>
-            <td>Group Name</td>
-            <td>Number of Slots</td>
-            <td>Select</td>
+            <td width='60%'>Group Name</td>
+            <td width='20%' className='center-cell'>Number of Slots</td>
+            <td width='20%' className='center-cell'>Select</td>
           </tr>
         </thead>
         <tbody>

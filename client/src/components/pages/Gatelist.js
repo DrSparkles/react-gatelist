@@ -34,7 +34,6 @@ export default class Gatelist extends React.Component {
     else {
       return (
         <div id='Gatelist'>
-          <h2>Gatelist</h2>
           <GatelistPanels />
         </div>
       );

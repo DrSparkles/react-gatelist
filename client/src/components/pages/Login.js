@@ -89,7 +89,7 @@ export default class Login extends React.Component {
                     onClick={this.handleSubmitForm}
                     type="button"
                     disabled={inProgress}
-                    className="btn btn-sm"
+                    className="btn-text btn btn-sm"
                     style={btnStyle}
                   >
                     Sign in

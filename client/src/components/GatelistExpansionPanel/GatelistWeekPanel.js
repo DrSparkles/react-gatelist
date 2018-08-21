@@ -12,12 +12,17 @@ import {inject, observer} from "mobx-react";
 
 @inject('interfaceStore')
 @observer
-class GLWeekPanel extends React.Component {
+class GatelistWeekPanel extends React.Component {
+
+  expanded = false;
 
   handleChangeWeek = week => (event, expanded) => {
-    console.log('changed week: expanded, week', expanded, week);
+    // console.log('changed week: expanded, week', expanded, week);
     if (expanded === true){
       this.props.interfaceStore.workingWithWeek = week;
+    }
+    else {
+      this.props.interfaceStore.workingWithWeek = '';
     }
   };
 
@@ -31,8 +36,8 @@ class GLWeekPanel extends React.Component {
 
     return (
       <ExpansionPanel expanded={this.isExpanded(week)} onChange={this.handleChangeWeek(week)}>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>Week {index + 1} - {week}</Typography>
+        <ExpansionPanelSummary className="panel-header" expandIcon={<ExpandMoreIcon />}>
+          <span className='week-header'>Week {index + 1} - {week}</span>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <div className='gatelist-week'>
@@ -45,4 +50,4 @@ class GLWeekPanel extends React.Component {
   }
 }
 
-export { GLWeekPanel };
+export { GatelistWeekPanel };

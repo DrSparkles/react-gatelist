@@ -1,4 +1,20 @@
+@import '../../styles/colors.scss';
+
 .gatelist-week {
   display: block;
   width: 100%;
+}
+
+.panel-header {
+  background-color: $color-primary-2 !important;
+  color: #FFF;
+}
+
+.panel-header span {
+  color: #FFF;
+}
+
+.week-header {
+  font-size: 18px;
+  color: #FFF;
 }
