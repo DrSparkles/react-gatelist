@@ -6,13 +6,20 @@ import './style.css';
 /**
  * User Detail Form
  */
-@inject('authStore')
+@inject('authStore', 'userStore')
 @observer
 class UserDetailsForm extends React.Component {
 
   editableUser = this.props.editableUser;
   editingProfile = (this.editableUser !== undefined);
-  handleSaveUser = this.props.handleSaveUser;
+  // handleSaveUser = this.props.handleSaveUser;
+
+  handleSaveUser = (ev) => {
+    this.props.handleSaveUser(ev);
+    this.setState({passwordValidationField: ''});
+  };
+
+
 
   password;
 
@@ -22,6 +29,18 @@ class UserDetailsForm extends React.Component {
       passwordValidationClass: "form-control form-control-sm",
       passwordValidationField: ""
     };
+  }
+
+  /**
+   * Load values for user
+   */
+  componentWillMount(){
+    if (this.editingProfile){
+      this.props.userStore.setEditingUserFromCurrentUser();
+    }
+    // this.props.userStore.setEditable('firstName', document.getElementById('firstName').value);
+    // this.props.userStore.setEditable('lastName', document.getElementById('lastName').value);
+    // this.props.userStore.setEditable('email', document.getElementById('email').value);
   }
 
   /**
@@ -44,7 +63,8 @@ class UserDetailsForm extends React.Component {
 
   handleFirstNameChange = (ev) => {
     if (this.editingProfile){
-      this.props.userStore.currentUser.firstName = ev.target.value;
+      console.log('trying to edit firstname', ev.target.value);
+      this.props.userStore.editingUser.firstName = ev.target.value;
     }
     else {
       this.props.authStore.setFirstName(ev.target.value);
@@ -53,7 +73,7 @@ class UserDetailsForm extends React.Component {
 
   handleLastNameChange = (ev) => {
     if (this.editingProfile){
-      this.props.userStore.currentUser.lastName = ev.target.value;
+      this.props.userStore.editingUser.lastName = ev.target.value;
     }
     else {
       this.props.authStore.setLastName(ev.target.value);
@@ -62,7 +82,7 @@ class UserDetailsForm extends React.Component {
 
   handleEmailChange = (ev) => {
     if (this.editingProfile){
-      this.props.userStore.currentUser.email = ev.target.value;
+      this.props.userStore.editingUser.email = ev.target.value;
     }
     else {
       this.props.authStore.setEmail(ev.target.value);
@@ -70,11 +90,11 @@ class UserDetailsForm extends React.Component {
   };
 
   handlePasswordChange = (ev) => {
-
     this.password = ev.target.value;
 
     if (this.editingProfile){
-      this.props.userStore.currentUser.firstName = ev.target.value;
+      this.props.userStore.password = ev.target.value;
+      this.props.userStore.editingUser.password = ev.target.value;
     }
     else {
       this.props.authStore.setPassword(ev.target.value);
@@ -95,20 +115,29 @@ class UserDetailsForm extends React.Component {
 
     this.setState({passwordValidationClass: passwordValidationClass});
 
-    // if (this.editingProfile){
-    // }
-    // else {
-    //
-    // }
   };
 
   render() {
-    const { values, inProgress } = this.props.authStore;
-    const { editableUser } = this.props;
+    let firstName, lastName, email, password = '';
+    let loading;
+    if (this.editingProfile){
+      console.log('setting user var');
+      firstName = this.props.userStore.editingUser.firstName;
+      lastName = this.props.userStore.editingUser.lastName;
+      email = this.props.userStore.editingUser.email;
+      password = this.props.userStore.editingUser.password;
+      loading = this.props.userStore.loading;
+    }
+    else {
+      firstName = this.props.authStore.values.firstName;
+      lastName = this.props.authStore.values.lastName;
+      email = this.props.authStore.values.email;
+      password = this.props.authStore.values.password;
+      loading = this.props.authStore.loading;
+    }
 
-    const user = (editableUser !== undefined) ? editableUser : values;
-
-    console.log('values inputUser user', values, editableUser, user);
+    console.log('this.props.userStore.editingUser', this.props.userStore.editingUser);
+    console.log('firstName, lastName, email, loading', firstName, lastName, email, loading);
 
     return (
       <div id='UserDetailForm'>
@@ -120,9 +149,10 @@ class UserDetailsForm extends React.Component {
 
                 <div className="form-group">
                   <input
+                    id='firstName'
                     type="text"
                     placeholder="First Name"
-                    value={user.firstName}
+                    value={firstName}
                     onChange={this.handleFirstNameChange}
                     className="form-control form-control-sm"
                   />
@@ -130,9 +160,10 @@ class UserDetailsForm extends React.Component {
 
                 <div className="form-group">
                   <input
+                    id='lastName'
                     type="text"
                     placeholder="Last Name"
-                    value={user.lastName}
+                    value={lastName}
                     onChange={this.handleLastNameChange}
                     className="form-control form-control-sm"
                   />
@@ -140,9 +171,10 @@ class UserDetailsForm extends React.Component {
 
                 <div className="form-group">
                   <input
+                    id='email'
                     type="text"
                     placeholder="Email (also login / username)"
-                    value={user.email}
+                    value={email}
                     onChange={this.handleEmailChange}
                     className="form-control form-control-sm"
                   />
@@ -150,9 +182,10 @@ class UserDetailsForm extends React.Component {
 
                 <div className="form-group">
                   <input
+                    id='password'
                     type="password"
                     placeholder="Password"
-                    value={user.password}
+                    value={password}
                     onChange={this.handlePasswordChange}
                     className="form-control form-control-sm"
                   />
@@ -172,7 +205,7 @@ class UserDetailsForm extends React.Component {
                 <div className="form-group text-center">
                   <button
                     type="button"
-                    disabled={inProgress}
+                    disabled={loading}
                     className="btn btn-sm btn-text"
                     onClick={this.handleSaveUser}>
                     {this.getButtonText()}

@@ -43,10 +43,10 @@ router.use(authMiddleware);
 router.route('/:_id')
   .put((req, res) => {
     const userId = req.params._id;
-    const body = req.body.user;
+    const body = req.body;
     console.log('userId', userId);
     console.log('body', body);
-    usersModule.saveUser(userId, body, (err, docs) => {
+    usersModule.saveUser(userId, body.originalUser, body.newUser, (err, docs) => {
       if (err) return errorHandler(err, res);
       return res.json(docs);
     });

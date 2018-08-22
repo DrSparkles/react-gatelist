@@ -12,7 +12,7 @@ class AuthStore {
    * Progress value for loading from the db
    * @type {boolean}
    */
-  @observable inProgress = false;
+  @observable loading = false;
 
   @observable userLoggedIn = false;
 
@@ -91,7 +91,7 @@ class AuthStore {
    * @returns {Promise<any>}
    */
   @action login() {
-    this.inProgress = true;
+    this.loading = true;
     this.errors = undefined;
     return agent.Auth
       .login(this.values.email, this.values.password)
@@ -106,7 +106,7 @@ class AuthStore {
         throw err;
       }))
       .finally(action(() => {
-        this.inProgress = false;
+        this.loading = false;
       }));
   }
 
@@ -116,7 +116,7 @@ class AuthStore {
    * @returns {Promise<any>}
    */
   @action register() {
-    this.inProgress = true;
+    this.loading = true;
     this.errors = undefined;
     return agent.Auth
       .register(this.values.firstName, this.values.lastName, this.values.email, this.values.password)
@@ -131,7 +131,7 @@ class AuthStore {
         throw err;
       }))
       .finally(action(() => {
-        this.inProgress = false;
+        this.loading = false;
         this.userJustRegistered = true;
       }));
   }

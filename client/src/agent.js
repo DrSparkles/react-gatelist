@@ -106,9 +106,9 @@ const Auth = {
 };
 
 const Users = {
-  save: (userId, user) => {
+  save: (userId, originalUser, newUser) => {
     const url = "/users/" + userId;
-    return requests.put(url, { user })
+    return requests.put(url, { originalUser, newUser })
   }
 };
 

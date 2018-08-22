@@ -4,11 +4,6 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import SBMessage from "../SBMessage/SBMessage";
 
-const btnStyle = {
-  "backgroundColor": "5f0f0f",
-  "color": "FFFFFF"
-};
-
 /**
  * Login form
  */

@@ -19,6 +19,7 @@ export default class Profile extends React.Component {
     ev.preventDefault();
     this.props.userStore
       .saveUser();
+
   };
 
   /**

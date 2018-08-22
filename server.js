@@ -28,6 +28,7 @@ app.get('/api/hello', (req, res) => {
 
 // set up routing
 var apiRouter = require('./server/router')(app);
+
 app.use(historyFallback());
 
 if (process.env.NODE_ENV === 'production') {

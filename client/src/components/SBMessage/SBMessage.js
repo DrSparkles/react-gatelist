@@ -1,15 +1,13 @@
 import React from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-// import { inject, observer } from 'mobx-react';
 
 import './style.css';
 
 export default class SBMessage extends React.Component {
 
   componentWillMount(){
-    this.state.open = true;
+    // this.state.open = true;
+    this.setState({'open': true});
   }
 
   state = {

@@ -61,7 +61,8 @@ export default class Layout extends React.Component {
               <PrivateRoute path="/settings" component={Settings} />
               <PrivateRoute path="/users" component={Users} />
               <PrivateRoute path="/gatelist/:groupId?" component={Gatelist} />
-              <Route exact path="/" component={Home} />
+              <Route path="/home" component={Home} />
+              <Route path="/" component={Home} />
             </Switch>
           </div>
           <Footer />

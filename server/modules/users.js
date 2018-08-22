@@ -60,8 +60,10 @@ class User {
 
   }
 
-  saveUser(userId, userData, cb){
-    const { firstName, lastName, email, password } = userData;
+  saveUser(userId, originalUserData, newUesrData, cb){
+
+    const { originalFirstName, originalLastName, originalEmail } = originalUserData;
+    const { firstName, lastName, email, password } = newUesrData;
 
     // make sure our values are set
     if (firstName === undefined || firstName === "" ||
@@ -71,10 +73,11 @@ class User {
     }
 
     // make sure the user is unique
-    this.user_collection.find({email}, (err, userDoc) => {
+    this.user_collection.find({email: originalEmail}, (err, userDoc) => {
+
       if (err) return returnSimpleError(err, 400, cb);
 
-      if (userDoc){
+      if (userDoc.length){
         return returnSimpleError("That email already exists; please try another!", 400, cb);
       }
 

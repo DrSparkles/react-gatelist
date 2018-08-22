@@ -10,15 +10,36 @@ import groupStore from "./groupStore";
  */
 class UserStore {
 
+  @observable currentUser = {};
+
+  @observable editingUser = {
+    userId: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: ''
+  };
+
+  setEditingUserFromCurrentUser(){
+    this.editingUser.userId = this.currentUser.userId;
+    this.editingUser.firstName = this.currentUser.firstName;
+    this.editingUser.lastName = this.currentUser.lastName;
+    this.editingUser.email = this.currentUser.email;
+  }
+
   /**
-   * The currently logged in user.  Expecting an object containing:
-   * {
-   *   username: STRING,
-   *   _id: INT user database id
-   * }
-   * @type {object}
+   * Loading state for fetching the user; true if we're accessing the db, false if we've fetched the user
+   * @type {boolean}
    */
-  @observable currentUser;
+  @observable loading;
+
+  /**
+   * Pending values for updating user data, such as resetting username or password
+   */
+  @observable updatingUser;
+  @observable updatingUserErrors;
+
+  @observable password;
 
   @computed get isAdmin(){
     return this.currentUser && this.currentUser.userType !== undefined && this.currentUser.userType === 'admin';
@@ -29,26 +50,12 @@ class UserStore {
   }
 
   /**
-   * Loading state for fetching the user; true if we're accessing the db, false if we've fetched the user
-   * @type {boolean}
-   */
-  @observable loadingUser;
-
-  /**
-   * Pending values for updating user data, such as resetting username or password
-   */
-  @observable updatingUser;
-  @observable updatingUserErrors;
-
-  @observable password;
-
-  /**
    * Fetch user from the db.  On the server side the auth token will be read to determine
    * if they are authorized
    * @returns {Promise<any>}
    */
   @action pullUser() {
-    this.loadingUser = true;
+    this.loading = true;
     return new Promise((resolve, reject) => {
       agent.SettingsData((err, results) => {
       if (err){
@@ -67,33 +74,40 @@ class UserStore {
       settingStore.setSettingData(results.settings.result[0]);
       groupStore.setUserGroups(results.groups.result);
       authStore.setUserLoggedIn(true);
-      this.loadingUser = false;
+      this.loading = false;
       return resolve();
     })});
   }
 
   @action saveUser(){
-    this.loadingUser = true;
-
+    this.loading = true;
     const user = {
-      userId: this.currentUser.userId,
-      firstName: this.currentUser.firstName,
-      lastName: this.currentUser.lastName,
-      email: this.currentUser.email
+      userId: this.editingUser.userId,
+      firstName: this.editingUser.firstName,
+      lastName: this.editingUser.lastName,
+      email: this.editingUser.email
     };
 
-    if (this.password !== undefined){
-      user.password = this.password;
+    if (this.editingUser.userType){
+      user.userType = this.editingUser.userType;
+    }
+
+    if (this.editingUser.password !== ''){
+      user.password = this.editingUser.password;
     }
 
     return agent.Users
-      .save(this.currentUser.userId, user)
+      .save(this.currentUser.userId, this.currentUser, user)
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
       .finally(action(() => {
-        this.loadingUser = false;
+        this.pullUser()
+          .finally(() => {
+            this.setEditingUserFromCurrentUser();
+            this.loading = false;
+          });
       }));
   }
 
@@ -105,6 +119,16 @@ class UserStore {
     currentUser.email = userData.email;
     currentUser.userType = userData.userType;
     return currentUser;
+  }
+
+  clearEditingUser(){
+    this.editingUser = {
+      userId: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: ''
+    };
   }
 
   /**
