@@ -21,6 +21,7 @@ import Users from "../Users";
 import Gatelist from "../Gatelist";
 import ManageGroups from "../ManageGroups";
 import Footer from "../../Footer/Footer";
+import AdminGatelist from "../AdminGatelist";
 
 @inject('commonStore', 'userStore', 'settingStore')
 @withRouter
@@ -61,6 +62,7 @@ export default class Layout extends React.Component {
               <PrivateRoute path="/settings" component={Settings} />
               <PrivateRoute path="/users" component={Users} />
               <PrivateRoute path="/gatelist/:groupId?" component={Gatelist} />
+              <PrivateRoute path="/admin/gatelist/:groupId?" component={AdminGatelist} />
               <Route path="/home" component={Home} />
               <Route path="/" component={Home} />
             </Switch>

@@ -44,9 +44,9 @@ const LoggedOutView = props => {
 const LoggedInView = props => {
   if (props.currentUser) {
     return (
-      <div>
-        <SuperAdminOptions isSuperAdmin={props.isSuperAdmin} isAdmin={props.isAdmin} />
-        <AdminOptions isSuperAdmin={props.isSuperAdmin} isAdmin={props.isAdmin} />
+      <div className='nav-list-container'>
+        <SuperAdminOptions navClass={props.navClass} isSuperAdmin={props.isSuperAdmin} isAdmin={props.isAdmin} />
+        <AdminOptions navClass={props.navClass} isSuperAdmin={props.isSuperAdmin} isAdmin={props.isAdmin} />
         <ul className={props.navClass}>
           <li><Link to='/groups'>My Groups</Link></li>
           <li><Link to='/profile'>My Profile</Link></li>
@@ -62,9 +62,9 @@ const LoggedInView = props => {
 const AdminOptions = props => {
   if (props.isAdmin || props.isSuperAdmin){
     return (
-      <div>
+      <div className='nav-list-container'>
         <ul className={props.navClass}>
-          <li><Link to='/gatelist'>Gatelist</Link></li>
+          <li><Link to='/admin/gatelist'>Gatelist</Link></li>
           <li><Link to='/manage-groups'>Manage Groups</Link></li>
         </ul>
         <br clear='all' />
@@ -77,7 +77,7 @@ const AdminOptions = props => {
 const SuperAdminOptions = props => {
   if (props.isSuperAdmin){
     return (
-      <div>
+      <div className='nav-list-container'>
         <ul className={props.navClass}>
           <li><Link to='/settings'>Settings</Link></li>
           <li><Link to='/users'>Users</Link></li>
