@@ -102,9 +102,13 @@ const Auth = {
   },
   register: (firstName, lastName, email, password) => {
     return requests.post('/users', { firstName, lastName, email, password })
-  },
-  save: (user) => {
-    return requests.put('/user', { user })
+  }
+};
+
+const Users = {
+  save: (userId, user) => {
+    const url = "/users/" + userId;
+    return requests.put(url, { user })
   }
 };
 
@@ -208,5 +212,6 @@ export default {
   Groups,
   Settings,
   Gatelist,
+  Users,
   SettingsData
 };

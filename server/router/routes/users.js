@@ -38,8 +38,19 @@ router.route('/')
 router.use(authMiddleware);
 
 /**
- * Routes at /api/users
+ * Save user info
  */
+router.route('/:_id')
+  .put((req, res) => {
+    const userId = req.params._id;
+    const body = req.body.user;
+    console.log('userId', userId);
+    console.log('body', body);
+    usersModule.saveUser(userId, body, (err, docs) => {
+      if (err) return errorHandler(err, res);
+      return res.json(docs);
+    });
+  });
 
 /**
  * Get user account

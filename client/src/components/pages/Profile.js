@@ -7,7 +7,7 @@ import React from "react";
 import { inject, observer } from 'mobx-react';
 import UserDetailsForm from "../UserDetailsForm/UserDetailsForm";
 
-@inject('commonStore', 'userStore')
+@inject('commonStore', 'userStore', 'authStore')
 @observer
 export default class Profile extends React.Component {
 
@@ -17,7 +17,7 @@ export default class Profile extends React.Component {
 
   handleSaveUser = (ev) => {
     ev.preventDefault();
-    this.props.authStore
+    this.props.userStore
       .saveUser();
   };
 
@@ -28,12 +28,13 @@ export default class Profile extends React.Component {
   render(){
 
     const user = this.props.userStore.currentUser;
+    console.log('user', this.props.userStore.currentUser);
 
     return (
       <div id='Profile'>
         <h2>Profile</h2>
         <div className='profile-container'>
-          <UserDetailsForm user={user} handleSaveUser={this.handleSaveUser} />
+          <UserDetailsForm editableUser={user} handleSaveUser={this.handleSaveUser} />
         </div>
       </div>
     );

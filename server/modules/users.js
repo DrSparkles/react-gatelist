@@ -1,4 +1,4 @@
-import { db, returnSimpleResult, returnSimpleError, getIdFromJSON } from '../lib/db';
+import {db, returnSimpleResult, returnSimpleError, getIdFromJSON, getId} from '../lib/db';
 import authConfig from '../config/auth.config';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
@@ -58,6 +58,49 @@ class User {
       });
     });
 
+  }
+
+  saveUser(userId, userData, cb){
+    const { firstName, lastName, email, password } = userData;
+
+    // make sure our values are set
+    if (firstName === undefined || firstName === "" ||
+        lastName === undefined || lastName === "" ||
+        email === undefined || email === ""){
+      return returnSimpleError("all fields are required.", 400, cb);
+    }
+
+    // make sure the user is unique
+    this.user_collection.find({email}, (err, userDoc) => {
+      if (err) return returnSimpleError(err, 400, cb);
+
+      if (userDoc){
+        return returnSimpleError("That email already exists; please try another!", 400, cb);
+      }
+
+      const insertQuery = {
+        firstName,
+        lastName,
+        email,
+        userType: 'user',
+      };
+
+      if (password !== undefined){
+        // hash our password for security
+        insertQuery.password = bcrypt.hashSync(password, 10);
+      }
+
+      const query = {_id: getId(userId)};
+
+      const updateQuery = {
+        $set: insertQuery
+      };
+
+      this.user_collection.update(query, updateQuery, (err, doc) => {
+        if (err) return returnSimpleError(err, 400, cb);
+        return returnSimpleResult(err, doc, cb);
+      });
+    });
   }
 
   /**

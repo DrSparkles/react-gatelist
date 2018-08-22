@@ -40,6 +40,8 @@ class UserStore {
   @observable updatingUser;
   @observable updatingUserErrors;
 
+  @observable password;
+
   /**
    * Fetch user from the db.  On the server side the auth token will be read to determine
    * if they are authorized
@@ -72,8 +74,20 @@ class UserStore {
 
   @action saveUser(){
     this.loadingUser = true;
-    return agent.Auth
-      .save()
+
+    const user = {
+      userId: this.currentUser.userId,
+      firstName: this.currentUser.firstName,
+      lastName: this.currentUser.lastName,
+      email: this.currentUser.email
+    };
+
+    if (this.password !== undefined){
+      user.password = this.password;
+    }
+
+    return agent.Users
+      .save(this.currentUser.userId, user)
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;

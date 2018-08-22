@@ -10,6 +10,12 @@ import './style.css';
 @observer
 class UserDetailsForm extends React.Component {
 
+  editableUser = this.props.editableUser;
+  editingProfile = (this.editableUser !== undefined);
+  handleSaveUser = this.props.handleSaveUser;
+
+  password;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -29,49 +35,81 @@ class UserDetailsForm extends React.Component {
     });
   }
 
-  handleSaveUser = this.props.handleSaveUser;
-
   getButtonText = () => {
-    if (this.props.user !== undefined){
+    if (this.editingProfile){
       return 'Save';
     }
     return 'Sign up';
   };
 
   handleFirstNameChange = (ev) => {
-    this.props.authStore.setFirstName(ev.target.value);
+    if (this.editingProfile){
+      this.props.userStore.currentUser.firstName = ev.target.value;
+    }
+    else {
+      this.props.authStore.setFirstName(ev.target.value);
+    }
   };
 
   handleLastNameChange = (ev) => {
-    this.props.authStore.setLastName(ev.target.value);
+    if (this.editingProfile){
+      this.props.userStore.currentUser.lastName = ev.target.value;
+    }
+    else {
+      this.props.authStore.setLastName(ev.target.value);
+    }
   };
 
   handleEmailChange = (ev) => {
-    this.props.authStore.setEmail(ev.target.value);
+    if (this.editingProfile){
+      this.props.userStore.currentUser.email = ev.target.value;
+    }
+    else {
+      this.props.authStore.setEmail(ev.target.value);
+    }
   };
 
   handlePasswordChange = (ev) => {
-    this.props.authStore.setPassword(ev.target.value);
+
+    this.password = ev.target.value;
+
+    if (this.editingProfile){
+      this.props.userStore.currentUser.firstName = ev.target.value;
+    }
+    else {
+      this.props.authStore.setPassword(ev.target.value);
+    }
   };
 
   handlePasswordCheckChange = (ev) => {
+
     const fieldValue = ev.target.value;
     this.setState({passwordValidationField: fieldValue});
 
     // set default class and handle class change as the field changes...
     // if the password validation check doesn't match the original password, set input to invalid
     let passwordValidationClass = "form-control form-control-sm";
-    if (fieldValue !== "" && fieldValue !== this.props.authStore.values.password){
+    if (fieldValue !== "" && fieldValue !== this.password){
       passwordValidationClass = "form-control form-control-sm is-invalid";
     }
 
     this.setState({passwordValidationClass: passwordValidationClass});
+
+    // if (this.editingProfile){
+    // }
+    // else {
+    //
+    // }
   };
-
-
 
   render() {
     const { values, inProgress } = this.props.authStore;
+    const { editableUser } = this.props;
+
+    const user = (editableUser !== undefined) ? editableUser : values;
+
+    console.log('values inputUser user', values, editableUser, user);
+
     return (
       <div id='UserDetailForm'>
         <div className="row">
@@ -84,7 +122,7 @@ class UserDetailsForm extends React.Component {
                   <input
                     type="text"
                     placeholder="First Name"
-                    value={values.firstName}
+                    value={user.firstName}
                     onChange={this.handleFirstNameChange}
                     className="form-control form-control-sm"
                   />
@@ -94,7 +132,7 @@ class UserDetailsForm extends React.Component {
                   <input
                     type="text"
                     placeholder="Last Name"
-                    value={values.lastName}
+                    value={user.lastName}
                     onChange={this.handleLastNameChange}
                     className="form-control form-control-sm"
                   />
@@ -104,7 +142,7 @@ class UserDetailsForm extends React.Component {
                   <input
                     type="text"
                     placeholder="Email (also login / username)"
-                    value={values.email}
+                    value={user.email}
                     onChange={this.handleEmailChange}
                     className="form-control form-control-sm"
                   />
@@ -114,7 +152,7 @@ class UserDetailsForm extends React.Component {
                   <input
                     type="password"
                     placeholder="Password"
-                    value={values.password}
+                    value={user.password}
                     onChange={this.handlePasswordChange}
                     className="form-control form-control-sm"
                   />
