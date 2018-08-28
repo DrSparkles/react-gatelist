@@ -12,13 +12,12 @@ export class AdminGatelistTab extends React.Component {
 
   //this.loadWeekData(this.weeks[this.props.interfaceStore.adminTabIndex]);
 
-  loadWeekData = (week) => {
-    this.props.gatelistStore.loadGatelistForWeek(week);
-  };
-
   render() {
     const { weekIndex } = this.props;
     const tabValue = this.props.interfaceStore.adminTabIndex;
+
+    const gatelistData = this.props.gatelistStore.gatelistByWeek[this.week];
+    console.log('gatelistData', gatelistData);
 
     if (tabValue === weekIndex){
       if (this.props.gatelistStore.loadingGatelist){

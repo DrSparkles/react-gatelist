@@ -33,6 +33,7 @@ class GatelistWeekPanel extends React.Component {
 
     const { week, index } = this.props;
     const gatelistData = this.props.gatelistStore.getGatelistEntriesForWeek(week);
+    console.log('gatelistData in gatelistweekpanel', gatelistData);
     return (
       <ExpansionPanel expanded={this.isExpanded(week)} onChange={this.handleChangeWeek(week)}>
         <ExpansionPanelSummary className="panel-header" expandIcon={<ExpandMoreIcon />}>
@@ -41,7 +42,7 @@ class GatelistWeekPanel extends React.Component {
         <ExpansionPanelDetails>
           <div className='gatelist-week'>
             <GatelistForm week={week} className='flex-row' />
-            <GatelistList week={week} gateslistData={gatelistData} className='flex-row' />
+            <GatelistList week={week} gatelistData={gatelistData} className='flex-row' />
           </div>
         </ExpansionPanelDetails>
       </ExpansionPanel>

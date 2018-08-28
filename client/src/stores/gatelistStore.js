@@ -98,6 +98,7 @@ class GatelistStore {
    * @returns {*|Promise<any>|Promise<T>}
    */
   @action loadGatelistForWeek(week){
+
     this.loadingGatelist = true;
     return agent.Gatelist
       .getGatelistForWeek(week)

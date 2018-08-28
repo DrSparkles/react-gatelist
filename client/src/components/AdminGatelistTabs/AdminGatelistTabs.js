@@ -13,11 +13,22 @@ export class AdminGatelistTabs extends React.Component {
   weeks = this.props.weeks;
 
   componentDidMount(){
+    // this.props.interfaceStore.adminTabIndex
+    // if (tabValue === weekIndex){
+    //   console.log('the indexes match');
+    //   this.loadWeekData(this.week);
+    // }
 
+    const week = this.weeks[this.props.interfaceStore.adminTabIndex];
+    this.loadWeekData(week);
   }
 
   handleChange = (event, value) => {
     this.props.interfaceStore.adminTabIndex = value;
+  };
+
+  loadWeekData = (week) => {
+    this.props.gatelistStore.loadGatelistForWeek(week);
   };
 
   render() {
