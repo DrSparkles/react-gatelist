@@ -9,7 +9,7 @@ import { GatelistForm } from '../GatelistForm';
 import { GatelistList } from "../GatelistList";
 import {inject, observer} from "mobx-react";
 
-@inject('interfaceStore')
+@inject('interfaceStore', 'gatelistStore')
 @observer
 class GatelistWeekPanel extends React.Component {
 
@@ -32,7 +32,7 @@ class GatelistWeekPanel extends React.Component {
   render(){
 
     const { week, index } = this.props;
-
+    const gatelistData = this.props.gatelistStore.getGatelistEntriesForWeek(week);
     return (
       <ExpansionPanel expanded={this.isExpanded(week)} onChange={this.handleChangeWeek(week)}>
         <ExpansionPanelSummary className="panel-header" expandIcon={<ExpandMoreIcon />}>
@@ -41,7 +41,7 @@ class GatelistWeekPanel extends React.Component {
         <ExpansionPanelDetails>
           <div className='gatelist-week'>
             <GatelistForm week={week} className='flex-row' />
-            <GatelistList week={week} className='flex-row' />
+            <GatelistList week={week} gateslistData={gatelistData} className='flex-row' />
           </div>
         </ExpansionPanelDetails>
       </ExpansionPanel>

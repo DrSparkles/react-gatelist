@@ -2,10 +2,9 @@
  * Gatelist page
  */
 import React from "react";
-// import moment from "moment";
 import { inject, observer } from 'mobx-react';
 import { GatelistPanels } from '../GatelistExpansionPanel';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 @inject('commonStore', 'userStore', 'groupStore', 'routerStore', 'gatelistStore')
 @observer
@@ -17,7 +16,8 @@ export default class Gatelist extends React.Component {
       return null;
     }
 
-    this.props.gatelistStore.loadGroupsGatelist(this.props.groupStore.currentGroup.groupId);
+    // this.props.groupStore.currentGroup.groupId
+    this.props.gatelistStore.loadGroupsGatelist();
   }
 
   /**
@@ -28,7 +28,7 @@ export default class Gatelist extends React.Component {
 
     if (this.props.gatelistStore.loadingGatelist){
       return (
-        <CircularProgress/>
+        <LoadingSpinner/>
       );
     }
     else {

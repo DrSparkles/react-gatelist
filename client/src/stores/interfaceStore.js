@@ -8,6 +8,8 @@ class InterfaceStore {
 
   @observable workingWithWeek = '';
 
+  @observable adminTabIndex = 0;
+
 }
 
 export default new InterfaceStore();

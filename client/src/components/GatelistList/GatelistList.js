@@ -8,12 +8,13 @@ import {GatelistListItem} from "./GatelistListItem";
 export class GatelistList extends React.Component {
 
   render() {
-    const week = this.props.week;
-    const gatelist = this.props.gatelistStore.getGatelistEntriesForWeek(week);
-    console.log('GatelistList gatelist', gatelist);
+
+    const { week, gatelistData } = this.props;
+    console.log('GatelistList gatelist', gatelistData);
+
     let savedGatelistForPrinting = [];
-    if (gatelist.length > 0){
-      savedGatelistForPrinting = gatelist.map((gl, index) => {
+    if (gatelistData.length > 0){
+      savedGatelistForPrinting = gatelistData.map((gl, index) => {
         console.log(gl);
         return <GatelistListItem key={index} week={week} index={index} gatelist={gl} />;
       });

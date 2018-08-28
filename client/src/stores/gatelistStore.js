@@ -20,6 +20,8 @@ class GatelistStore {
 
   @observable gatelist = {};
 
+  @observable gatelistByWeek = {};
+
   @observable deleting;
 
   @observable currentGatelist = {
@@ -64,6 +66,10 @@ class GatelistStore {
     return [];
   }
 
+  /**
+   * Load the gatelist for a given group
+   * @returns {*|Promise<any>|Promise<T>}
+   */
   @action loadGroupsGatelist(){
     this.loadingGatelist = true;
     return agent.Gatelist
@@ -75,7 +81,34 @@ class GatelistStore {
           settingStore.settingValues.numWeeks
         );
         const userGatelistData = gatelist.result;
-        this.gatelist = this.setGroupsGatelistValues(this.gatelist, userGatelistData);
+        this.gatelist = this.parseGatelistValues(this.gatelist, userGatelistData);
+      }))
+      .catch(action((err) => {
+        this.errors = err.response && err.response.body && err.response.body.message;
+        throw err;
+      }))
+      .finally(action(() => {
+        this.loadingGatelist = false;
+      }));
+  }
+
+  /**
+   * Load the complete gatelist for a given week, for the admin view
+   * @param week
+   * @returns {*|Promise<any>|Promise<T>}
+   */
+  @action loadGatelistForWeek(week){
+    this.loadingGatelist = true;
+    return agent.Gatelist
+      .getGatelistForWeek(week)
+      .then(action((gatelist) => {
+        this.gatelistByWeek = this.setupGatelist(
+          this.gatelistByWeek,
+          settingStore.settingValues.startWeekend,
+          settingStore.settingValues.numWeeks
+        );
+        const weekGatelistData = gatelist.result;
+        this.gatelistByWeek = this.parseGatelistValues(this.gatelistByWeek, weekGatelistData);
       }))
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.message;
@@ -94,7 +127,7 @@ class GatelistStore {
     return gatelistHash;
   }
 
-  setGroupsGatelistValues(gatelistHash, gatelistData){
+  parseGatelistValues(gatelistHash, gatelistData){
 
     for (let week in gatelistData){
       if (gatelistData.hasOwnProperty(week)) {
@@ -180,6 +213,7 @@ class GatelistStore {
       minor: this.currentGatelist.minor,
       notes: this.currentGatelist.notes,
       groupId: groupStore.currentGroup.groupId,
+      groupName: groupStore.currentGroup.groupName,
       addedBy: userStore.currentUser.userId
     };
   }

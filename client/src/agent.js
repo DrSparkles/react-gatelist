@@ -162,6 +162,10 @@ const Gatelist = {
     const url = "/gatelist/user/" + userId;
     return requests.get(url);
   },
+  getGatelistForWeek: (week) => {
+    const url = "/gatelist/week/" + week;
+    return requests.get(url);
+  },
   getGroupsGatelist: (groupId) => {
     const url = "/gatelist/group/" + groupId;
     return requests.get(url);

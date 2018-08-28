@@ -7,7 +7,7 @@ import './style.css';
 import MainNav from '../MainNav';
 
 /**
- * Site header
+ * Site footer
  */
 @inject('userStore', 'commonStore')
 @observer

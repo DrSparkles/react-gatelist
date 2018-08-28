@@ -31,6 +31,18 @@ router.route('/')
     });
   });
 
+router.route('/week/:week')
+  /**
+   * Get the entire gatelist for a given week
+   */
+  .get((req, res) => {
+    const week = req.params.week;
+    gatelistModule.getGatelistByWeek(week, (err, docs) => {
+      if (err) return errorHandler(err, res);
+      return res.json(docs);
+    });
+  });
+
 router.route('/user/:_id')
   /**
    * Get user's gatelists

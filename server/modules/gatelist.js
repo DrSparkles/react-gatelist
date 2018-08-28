@@ -20,13 +20,14 @@ class Gatelist {
 
     console.log('create new', userId, gatelistValues);
 
-    const { firstName, lastName, date, minor, notes, groupId } = gatelistValues;
+    const { firstName, lastName, date, minor, notes, groupId, groupName } = gatelistValues;
 
     if (firstName === undefined || firstName === '' ||
         lastName === undefined || lastName === '' ||
         date === undefined || date === '' ||
         minor === undefined || minor === '' ||
-        groupId === undefined || groupId === ''
+        groupId === undefined || groupId === '' ||
+        groupName === undefined || groupName === ''
     ){
       console.log('createNew exiting due to empty values');
       return returnSimpleError("all fields are required.", 400, cb);
@@ -37,6 +38,7 @@ class Gatelist {
     const addedByObjId = getId(userId);
     const insertQuery = {
       groupId: groupObjId,
+      groupName,
       firstName,
       lastName,
       date: date,
@@ -54,6 +56,35 @@ class Gatelist {
         return returnSimpleError(err, 400, cb);
       }
       return returnSimpleResult(null, doc, cb);
+    });
+
+  }
+
+  /**
+   * Get gatelist by week and sort by groupName
+   * @param week
+   * @param cb
+   */
+  getGatelistByWeek(week, cb){
+
+    const query = {date: week};
+    const sort = {sort: {groupName: 1}};
+    console.log('query', query);
+    this.gatelists_collection.find(query, sort, (err, docs) => {
+      if (err) return returnSimpleError(err, 400, cb);
+
+      const gatelist = {};
+      for (let i = 0; i < docs.length; i++){
+        const glEntry = docs[i];
+
+        if (gatelist[glEntry.date] === undefined){
+          gatelist[glEntry.date] = [];
+        }
+
+        gatelist[glEntry.date].push(glEntry);
+      }
+
+      return returnSimpleResult(null, gatelist, cb);
     });
 
   }

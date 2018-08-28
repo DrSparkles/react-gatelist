@@ -1,44 +1,38 @@
-/**
- * Gatelist page
- */
 import React from "react";
-// import moment from "moment";
 import { inject, observer } from 'mobx-react';
-import { GatelistPanels } from '../GatelistExpansionPanel';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import moment from "moment";
 import {AdminGatelistTabs} from "../AdminGatelistTabs";
+import {getGatelistWeeks, getNextSaturday} from "../../utils/date.utils";
 
-@inject('commonStore', 'userStore', 'groupStore', 'routerStore', 'gatelistStore')
+@inject('gatelistStore', 'interfaceStore', 'settingStore')
 @observer
-export default class Gatelist extends React.Component {
+export default class AdminGatelist extends React.Component {
 
-  currentWeek = moment().startOf('week').format('YYYY-MM-DD');
+  weeks = getGatelistWeeks(this.props.settingStore.settingValues.startWeekend, this.props.settingStore.settingValues.numWeeks);
 
   componentDidMount() {
-    if (this.props.groupStore.currentGroup.groupId === 0){
-      this.props.routerStore.push('/groups');
-      return null;
+    const nextSaturday = getNextSaturday();
+    const weekIndex = this.weeks.indexOf(nextSaturday);
+    if (weekIndex >= 0) {
+      this.props.interfaceStore.adminTabIndex = weekIndex;
     }
-
-    this.props.gatelistStore.loadGroupsGatelist(this.props.groupStore.currentGroup.groupId);
+    else {
+      this.props.interfaceStore.adminTabIndex = 0;
+    }
   }
 
-  /**
-   * Render our document!
-   * @returns {*}
-   */
   render(){
 
     if (this.props.gatelistStore.loadingGatelist){
       return (
-        <CircularProgress/>
+        <CircularProgress />
       );
     }
     else {
+      const currentWeek = this.weeks[this.props.interfaceStore.adminTabIndex];
       return (
         <div id='AdminGatelist'>
-          <AdminGatelistTabs />
+          <AdminGatelistTabs weeks={this.weeks} currentWeek={currentWeek} />
         </div>
       );
     }
