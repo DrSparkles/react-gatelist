@@ -19,22 +19,21 @@ export default class AdminGatelist extends React.Component {
     else {
       this.props.interfaceStore.adminTabIndex = 0;
     }
+
+    this.loadWeekData(this.weeks[this.props.interfaceStore.adminTabIndex]);
+    console.log('this.props.gatelistStore.gatelistByWeek',this.props.gatelistStore.gatelistByWeek);
   }
 
-  render(){
+  loadWeekData = (week) => {
+    this.props.gatelistStore.loadGatelistForWeek(week);
+  };
 
-    if (this.props.gatelistStore.loadingGatelist){
-      return (
-        <CircularProgress />
-      );
-    }
-    else {
-      const currentWeek = this.weeks[this.props.interfaceStore.adminTabIndex];
-      return (
-        <div id='AdminGatelist'>
-          <AdminGatelistTabs weeks={this.weeks} currentWeek={currentWeek} />
-        </div>
-      );
-    }
+  render(){
+    return (
+      <div>
+        <h1>SERIOUSLY</h1>
+        <AdminGatelistTabs weeks={this.weeks} />
+      </div>
+    );
   }
 }

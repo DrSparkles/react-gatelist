@@ -13,6 +13,7 @@ import { Router } from 'react-router';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import 'semantic-ui-css/semantic.min.css';
 import './styles/colors.css';
 
 import Layout from "./components/pages/Layout";

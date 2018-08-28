@@ -110,6 +110,7 @@ class GatelistStore {
         );
         const weekGatelistData = gatelist.result;
         this.gatelistByWeek = this.parseGatelistValues(this.gatelistByWeek, weekGatelistData);
+        console.log('loadGatelistForWeek', this.gatelistByWeek);
       }))
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.message;

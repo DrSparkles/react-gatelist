@@ -1,10 +1,8 @@
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import {inject, observer} from "mobx-react";
 import React from "react";
 import {getGatelistWeeks, getNextSaturday} from "../../utils/date.utils";
 import { AdminGatelistTab } from './AdminGatelistTab';
+import { Tab } from 'semantic-ui-react'
 
 @inject('settingStore', 'interfaceStore', 'gatelistStore')
 @observer
@@ -13,14 +11,8 @@ export class AdminGatelistTabs extends React.Component {
   weeks = this.props.weeks;
 
   componentDidMount(){
-    // this.props.interfaceStore.adminTabIndex
-    // if (tabValue === weekIndex){
-    //   console.log('the indexes match');
-    //   this.loadWeekData(this.week);
-    // }
-
-    const week = this.weeks[this.props.interfaceStore.adminTabIndex];
-    this.loadWeekData(week);
+    // const week = this.weeks[this.props.interfaceStore.adminTabIndex];
+    // this.loadWeekData(week);
   }
 
   handleChange = (event, value) => {
@@ -33,23 +25,28 @@ export class AdminGatelistTabs extends React.Component {
 
   render() {
 
-    const weekTabLabels = this.weeks.map((week, index) => {
-      return <Tab label={week} key={index} />;
+    const panes = this.weeks.map((week, index) => {
+      return { menuItem: week, render: () => <AdminGatelistTab key={index} weekIndex={index} week={this.weeks[index]} title={week} /> };
     });
 
-    const weekItems = this.weeks.map((week, index) => {
-      return <AdminGatelistTab key={index} week={week} weekIndex={index} />;
-    });
+    const AdminTabs = () => <Tab panes={panes} />;
 
-    return (
-      <div>
-        <AppBar position="static">
-          <Tabs value={this.props.interfaceStore.adminTabIndex} onChange={this.handleChange}>
-            {weekTabLabels}
-          </Tabs>
-        </AppBar>
-        {weekItems}
-      </div>
+    return(
+
+      <AdminTabs />
+
     );
-  };
+  }
 }
+
+/*
+<Tab eventKey={1} title="Tab 1">
+          Tab 1 content
+        </Tab>
+        <Tab eventKey={2} title="Tab 2">
+          Tab 2 content
+        </Tab>
+        <Tab eventKey={3} title="Tab 3" disabled>
+          Tab 3 content
+        </Tab>
+ */
