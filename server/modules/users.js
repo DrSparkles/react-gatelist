@@ -63,7 +63,7 @@ class User {
   saveUser(userId, originalUserData, newUesrData, cb){
 
     const { originalFirstName, originalLastName, originalEmail } = originalUserData;
-    const { firstName, lastName, email, password } = newUesrData;
+    const { firstName, lastName, email, password, userType } = newUesrData;
 
     // make sure our values are set
     if (firstName === undefined || firstName === "" ||
@@ -84,9 +84,12 @@ class User {
       const insertQuery = {
         firstName,
         lastName,
-        email,
-        userType: 'user',
+        email
       };
+
+      if (userType !== undefined){
+        insertQuery.userType = userType;
+      }
 
       if (password !== undefined){
         // hash our password for security

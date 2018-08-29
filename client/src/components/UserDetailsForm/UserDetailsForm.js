@@ -11,15 +11,8 @@ import './style.css';
 class UserDetailsForm extends React.Component {
 
   editableUser = this.props.editableUser;
+
   editingProfile = (this.editableUser !== undefined);
-  // handleSaveUser = this.props.handleSaveUser;
-
-  handleSaveUser = (ev) => {
-    this.props.handleSaveUser(ev);
-    this.setState({passwordValidationField: ''});
-  };
-
-
 
   password;
 
@@ -31,6 +24,11 @@ class UserDetailsForm extends React.Component {
     };
   }
 
+  handleSaveUser = (ev) => {
+    this.props.handleSaveUser(ev);
+    this.setState({passwordValidationField: ''});
+  };
+
   /**
    * Load values for user
    */
@@ -38,9 +36,6 @@ class UserDetailsForm extends React.Component {
     if (this.editingProfile){
       this.props.userStore.setEditingUserFromCurrentUser();
     }
-    // this.props.userStore.setEditable('firstName', document.getElementById('firstName').value);
-    // this.props.userStore.setEditable('lastName', document.getElementById('lastName').value);
-    // this.props.userStore.setEditable('email', document.getElementById('email').value);
   }
 
   /**

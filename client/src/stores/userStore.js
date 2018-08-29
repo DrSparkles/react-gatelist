@@ -17,7 +17,8 @@ class UserStore {
     firstName: '',
     lastName: '',
     email: '',
-    password: ''
+    password: '',
+    userType: ''
   };
 
   setEditingUserFromCurrentUser(){
@@ -25,6 +26,7 @@ class UserStore {
     this.editingUser.firstName = this.currentUser.firstName;
     this.editingUser.lastName = this.currentUser.lastName;
     this.editingUser.email = this.currentUser.email;
+    this.editingUser.userType = this.currentUser.userType;
   }
 
   /**
@@ -101,7 +103,7 @@ class UserStore {
     if (this.editingUser.password !== ''){
       user.password = this.editingUser.password;
     }
-
+    console.log('this.editingUser', this.editingUser);
     return agent.Users
       .save(this.currentUser.userId, this.currentUser, user)
       .catch(action((err) => {
@@ -133,7 +135,8 @@ class UserStore {
       firstName: '',
       lastName: '',
       email: '',
-      password: ''
+      password: '',
+      userType: ''
     };
   }
 
