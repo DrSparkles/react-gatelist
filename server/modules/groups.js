@@ -54,8 +54,10 @@ class Groups {
    */
   getUsersGroups(userId, cb){
     const query = {userId: getId(userId)};
+    console.log('getUsersGroups query', query);
     this.groups_collection.find(query, (err, docs) => {
       if (err) return returnSimpleError(err, 400, cb);
+      console.log('getUsersGroups docs', docs);
       return returnSimpleResult(null, docs, cb);
     });
   }

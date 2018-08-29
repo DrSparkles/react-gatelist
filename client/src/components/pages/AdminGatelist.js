@@ -31,7 +31,6 @@ export default class AdminGatelist extends React.Component {
   render(){
     return (
       <div>
-        <h1>SERIOUSLY</h1>
         <AdminGatelistTabs weeks={this.weeks} />
       </div>
     );

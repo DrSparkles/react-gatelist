@@ -2,6 +2,7 @@ import { observable } from 'mobx';
 
 export class GatelistEntry {
   @observable gatelistId = "";
+  @observable groupName = "";
   @observable firstName = "";
   @observable lastName = 0;
   @observable date = "";
@@ -11,8 +12,9 @@ export class GatelistEntry {
   @observable createdDate = "";
   @observable addedBy = "";
 
-  constructor(gatelistId, firstName, lastName, date, minor, notes, groupId, createdDate, addedBy) {
+  constructor(gatelistId, groupName, firstName, lastName, date, minor, notes, groupId, createdDate, addedBy) {
     this.gatelistId = gatelistId;
+    this.groupName = groupName;
     this.firstName = firstName;
     this.lastName = lastName;
     this.date = date;

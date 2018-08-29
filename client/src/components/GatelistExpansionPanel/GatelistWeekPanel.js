@@ -13,8 +13,6 @@ import {inject, observer} from "mobx-react";
 @observer
 class GatelistWeekPanel extends React.Component {
 
-  expanded = false;
-
   handleChangeWeek = week => (event, expanded) => {
     // console.log('changed week: expanded, week', expanded, week);
     if (expanded === true){

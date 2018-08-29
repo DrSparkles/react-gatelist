@@ -138,6 +138,7 @@ class GatelistStore {
           const gatelist = weeksList[i];
           const glEntry = new GatelistEntry(
                 gatelist._id,
+                gatelist.groupName,
                 gatelist.firstName,
                 gatelist.lastName,
                 gatelist.date,

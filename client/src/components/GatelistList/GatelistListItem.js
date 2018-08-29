@@ -8,6 +8,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 export class GatelistListItem extends React.Component {
 
   gatelistId = this.props.gatelist.gatelistId;
+  groupName = this.props.gatelist.groupName;
   firstName = this.props.gatelist.firstName;
   lastName = this.props.gatelist.lastName;
   date = this.props.gatelist.date;
@@ -28,13 +29,15 @@ export class GatelistListItem extends React.Component {
   };
 
   render() {
-
+    console.log('this.props.adminView this.groupName', this.props.adminView, this.groupName);
+    console.log('GatelistListItem this.props.gatelist', this.props.gatelist);
     return (
       <tr className='gatelist-row'>
-        <td colSpan='2' width='45%'>{this.firstName} {this.lastName}</td>
+        {<GroupNameCell adminView={this.props.adminView} groupName={this.groupName} />}
+        <td>{this.firstName} {this.lastName}</td>
         <td width='10%'>{this.minor}</td>
         <td width='25%'>{this.notes}</td>
-        <td width='20%'>
+        <td width='15%'>
           <div className="form-group gatelist-form-controls">
             <button className='btn btn-sm' onClick={this.handleEditClick}><EditIcon className='icon edit-icon' /></button>
             <button className='btn btn-sm' onClick={this.handleDeleteClick}><DeleteForeverIcon className='icon delete-icon' /></button>
@@ -44,3 +47,15 @@ export class GatelistListItem extends React.Component {
     );
   }
 }
+
+const GroupNameCell = (props) => {
+  console.log('GroupNameCell adminView groupName', props.adminView, props.groupName);
+  if (props.adminView){
+    return (
+      <td width='20%'>{props.groupName}</td>
+    );
+  }
+  else {
+    return null;
+  }
+};

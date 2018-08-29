@@ -56,7 +56,7 @@ export class AdminGatelistTab extends React.Component {
             <br />
             <DownloadCSVBtn downloadData={this.gatelist} />
             <br />
-            <GatelistList week={this.week} gatelistData={currentWeekDataArray} className='flex-row' />
+            <GatelistList week={this.week} gatelistData={currentWeekDataArray} adminView={true} className='flex-row' />
           </div>
         </Tab.Pane>
       );
