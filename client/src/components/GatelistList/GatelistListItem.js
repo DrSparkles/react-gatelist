@@ -28,46 +28,48 @@ export class GatelistListItem extends React.Component {
     this.props.gatelistStore.deleteGatelist();
   };
 
+  showAdminColumns = () => {
+    return this.props.userStore.isAdmin || this.props.userStore.isSuperAdmin;
+  };
+
+  renderGroupNameCell = () => {
+    if (this.showAdminColumns()){
+      return (
+        <td width='20%'>{this.groupName}</td>
+      );
+    }
+    else {
+      return null;
+    }
+  };
+
+  renderEditButtons = () => {
+    if (this.props.userStore.isAdmin === false) {
+      return (
+        <div className="form-group gatelist-form-controls">
+          <button className='btn btn-sm' onClick={this.handleEditClick}><EditIcon className='icon edit-icon' /></button>
+          <button className='btn btn-sm' onClick={this.handleDeleteClick}><DeleteForeverIcon className='icon delete-icon' /></button>
+        </div>
+      );
+    }
+    else {
+      return (
+        <span>&nbsp;</span>
+      );
+    }
+  };
+
   render() {
     return (
       <tr className='gatelist-row'>
-        {<GroupNameCell adminView={this.props.adminView} groupName={this.groupName} />}
+        {this.renderGroupNameCell()}
         <td>{this.firstName} {this.lastName}</td>
         <td width='10%'>{this.minor}</td>
         <td width='25%'>{this.notes}</td>
         <td width='15%'>
-          <EditButtons adminView={this.props.adminView} handleEditClick={this.handleEditClick} handleDeleteClick={this.handleDeleteClick} />
+          {this.renderEditButtons()}
         </td>
       </tr>
     );
   }
 }
-
-const GroupNameCell = (props) => {
-  if (props.adminView){
-    return (
-      <td width='20%'>{props.groupName}</td>
-    );
-  }
-  else {
-    return null;
-  }
-};
-
-const EditButtons = (props) => {
-  if (props.adminView === false){
-    const handleEditClick = props.handleEditClick;
-    const handleDeleteClick = props.handleDeleteClick;
-    return (
-      <div className="form-group gatelist-form-controls">
-        <button className='btn btn-sm' onClick={handleEditClick}><EditIcon className='icon edit-icon' /></button>
-        <button className='btn btn-sm' onClick={handleDeleteClick}><DeleteForeverIcon className='icon delete-icon' /></button>
-      </div>
-    );
-  }
-  else {
-    return (
-      <span>&nbsp;</span>
-    );
-  }
-};

@@ -19,7 +19,7 @@ export class GatelistList extends React.Component {
     }
 
     let header = <NormalHeader />;
-    if (this.props.adminView){
+    if (this.props.userStore.isAdmin || this.props.userStore.isSuperAdmin){
       header = <AdminHeader />;
     }
 

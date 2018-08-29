@@ -7,7 +7,7 @@ import { Tab } from 'semantic-ui-react'
 
 import './style.css';
 
-@inject('gatelistStore', 'interfaceStore')
+@inject('gatelistStore', 'interfaceStore', 'userStore')
 @observer
 export class AdminGatelistTab extends React.Component {
 
@@ -61,7 +61,7 @@ export class AdminGatelistTab extends React.Component {
         <Tab.Pane>
           <div>
             <DownloadCSVBtn fileName={this.fileName} dataFilter={this.gatelistCSVDataFilter} headerData={this.headerData} downloadData={currentWeekDataArray} className='download-csv-btn' />
-            <GatelistList week={this.week} gatelistData={currentWeekDataArray} adminView={true} className='flex-row' />
+            <GatelistList week={this.week} gatelistData={currentWeekDataArray} adminView={this.props.userStore.isAdmin} className='flex-row' />
           </div>
         </Tab.Pane>
       );
