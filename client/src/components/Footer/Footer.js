@@ -22,6 +22,7 @@ class Footer extends React.Component {
       <div id='Footer'>
         <nav>
           <MainNav navPlacement='footer' />
+          <br clear='all' />
           &copy; gwendolyn {this.getYear()}
         </nav>
       </div>

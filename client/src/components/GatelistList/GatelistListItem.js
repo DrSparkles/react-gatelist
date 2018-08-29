@@ -29,8 +29,6 @@ export class GatelistListItem extends React.Component {
   };
 
   render() {
-    console.log('this.props.adminView this.groupName', this.props.adminView, this.groupName);
-    console.log('GatelistListItem this.props.gatelist', this.props.gatelist);
     return (
       <tr className='gatelist-row'>
         {<GroupNameCell adminView={this.props.adminView} groupName={this.groupName} />}
@@ -38,10 +36,7 @@ export class GatelistListItem extends React.Component {
         <td width='10%'>{this.minor}</td>
         <td width='25%'>{this.notes}</td>
         <td width='15%'>
-          <div className="form-group gatelist-form-controls">
-            <button className='btn btn-sm' onClick={this.handleEditClick}><EditIcon className='icon edit-icon' /></button>
-            <button className='btn btn-sm' onClick={this.handleDeleteClick}><DeleteForeverIcon className='icon delete-icon' /></button>
-          </div>
+          <EditButtons adminView={this.props.adminView} handleEditClick={this.handleEditClick} handleDeleteClick={this.handleDeleteClick} />
         </td>
       </tr>
     );
@@ -49,7 +44,6 @@ export class GatelistListItem extends React.Component {
 }
 
 const GroupNameCell = (props) => {
-  console.log('GroupNameCell adminView groupName', props.adminView, props.groupName);
   if (props.adminView){
     return (
       <td width='20%'>{props.groupName}</td>
@@ -57,5 +51,23 @@ const GroupNameCell = (props) => {
   }
   else {
     return null;
+  }
+};
+
+const EditButtons = (props) => {
+  if (props.adminView === false){
+    const handleEditClick = props.handleEditClick;
+    const handleDeleteClick = props.handleDeleteClick;
+    return (
+      <div className="form-group gatelist-form-controls">
+        <button className='btn btn-sm' onClick={handleEditClick}><EditIcon className='icon edit-icon' /></button>
+        <button className='btn btn-sm' onClick={handleDeleteClick}><DeleteForeverIcon className='icon delete-icon' /></button>
+      </div>
+    );
+  }
+  else {
+    return (
+      <span>&nbsp;</span>
+    );
   }
 };

@@ -65,7 +65,6 @@ const AdminOptions = props => {
       <div className='nav-list-container'>
         <ul className={props.navClass}>
           <li><Link to='/admin/gatelist'>Gatelist</Link></li>
-          <li><Link to='/manage-groups'>Manage Groups</Link></li>
         </ul>
         <br clear='all' />
       </div>
@@ -79,8 +78,9 @@ const SuperAdminOptions = props => {
     return (
       <div className='nav-list-container'>
         <ul className={props.navClass}>
-          <li><Link to='/settings'>Settings</Link></li>
-          <li><Link to='/users'>Users</Link></li>
+          <li><Link to='/admin/settings'>Settings</Link></li>
+          <li><Link to='/admin/users'>Users</Link></li>
+          <li><Link to='/admin/manage-groups'>Manage Groups</Link></li>
         </ul>
         <br clear='all' />
       </div>

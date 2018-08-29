@@ -68,7 +68,7 @@ class Gatelist {
   getGatelistByWeek(week, cb){
 
     const query = {date: week};
-    const sort = {sort: {groupName: 1}};
+    const sort = {sort: {groupName: 1, lastName: 1}};
     console.log('query', query);
     this.gatelists_collection.find(query, sort, (err, docs) => {
       if (err) return returnSimpleError(err, 400, cb);

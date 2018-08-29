@@ -1,6 +1,5 @@
 import React from "react";
 import { inject, observer } from 'mobx-react';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import {AdminGatelistTabs} from "../AdminGatelistTabs";
 import {getGatelistWeeks, getNextSaturday} from "../../utils/date.utils";
 

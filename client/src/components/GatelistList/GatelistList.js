@@ -10,12 +10,10 @@ export class GatelistList extends React.Component {
   render() {
 
     const { week, gatelistData } = this.props;
-    console.log('GatelistList gatelist', gatelistData);
 
     let savedGatelistForPrinting = [];
     if (gatelistData.length > 0){
       savedGatelistForPrinting = gatelistData.map((gl, index) => {
-        console.log(gl);
         return <GatelistListItem key={index} week={week} index={index} gatelist={gl} adminView={this.props.adminView} />;
       });
     }
