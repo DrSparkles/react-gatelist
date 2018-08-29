@@ -58,6 +58,7 @@ class UserStore {
     this.loading = true;
     return new Promise((resolve, reject) => {
       agent.SettingsData((err, results) => {
+
       if (err){
         console.log(err);
         return reject(err);
@@ -68,12 +69,17 @@ class UserStore {
       }
 
       console.log('pull user results', results);
+
       // this.currentUser = results.user.result.user;
+
       this.currentUser = this.setCurrentUser(results.user.result.user);
+
       console.log('pull user current user', this.currentUser);
+
       settingStore.setSettingData(results.settings.result[0]);
       groupStore.setUserGroups(results.groups.result);
       authStore.setUserLoggedIn(true);
+
       this.loading = false;
       return resolve();
     })});

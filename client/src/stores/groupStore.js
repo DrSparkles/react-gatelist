@@ -59,11 +59,11 @@ class GroupStore {
    */
   @action loadUsersGroups() {
     this.loadingGroups = true;
+    this.usersGroups.clear();
     return agent.Groups
       .getUsersGroups()
       .then(action((groups) => {
         console.log('groups in loadUsersGroups', groups);
-        this.usersGroups.clear();
         const userGroupData = groups.result;
         this.setUserGroups(userGroupData);
       }))
@@ -77,6 +77,7 @@ class GroupStore {
   }
 
   setUserGroups(userGroupData){
+    this.usersGroups.clear();
     userGroupData.forEach((group) => {
       this.usersGroups.set(
         group._id,

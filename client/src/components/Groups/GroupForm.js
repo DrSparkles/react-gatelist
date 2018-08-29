@@ -10,8 +10,8 @@ export class GroupForm extends React.Component {
   componentWillMount(){
     const path = this.props.routerStore.location.pathname;
     const pathPieces = path.split("/");
-    console.log(path);
-    console.log(pathPieces);
+    console.log('GroupForm path', path);
+    console.log('GroupForm path pieces', pathPieces);
 
     const groupId = (pathPieces.length > 2) ? pathPieces[pathPieces.length - 1] : '';
     this.props.groupStore.loadCurrentGroup(groupId);
