@@ -25,6 +25,7 @@ import groupStore from './stores/groupStore';
 import settingStore from './stores/settingStore';
 import gatelistStore from './stores/gatelistStore';
 import interfaceStore from './stores/interfaceStore';
+import messagingStore from './stores/messagingStore';
 
 const browserHistory = createBrowserHistory();
 const routerStore = new RouterStore();
@@ -39,7 +40,8 @@ const stores = {
   settingStore,
   gatelistStore,
   routerStore,
-  interfaceStore
+  interfaceStore,
+  messagingStore
 };
 
 const app = document.getElementById("root");

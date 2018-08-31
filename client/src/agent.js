@@ -108,7 +108,15 @@ const Auth = {
 const Users = {
   save: (userId, originalUser, newUser) => {
     const url = "/users/" + userId;
-    return requests.put(url, { originalUser, newUser })
+    return requests.put(url, { originalUser, newUser });
+  },
+  getAllUsers: () => {
+    const url = "/users";
+    return requests.get(url);
+  },
+  deleteUser: (userId) => {
+    const url = "/users/" + userId;
+    return requests.del(url);
   }
 };
 
@@ -171,12 +179,10 @@ const Gatelist = {
     return requests.get(url);
   },
   saveGatelist: (data) => {
-    console.log('save gatelist data', data);
     const url = "/gatelist";
     return requests.post(url, data);
   },
   editGatelist: (gatelistId, data) => {
-    console.log(data);
     const url = "/gatelist/" + gatelistId;
     return requests.put(url, data);
   },

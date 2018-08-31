@@ -5,6 +5,8 @@ import './style.css';
 
 export default class SBMessage extends React.Component {
 
+  msg = this.props.msg;
+
   componentWillMount(){
     // this.state.open = true;
     this.setState({'open': true});
@@ -24,8 +26,6 @@ export default class SBMessage extends React.Component {
 
   render(){
 
-    const { msg } = this.props;
-
     return (
       <Snackbar
         open={this.state.open}
@@ -33,7 +33,7 @@ export default class SBMessage extends React.Component {
         ContentProps={{
           'aria-describedby': 'message-id',
         }}
-        message={msg}
+        message={this.msg}
         onClose={this.handleClose}
       />
     );

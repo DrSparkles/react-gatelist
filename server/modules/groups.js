@@ -54,10 +54,26 @@ class Groups {
    */
   getUsersGroups(userId, cb){
     const query = {userId: getId(userId)};
-    console.log('getUsersGroups query', query);
+    // console.log('getUsersGroups query', query);+
     this.groups_collection.find(query, (err, docs) => {
       if (err) return returnSimpleError(err, 400, cb);
-      console.log('getUsersGroups docs', docs);
+      // console.log('getUsersGroups docs', docs);
+      return returnSimpleResult(null, docs, cb);
+    });
+  }
+
+  /**
+   * Get all groups
+   * @param cb
+   */
+  getAllGroups(cb){
+
+    const query = {};
+    const sort = {groupName: 1};
+    const fields = {'_id': 1, 'userId': 1, 'groupName': 1, 'numGLSlots': 1, 'department': 1};
+
+    this.groups_collection.find(query, {fields, sort}, (err, docs) => {
+      if (err) return returnSimpleError(err, 400, cb);
       return returnSimpleResult(null, docs, cb);
     });
   }

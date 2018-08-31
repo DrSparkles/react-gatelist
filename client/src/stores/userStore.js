@@ -3,7 +3,8 @@ import agent from '../agent';
 import authStore from './authStore';
 import settingStore from "./settingStore";
 import groupStore from "./groupStore";
-// import promise from 'promise';
+import User from "./dataStores/User";
+import messagingStore from './messagingStore';
 
 /**
  * Handle user actions and state
@@ -11,6 +12,26 @@ import groupStore from "./groupStore";
 class UserStore {
 
   @observable currentUser = {};
+
+  @observable deleteUserId = '';
+
+  @observable deletingUser = false;
+
+  @observable users = [];
+
+  /**
+   * Loading state for fetching the user; true if we're accessing the db, false if we've fetched the user
+   * @type {boolean}
+   */
+  @observable loading;
+
+  /**
+   * Pending values for updating user data, such as resetting username or password
+   */
+  @observable updatingUser;
+  @observable updatingUserErrors;
+
+  @observable password;
 
   @observable editingUser = {
     userId: '',
@@ -29,26 +50,69 @@ class UserStore {
     this.editingUser.userType = this.currentUser.userType;
   }
 
-  /**
-   * Loading state for fetching the user; true if we're accessing the db, false if we've fetched the user
-   * @type {boolean}
-   */
-  @observable loading;
-
-  /**
-   * Pending values for updating user data, such as resetting username or password
-   */
-  @observable updatingUser;
-  @observable updatingUserErrors;
-
-  @observable password;
-
   @computed get isAdmin(){
     return this.currentUser && this.currentUser.userType !== undefined && this.currentUser.userType === 'admin';
   }
 
   @computed get isSuperAdmin(){
     return this.currentUser && this.currentUser.userType !== undefined && this.currentUser.userType === 'superadmin';
+  }
+
+  @action loadAllUsers(){
+    if (this.isSuperAdmin === false){
+      throw new Error("You are not authorized to do this action.");
+    }
+    this.loading = true;
+    return agent.Users
+      .getAllUsers()
+      .then(action((users) => {
+        this.clearUsers();
+        this.users = users.result.map(this.parseUser);
+        console.log('loadAllUsers', this.users);
+      }))
+      .catch(action((err) => {
+        this.loading = false;
+        this.errors = err.response && err.response.body && err.response.body.message;
+        throw err;
+      }))
+      .finally(action(() => {
+        this.loading = false;
+      }));
+  }
+
+  @action deleteUser(){
+    this.deletingUser = true;
+    return agent.Users
+      .deleteUser(this.deleteUserId)
+      .catch(action((err) => {
+        this.deletingUser = false;
+        this.errors = err.response && err.response.body && err.response.body.message;
+        throw err;
+      }))
+      .finally(action(() => {
+        this.deletingUser = false;
+        this.users = this.users.filter((user) => {
+          return (user.userId.toString() !== this.deleteUserId.toString());
+        });
+        this.deleteUserId = '';
+        messagingStore.successfullyDeletedUser = true;
+      }));
+  }
+
+  clearUsers(){
+    this.users = [];
+  }
+
+  parseUser(user){
+    console.log('userStore user', user);
+    return new User(
+      user._id,
+      user.firstName,
+      user.lastName,
+      user.email,
+      user.userType,
+      user.groups
+    );
   }
 
   /**
@@ -107,6 +171,7 @@ class UserStore {
     return agent.Users
       .save(this.currentUser.userId, this.currentUser, user)
       .catch(action((err) => {
+        this.loading = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))

@@ -2,6 +2,7 @@ import {db, returnSimpleResult, returnSimpleError, getIdFromJSON, getId} from '.
 import authConfig from '../config/auth.config';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import Groups from './groups';
 
 /**
  * Handle user auth
@@ -187,9 +188,60 @@ class User {
    * Fetch all users
    * @param cb
    */
-  getAll(cb){
-    this.user_collection.find({}, ["_id", "email"], (err, docs) => {
-      return returnSimpleResult(err, docs, cb);
+  getAllUsers(cb){
+
+    const query = {};
+    const sort = {lastName: 1};
+    const fields = {'_id': 1, 'firstName': 1, 'lastName': 1, 'email': 1, 'userType': 1};
+
+    this.user_collection.find(query, {fields, sort}, (err, docs) => {
+      if (err) return returnSimpleError("Fetching users has errored.", 400, cb);
+
+      Groups.getAllGroups((groupsErr, groupDocs) => {
+
+        if (groupsErr || groupDocs.error.toString() === "true") {
+          return returnSimpleError("Fetching groups has errored.", 400, cb);
+        }
+
+        // console.log('all users', docs);
+        // console.log('getAllGroups', groupDocs);
+        const groupsArray = groupDocs.result;
+
+        const combined = [];
+        for (let i = 0; i < docs.length; i++){
+          const user = docs[i];
+
+          user.groups = groupsArray.filter((group) => {
+            // console.log('group.userId, user._id', group.userId, user._id);
+            if (group.userId.toString() === user._id.toString()){
+              // console.log('found a match, returning group');
+              return group;
+            }
+          });
+          // console.log('user.groups', user.groups);
+          combined.push(user);
+        }
+
+        return returnSimpleResult(err, combined, cb);
+      });
+    });
+  }
+
+  /**
+   * Delete user
+   * @param userId
+   * @param cb
+   * @returns {*}
+   */
+  deleteUser(userId, cb){
+    if (userId === undefined || userId === ""){
+      return returnSimpleError("Must have a user id to delete the entry.", 400, cb);
+    }
+
+    const userObjId = getId(userId);
+    this.user_collection.remove({_id: userObjId}, (err, doc) => {
+      if (err) return returnSimpleError(err, 400, cb);
+      return returnSimpleResult(err, doc, cb);
     });
   }
 }

@@ -68,6 +68,7 @@ class GroupStore {
         this.setUserGroups(userGroupData);
       }))
       .catch(action((err) => {
+        this.loadingGroups = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
@@ -112,6 +113,7 @@ class GroupStore {
     return agent.Groups
       .createNew(saveData)
       .catch(action((err) => {
+        this.isSavingGroup = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
@@ -129,6 +131,7 @@ class GroupStore {
     return agent.Groups
       .editGroup(this.currentGroup.groupId, this.currentGroup)
       .catch(action((err) => {
+        this.isSavingGroup = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))

@@ -29,8 +29,13 @@ router.route('/')
       if (err) return errorHandler(err, res);
       return res.json(docs);
     });
+  })
+  .get((req, res) => {
+    usersModule.getAllUsers((err, docs) => {
+      if (err) return errorHandler(err, res);
+      return res.json(docs);
+    });
   });
-
 
 /**
  * APPLY AUTH MIDDLEWARE; ALL FOLLOWING ROUTES ARE PROTECTED
@@ -49,6 +54,13 @@ router.route('/:_id')
     usersModule.saveUser(userId, body.originalUser, body.newUser, (err, docs) => {
       if (err) return errorHandler(err, res);
       return res.json(docs);
+    });
+  })
+  .delete((req, res) => {
+    const userId = req.params._id;
+    usersModule.deleteUser(userId, (err, doc) => {
+      if (err) return errorHandler(err, res);
+      return res.json(doc);
     });
   });
 

@@ -30,6 +30,7 @@ class SettingStore {
         this.settingValues.defaultNumGLSlots = settingData.defaultNumGLSlots;
       }))
       .catch(action((err) => {
+        this.loadingSettings = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
@@ -52,6 +53,7 @@ class SettingStore {
     return agent.Settings
       .editSettings(this.settingValues.settingsId, this.settingValues)
       .catch(action((err) => {
+        this.isSavingSettings = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))

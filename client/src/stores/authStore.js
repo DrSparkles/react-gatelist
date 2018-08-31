@@ -102,6 +102,7 @@ class AuthStore {
         userStore.pullUser();
       })
       .catch(action((err) => {
+        this.loading = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
@@ -127,6 +128,7 @@ class AuthStore {
         // userStore.pullUser();
       })
       .catch(action((err) => {
+        this.loading = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))

@@ -84,6 +84,7 @@ class GatelistStore {
         this.gatelist = this.parseGatelistValues(this.gatelist, userGatelistData);
       }))
       .catch(action((err) => {
+        this.loadingGatelist = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
@@ -113,6 +114,7 @@ class GatelistStore {
         console.log('loadGatelistForWeek', this.gatelistByWeek);
       }))
       .catch(action((err) => {
+        this.loadingGatelist = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
@@ -175,6 +177,7 @@ class GatelistStore {
     return agent.Gatelist
       .saveGatelist(saveData)
       .catch(action((err) => {
+        this.isSavingGatelist = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
@@ -195,6 +198,7 @@ class GatelistStore {
     return agent.Gatelist
       .editGatelist(this.currentGatelist.gatelistId, saveData)
       .catch(action((err) => {
+        this.isSavingGatelist = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
@@ -226,6 +230,7 @@ class GatelistStore {
     return agent.Gatelist
       .deleteGatelist(this.deleteGatelistId)
       .catch(action((err) => {
+        this.deleting = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
@@ -249,44 +254,6 @@ class GatelistStore {
       notes: ''
     };
   }
-
-  /*
-  getBlankGatelist(){
-    return {
-      gatelistId: null,
-      firstName: '',
-      lastName: '',
-      date: '',
-      minor: false,
-      notes: ''
-    };
-  }
-
-  @action loadUsersGatelist() {
-    this.loadingGatelist = true;
-    return agent.Gatelist
-      .getUserGatelist(groupStore.currentGroup.groupId)
-      .then(action((gatelist) => {
-        console.log('loadUsersGatelist gatelist', gatelist);
-        console.log('loadUsersGatelist gatelist.result', gatelist.result);
-
-        this.gatelist.clear();
-        const userGatelistData = gatelist.result;
-
-        this.setUserGatelist(userGatelistData);
-        console.log('loadUsersGatelist userGatelistData', userGatelistData);
-
-      }))
-      .catch(action((err) => {
-        this.errors = err.response && err.response.body && err.response.body.message;
-        throw err;
-      }))
-      .finally(action(() => {
-        this.loadingGatelist = false;
-      }));
-  }
-
-*/
 }
 
 export default new GatelistStore();
