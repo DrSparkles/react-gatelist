@@ -1,14 +1,14 @@
 import {inject, observer} from "mobx-react";
 import React from "react";
-import { AdminGatelistTab } from './AdminGatelistTab';
+import { GatelistTab } from './GatelistTab';
 import { Tab } from 'semantic-ui-react'
-import {getCurrentUpcomingWeek, getIndexOfWeek} from "../../utils/date.utils";
+import { getGatelistWeeks, getCurrentUpcomingWeek, getIndexOfWeek } from "../../utils/date.utils";
 
 @inject('settingStore', 'interfaceStore', 'gatelistStore')
 @observer
-export class AdminGatelistTabs extends React.Component {
+export class GatelistTabs extends React.Component {
 
-  weeks = this.props.weeks;
+  weeks = getGatelistWeeks(this.props.settingStore.settingValues.startWeekend, this.props.settingStore.settingValues.numWeeks);
 
   upcomingWeek = getCurrentUpcomingWeek();
 
@@ -28,15 +28,17 @@ export class AdminGatelistTabs extends React.Component {
    */
   handleOnTabChange = (ev, data) => {
     this.props.interfaceStore.workingWithWeek = this.weeks[data.activeIndex];
+    this.props.gatelistStore.addGLEntry = false;
+    this.props.gatelistStore.editGLEntry = false;
   };
 
   render() {
 
     const panes = this.weeks.map((week, index) => {
-      return { menuItem: week, render: () => <AdminGatelistTab key={index} weekIndex={index} week={this.weeks[index]} title={week} /> };
+      return { menuItem: week, render: () => <GatelistTab key={index} weekIndex={index} week={this.weeks[index]} title={week} /> };
     });
 
-    const AdminTabs = () => {
+    const GatelistTabs = () => {
       return (
         <Tab
           panes={panes}
@@ -47,9 +49,7 @@ export class AdminGatelistTabs extends React.Component {
     };
 
     return(
-
-      <AdminTabs />
-
+      <GatelistTabs />
     );
   }
 }

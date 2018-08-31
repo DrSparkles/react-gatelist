@@ -1,7 +1,7 @@
 import React from "react";
 import { inject, observer } from 'mobx-react';
 import {AdminGatelistTabs} from "../AdminGatelistTabs";
-import {getGatelistWeeks, getNextSaturday} from "../../utils/date.utils";
+import {getGatelistWeeks, getCurrentUpcomingWeek} from "../../utils/date.utils";
 
 @inject('gatelistStore', 'interfaceStore', 'settingStore')
 @observer
@@ -10,7 +10,7 @@ export default class AdminGatelist extends React.Component {
   weeks = getGatelistWeeks(this.props.settingStore.settingValues.startWeekend, this.props.settingStore.settingValues.numWeeks);
 
   componentDidMount() {
-    const nextSaturday = getNextSaturday();
+    const nextSaturday = getCurrentUpcomingWeek();
     const weekIndex = this.weeks.indexOf(nextSaturday);
     if (weekIndex >= 0) {
       this.props.interfaceStore.adminTabIndex = weekIndex;

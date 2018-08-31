@@ -17,7 +17,7 @@ export function getGatelistWeeks(startDate, numWeeks){
   return weeks;
 }
 
-export function getNextSaturday(){
+export function getCurrentUpcomingWeek(){
   const dayINeed = 6; // for Saturday
   const today = moment().isoWeekday();
 
@@ -29,4 +29,14 @@ export function getNextSaturday(){
     // otherwise, give me *next week's* instance of that same day
     return moment().add(1, 'weeks').isoWeekday(dayINeed).format('YYYY-MM-DD');
   }
+}
+
+export function getIndexOfWeek(weeks, targetWeek){
+
+  const indexOf = weeks.indexOf(targetWeek);
+  if (indexOf < 0){
+    return 0;
+  }
+  return indexOf;
+
 }

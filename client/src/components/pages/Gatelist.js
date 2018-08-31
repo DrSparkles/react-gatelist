@@ -3,10 +3,10 @@
  */
 import React from "react";
 import { inject, observer } from 'mobx-react';
-import { GatelistPanels } from '../GatelistExpansionPanel';
+import { GatelistTabs } from '../GatelistTabs';
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
-@inject('commonStore', 'userStore', 'groupStore', 'routerStore', 'gatelistStore')
+@inject('groupStore', 'routerStore', 'gatelistStore')
 @observer
 export default class Gatelist extends React.Component {
 
@@ -16,7 +16,6 @@ export default class Gatelist extends React.Component {
       return null;
     }
 
-    // this.props.groupStore.currentGroup.groupId
     this.props.gatelistStore.loadGroupsGatelist();
   }
 
@@ -34,7 +33,7 @@ export default class Gatelist extends React.Component {
     else {
       return (
         <div id='Gatelist'>
-          <GatelistPanels />
+          <GatelistTabs />
         </div>
       );
     }

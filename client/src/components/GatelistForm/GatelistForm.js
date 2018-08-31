@@ -13,11 +13,14 @@ export class GatelistForm extends React.Component {
   numGLSlots = this.props.groupStore.currentGroup.numGLSlots;
 
   handleAddGLClick = (ev) => {
+    console.log('handleAddGLClick this.props.gatelistStore.addGLEntry', this.props.gatelistStore.addGLEntry);
     this.props.gatelistStore.addGLEntry = true;
-
   };
 
   renderGLForm = () => {
+    console.log('this.props.gatelistStore.addGLEntry', this.props.gatelistStore.addGLEntry);
+    console.log('this.props.interfaceStore.workingWithWeek', this.props.interfaceStore.workingWithWeek);
+    console.log('this.week', this.week);
     if (this.props.gatelistStore.addGLEntry || this.props.gatelistStore.editGLEntry){
       const gatelist = this.props.gatelistStore.currentGatelist;
       if (this.props.interfaceStore.workingWithWeek === this.week){
@@ -41,7 +44,7 @@ export class GatelistForm extends React.Component {
 
     return (
       <div id='GatelistForm'>
-        <button disabled={this.isAddBtnDisabled()} onClick={this.handleAddGLClick} className='btn btn-sm'><PersonAddIcon /></button>
+        <button disabled={this.isAddBtnDisabled()} onClick={this.handleAddGLClick} className='btn btn-sm'><PersonAddIcon className='icon add-gatelist-icon' /></button>
         <span className='filled-gatelist-slots'>{this.numSavedGLValues} / {this.numGLSlots} saved gatelist members</span>
         <div id='gatelist-form-container'>
           {this.renderGLForm()}
