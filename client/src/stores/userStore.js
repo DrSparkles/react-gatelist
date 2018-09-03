@@ -50,6 +50,10 @@ class UserStore {
     this.editingUser.userType = this.currentUser.userType;
   }
 
+  @computed get isUser(){
+    return this.currentUser && this.currentUser.userType !== undefined && this.currentUser.userType === 'user';
+  }
+
   @computed get isAdmin(){
     return this.currentUser && this.currentUser.userType !== undefined && this.currentUser.userType === 'admin';
   }

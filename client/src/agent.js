@@ -128,6 +128,10 @@ const Groups = {
     const url = "/groups";
     return requests.get(url);
   },
+  getAllGroups: () => {
+    const url = "/groups/all";
+    return requests.get(url);
+  },
   getGroup: (groupId) => {
     const url = "/groups/" + groupId;
     return requests.get(url);

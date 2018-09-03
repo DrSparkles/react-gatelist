@@ -6,13 +6,14 @@ import { GroupListItem } from "../Groups";
 @observer
 export class GroupList extends React.Component {
 
+  groups = this.props.groups;
+
   render(){
 
-    const groups = this.props.groupStore.getUserGroups;
-    console.log('groups', groups);
-    console.log('groups length', groups.length);
+    console.log('GroupList groups', this.groups);
+    console.log('GroupList groups length', this.groups.length);
 
-    const groupRows = groups.map((group) => {
+    const groupRows = this.groups.map((group) => {
       return <GroupListItem key={group.groupId} groupRow={group} />;
     });
 
@@ -20,9 +21,9 @@ export class GroupList extends React.Component {
       <table id='group-list' className='table'>
         <thead>
           <tr>
-            <td width='60%'>Group Name</td>
+            <td width='50%'>Group Name</td>
             <td width='20%' className='center-cell'>Number of Slots</td>
-            <td width='20%' className='center-cell'>Select</td>
+            <td width='30%' className='center-cell'>Select</td>
           </tr>
         </thead>
         <tbody>

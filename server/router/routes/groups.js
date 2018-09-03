@@ -31,6 +31,17 @@ router.route('/')
     });
   });
 
+/**
+ * Get all groups
+ */
+router.route('/all')
+  .get((req, res) => {
+    groupsModule.getAllGroups((err, docs) => {
+      if (err) return errorHandler(err, res);
+      return res.json(docs);
+    });
+  });
+
 router.route('/:_id')
   /**
    * Get by group id

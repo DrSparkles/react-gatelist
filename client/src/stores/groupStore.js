@@ -6,6 +6,8 @@ import settingStore from './settingStore';
 
 class GroupStore {
 
+  @observable editGroupEntry = false;
+
   @observable currentGroup = {
     groupId: 0,
     groupName: '',
@@ -14,6 +16,8 @@ class GroupStore {
   };
 
   @observable usersGroups = observable.map();
+
+  @observable allGroups = observable.map();
 
   @observable newGroup = {
     groupName: '',
@@ -33,6 +37,14 @@ class GroupStore {
 
   @computed get getUserGroups(){
     return values(this.usersGroups);
+  }
+
+  @computed get getNumAllGroups() {
+    return this.allGroups.size;
+  }
+
+  @computed get getAllGroups(){
+    return values(this.allGroups);
   }
 
   /**
@@ -57,6 +69,31 @@ class GroupStore {
   /**
    * @returns {Promise<any>}
    */
+  @action loadAllGroups() {
+    this.loadingGroups = true;
+    this.allGroups.clear();
+    return agent.Groups
+      .getAllGroups()
+      .then(action((groups) => {
+        console.log('groups in loadAllGroups', groups);
+        const groupData = groups.result;
+        console.log(groupData);
+        this.setAllGroups(groupData);
+        console.log(this.allGroups);
+      }))
+      .catch(action((err) => {
+        this.loadingGroups = false;
+        this.errors = err.response && err.response.body && err.response.body.message;
+        throw err;
+      }))
+      .finally(action(() => {
+        this.loadingGroups = false;
+      }));
+  }
+
+  /**
+   * @returns {Promise<any>}
+   */
   @action loadUsersGroups() {
     this.loadingGroups = true;
     this.usersGroups.clear();
@@ -75,6 +112,20 @@ class GroupStore {
       .finally(action(() => {
         this.loadingGroups = false;
       }));
+  }
+
+  setAllGroups(groupData){
+    this.allGroups.clear();
+    groupData.forEach((group) => {
+      this.allGroups.set(
+        group._id,
+        new Group(
+          group._id,
+          group.groupName,
+          group.numGLSlots,
+          group.department
+        ));
+    });
   }
 
   setUserGroups(userGroupData){

@@ -9,6 +9,8 @@ import { GroupForm, GroupList } from "../Groups";
 @observer
 export default class Groups extends React.Component {
 
+  groups = [];
+
   setupMessageText(numGroups){
     const message = {hasMessage: false, text: ''};
 
@@ -24,16 +26,17 @@ export default class Groups extends React.Component {
     return message;
   }
 
-  componentDidMount() {
-
-  }
+  // componentDidMount() {
+  //
+  //   console.log('groups in componentDidMount', this.groups);
+  // }
 
   /**
    * Render our document!
    * @returns {*}
    */
   render(){
-
+    this.groups = this.props.groupStore.getUserGroups;
     const numGroups = this.props.groupStore.getNumUserGroups;
     console.log('Groups this.setupMessageText(numGroups)', this.setupMessageText(numGroups));
     return (
@@ -41,7 +44,7 @@ export default class Groups extends React.Component {
         <h2>My Groups</h2>
         <CreateGroupMessage displayMessage={this.setupMessageText(numGroups)} />
         <GroupForm />
-        <GroupList />
+        <GroupList groups={this.groups} />
       </div>
     );
   }
