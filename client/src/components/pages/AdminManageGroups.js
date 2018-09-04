@@ -1,7 +1,7 @@
 import React from "react";
 import { inject, observer } from 'mobx-react';
 import { GroupList } from "../Groups";
-import {getGatelistWeeks, getCurrentUpcomingWeek} from "../../utils/date.utils";
+import {getGatelistWeeks} from "../../utils/date.utils";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 @inject('userStore', 'settingStore', 'groupStore')

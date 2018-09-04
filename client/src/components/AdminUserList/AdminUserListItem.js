@@ -1,7 +1,7 @@
 import {inject, observer} from "mobx-react";
 import React from "react";
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import { ConfirmationDialog } from "./ConfirmationDialog";
+import { AdminUserDeleteConfirmationDialog } from "./AdminUserDeleteConfirmationDialog";
 
 @inject('userStore')
 @observer
@@ -34,9 +34,6 @@ export class AdminUserListItem extends React.Component {
   handleDeleteClick = (ev) => {
     ev.preventDefault();
     this.setState({ open: true });
-    // console.log('trying to delete user');
-    // this.props.userStore.deleteUserId = this.userId;
-    // this.props.userStore.deleteUser();
   };
 
   handleClose = (value) => {
@@ -65,7 +62,7 @@ export class AdminUserListItem extends React.Component {
           <div className="form-group gatelist-form-controls">
             <button className='btn btn-sm' onClick={this.handleDeleteClick}><DeleteForeverIcon className='icon delete-icon' /></button>
           </div>
-          <ConfirmationDialog
+          <AdminUserDeleteConfirmationDialog
             open={this.state.open}
             onClose={this.handleClose}
             value={this.state.value}

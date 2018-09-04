@@ -42,7 +42,7 @@ class UserStore {
     userType: ''
   };
 
-  setEditingUserFromCurrentUser(){
+  @action setEditingUserFromCurrentUser(){
     this.editingUser.userId = this.currentUser.userId;
     this.editingUser.firstName = this.currentUser.firstName;
     this.editingUser.lastName = this.currentUser.lastName;
@@ -69,17 +69,17 @@ class UserStore {
     this.loading = true;
     return agent.Users
       .getAllUsers()
-      .then(action((users) => {
+      .then(action('loadAllUsers then',(users) => {
         this.clearUsers();
         this.users = users.result.map(this.parseUser);
         console.log('loadAllUsers', this.users);
       }))
-      .catch(action((err) => {
+      .catch(action('loadAllUsers error', (err) => {
         this.loading = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action(() => {
+      .finally(action('loadAllUsers finally', () => {
         this.loading = false;
       }));
   }
@@ -88,12 +88,12 @@ class UserStore {
     this.deletingUser = true;
     return agent.Users
       .deleteUser(this.deleteUserId)
-      .catch(action((err) => {
+      .catch(action('deleteUser error', (err) => {
         this.deletingUser = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action(() => {
+      .finally(action('deleteUser finally', () => {
         this.deletingUser = false;
         this.users = this.users.filter((user) => {
           return (user.userId.toString() !== this.deleteUserId.toString());
@@ -103,11 +103,11 @@ class UserStore {
       }));
   }
 
-  clearUsers(){
+  @action clearUsers(){
     this.users = [];
   }
 
-  parseUser(user){
+  @action parseUser(user){
     console.log('userStore user', user);
     return new User(
       user._id,
@@ -174,21 +174,21 @@ class UserStore {
     console.log('this.editingUser', this.editingUser);
     return agent.Users
       .save(this.currentUser.userId, this.currentUser, user)
-      .catch(action((err) => {
+      .catch(action('saveUser error', (err) => {
         this.loading = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action(() => {
+      .finally(action('saveUser finally', () => {
         this.pullUser()
-          .finally(() => {
+          .finally(action('saveUser finally pullUser finally', () => {
             this.setEditingUserFromCurrentUser();
             this.loading = false;
-          });
+          }));
       }));
   }
 
-  setCurrentUser(userData){
+  @action setCurrentUser(userData){
     const currentUser = {};
     currentUser.userId = (userData._id) ? userData._id : userData.userId;
     currentUser.firstName = userData.firstName;
@@ -198,7 +198,7 @@ class UserStore {
     return currentUser;
   }
 
-  clearEditingUser(){
+  @action clearEditingUser(){
     this.editingUser = {
       userId: '',
       firstName: '',

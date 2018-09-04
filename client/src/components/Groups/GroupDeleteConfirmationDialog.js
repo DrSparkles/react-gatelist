@@ -7,7 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Dialog from '@material-ui/core/Dialog';
 
 @observer
-export class ConfirmationDialog extends React.Component {
+export class GroupDeleteConfirmationDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -39,9 +39,13 @@ export class ConfirmationDialog extends React.Component {
         aria-labelledby="confirmation-dialog-title"
         {...other}
       >
-        <DialogTitle id="confirmation-dialog-title">Delete this user and all their groups?</DialogTitle>
+        <DialogTitle id="confirmation-dialog-title">Delete this group?</DialogTitle>
         <DialogContent>
-          <div>Are you sure you want to delete {this.props.value}?</div>
+          <div>
+            Are you sure you want to delete {this.props.value}?
+            <br />
+            Deleting this group will remove all their gatelist entries.
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={this.handleCancel} color="primary">

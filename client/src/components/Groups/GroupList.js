@@ -9,20 +9,19 @@ export class GroupList extends React.Component {
   groups = this.props.groups;
 
   render(){
-
     console.log('GroupList groups', this.groups);
     console.log('GroupList groups length', this.groups.length);
 
-    const groupRows = this.groups.map((group) => {
-      return <GroupListItem key={group.groupId} groupRow={group} />;
+    const groupRows = this.groups.map((group, index) => {
+      return <GroupListItem key={group.groupId} index={index} groupRow={group} />;
     });
 
     return (
       <table id='group-list' className='table'>
         <thead>
           <tr>
-            <td width='50%'>Group Name</td>
-            <td width='20%' className='center-cell'>Number of Slots</td>
+            <td width='40%'>Group Name</td>
+            <td width='30%' className='center-cell'>Number of Slots</td>
             <td width='30%' className='center-cell'>Select</td>
           </tr>
         </thead>

@@ -112,6 +112,7 @@ class Groups {
   updateGroup(groupId, values, cb){
 
     const { groupName, numGLSlots, userId } = values;
+    console.log('updateGroup values', values);
 
     if (groupId === undefined || groupId === '' ||
         groupName === undefined || groupName === '' ||
@@ -119,6 +120,8 @@ class Groups {
         userId === undefined || userId === ''){
       return returnSimpleError("Missing required information to edit group", 400, cb);
     }
+
+
 
     const query = {_id: getId(groupId)};
     const updateQuery = {
@@ -128,6 +131,9 @@ class Groups {
         userId: userId
       }
     };
+
+    console.log('updateGroup query', updateQuery);
+
     this.groups_collection.update(query, updateQuery, (err, doc) => {
       if (err) return returnSimpleError(err, 400, cb);
       return returnSimpleResult(err, doc, cb);

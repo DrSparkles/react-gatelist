@@ -33,7 +33,7 @@ class GatelistStore {
     notes: ''
   };
 
-  setCurentGatelist = (week, gatelistId) => {
+  @action setCurentGatelist = (week, gatelistId) => {
     if (this.gatelist[week] !== undefined && this.gatelist[week][gatelistId] !== undefined){
       const gatelist = this.gatelist[week][gatelistId];
       this.currentGatelist.gatelistId = gatelist.gatelistId;
@@ -74,7 +74,7 @@ class GatelistStore {
     this.loadingGatelist = true;
     return agent.Gatelist
       .getGroupsGatelist(groupStore.currentGroup.groupId)
-      .then(action((gatelist) => {
+      .then(action('loadGroupsGatelist then', (gatelist) => {
         this.gatelist = this.setupGatelist(
           this.gatelist,
           settingStore.settingValues.startWeekend,
@@ -83,12 +83,12 @@ class GatelistStore {
         const userGatelistData = gatelist.result;
         this.gatelist = this.parseGatelistValues(this.gatelist, userGatelistData);
       }))
-      .catch(action((err) => {
+      .catch(action('loadGroupsGatelist error', (err) => {
         this.loadingGatelist = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action(() => {
+      .finally(action('loadGroupsGatelist finally', () => {
         this.loadingGatelist = false;
       }));
   }
@@ -103,7 +103,7 @@ class GatelistStore {
     this.loadingGatelist = true;
     return agent.Gatelist
       .getGatelistForWeek(week)
-      .then(action((gatelist) => {
+      .then(action('loadGatelistForWeek then', (gatelist) => {
         this.gatelistByWeek = this.setupGatelist(
           this.gatelistByWeek,
           settingStore.settingValues.startWeekend,
@@ -113,17 +113,17 @@ class GatelistStore {
         this.gatelistByWeek = this.parseGatelistValues(this.gatelistByWeek, weekGatelistData);
         console.log('loadGatelistForWeek', this.gatelistByWeek);
       }))
-      .catch(action((err) => {
+      .catch(action('loadGatelistForWeek error', (err) => {
         this.loadingGatelist = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action(() => {
+      .finally(action('loadGatelistForWeek finally', () => {
         this.loadingGatelist = false;
       }));
   }
 
-  setupGatelist(gatelistHash, startWeekend, numWeeks){
+  @action setupGatelist(gatelistHash, startWeekend, numWeeks){
     for (let i = 0; i < numWeeks; i++){
       const week = moment(startWeekend).add(i, 'weeks').format('YYYY-MM-DD');
       gatelistHash[week] = {};
@@ -131,7 +131,7 @@ class GatelistStore {
     return gatelistHash;
   }
 
-  parseGatelistValues(gatelistHash, gatelistData){
+  @action parseGatelistValues(gatelistHash, gatelistData){
 
     for (let week in gatelistData){
       if (gatelistData.hasOwnProperty(week)) {
@@ -176,12 +176,12 @@ class GatelistStore {
     console.log('saveData', saveData);
     return agent.Gatelist
       .saveGatelist(saveData)
-      .catch(action((err) => {
+      .catch(action('saveNewGatelist error', (err) => {
         this.isSavingGatelist = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action(() => {
+      .finally(action('saveNewGatelist finally', () => {
         this.clearCurrentGroup();
         this.loadGroupsGatelist()
           .finally(() => {
@@ -197,12 +197,12 @@ class GatelistStore {
     console.log('saving this data!', saveData);
     return agent.Gatelist
       .editGatelist(this.currentGatelist.gatelistId, saveData)
-      .catch(action((err) => {
+      .catch(action('saveNewGatelist error', (err) => {
         this.isSavingGatelist = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action(() => {
+      .finally(action('saveNewGatelist finally', () => {
         this.clearCurrentGroup();
         this.loadGroupsGatelist()
           .finally(() => {
@@ -229,12 +229,12 @@ class GatelistStore {
     this.deleting = true;
     return agent.Gatelist
       .deleteGatelist(this.deleteGatelistId)
-      .catch(action((err) => {
+      .catch(action('deleteGatelist error', (err) => {
         this.deleting = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action(() => {
+      .finally(action('deleteGatelist finally', () => {
         if (this.deleteGatelistId === this.currentGatelist.gatelistId){
           this.clearCurrentGroup();
         }

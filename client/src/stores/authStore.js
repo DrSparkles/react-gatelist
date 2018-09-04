@@ -95,18 +95,18 @@ class AuthStore {
     this.errors = undefined;
     return agent.Auth
       .login(this.values.email, this.values.password)
-      .then ((userToken) => {
+      .then (action('login then 1', (userToken) => {
         commonStore.setToken(userToken.result.token);
-      })
-      .then(() => {
+      }))
+      .then(action('login then 2', () => {
         userStore.pullUser();
-      })
-      .catch(action((err) => {
+      }))
+      .catch(action('login error', (err) => {
         this.loading = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action(() => {
+      .finally(action('login finally', () => {
         this.loading = false;
       }));
   }
@@ -121,18 +121,18 @@ class AuthStore {
     this.errors = undefined;
     return agent.Auth
       .register(this.values.firstName, this.values.lastName, this.values.email, this.values.password)
-      .then(( user ) => {
+      .then(action('register then', (user) => {
         commonStore.setToken(user.result.token);
-      })
-      .then(() => {
+      }))
+      .then(action('register then', () => {
         // userStore.pullUser();
-      })
-      .catch(action((err) => {
+      }))
+      .catch(action('register error',(err) => {
         this.loading = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action(() => {
+      .finally(action('register finally', () => {
         this.loading = false;
         this.userJustRegistered = true;
       }));

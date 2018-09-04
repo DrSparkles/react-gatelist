@@ -26,11 +26,6 @@ export default class Groups extends React.Component {
     return message;
   }
 
-  // componentDidMount() {
-  //
-  //   console.log('groups in componentDidMount', this.groups);
-  // }
-
   /**
    * Render our document!
    * @returns {*}

@@ -6,8 +6,7 @@ import {
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 
-/* eslint-disable */
-import mainStyles from '../../../styles/masterStyle.css';
+import '../../../styles/masterStyle.css';
 
 import Header from '../../Header';
 import Home from '../Home';
@@ -24,6 +23,7 @@ import Footer from "../../Footer/Footer";
 import AdminGatelist from "../AdminGatelist";
 import AdminUsers from '../AdminUsers';
 import AdminManageGroups from "../AdminManageGroups";
+import DevTools from "mobx-react-devtools";
 
 @inject('commonStore', 'userStore', 'settingStore')
 @withRouter
@@ -52,6 +52,7 @@ export default class Layout extends React.Component {
     if (this.props.commonStore.appLoaded) {
       return (
         <div id='layout'>
+          <DevTools/>
           <Header />
           <div id='content'>
             <Switch>

@@ -2,9 +2,15 @@ import { observable, action, computed, values } from 'mobx';
 import agent from '../agent';
 import Group from './dataStores/Group';
 import settingStore from './settingStore';
+import userStore from './userStore';
+import messagingStore from "./messagingStore";
 
 
 class GroupStore {
+
+  @observable isSavingGroup = false;
+
+  @observable deletingGroup = false;
 
   @observable editGroupEntry = false;
 
@@ -60,8 +66,14 @@ class GroupStore {
         userId: ''
       };
     }
-    else {
+    else if (userStore.isSuperAdmin && this.allGroups.get(groupId) !== undefined){
+      this.currentGroup = this.allGroups.get(groupId);
+    }
+    else if (userStore.isUser && this.usersGroups.get(groupId) !== undefined){
       this.currentGroup = this.usersGroups.get(groupId);
+    }
+    else {
+      return false;
     }
     return this.currentGroup;
   }
@@ -74,19 +86,19 @@ class GroupStore {
     this.allGroups.clear();
     return agent.Groups
       .getAllGroups()
-      .then(action((groups) => {
-        console.log('groups in loadAllGroups', groups);
+      .then(action('loadAllGroups groups', (groups) => {
         const groupData = groups.result;
-        console.log(groupData);
         this.setAllGroups(groupData);
-        console.log(this.allGroups);
+        console.log('loadAllGroups groups', groups);
+        console.log('loadAllGroups groupData', groupData);
+        console.log('loadAllGroups this.allGroups', this.allGroups);
       }))
-      .catch(action((err) => {
+      .catch(action('loadAllGroups error', (err) => {
         this.loadingGroups = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action(() => {
+      .finally(action('loadAllGroups finally', () => {
         this.loadingGroups = false;
       }));
   }
@@ -99,22 +111,22 @@ class GroupStore {
     this.usersGroups.clear();
     return agent.Groups
       .getUsersGroups()
-      .then(action((groups) => {
+      .then(action('loadUsersGroups then', (groups) => {
         console.log('groups in loadUsersGroups', groups);
         const userGroupData = groups.result;
         this.setUserGroups(userGroupData);
       }))
-      .catch(action((err) => {
+      .catch(action('loadUsersGroups error', (err) => {
         this.loadingGroups = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action(() => {
+      .finally(action('loadUsersGroups finally', () => {
         this.loadingGroups = false;
       }));
   }
 
-  setAllGroups(groupData){
+  @action setAllGroups(groupData){
     this.allGroups.clear();
     groupData.forEach((group) => {
       this.allGroups.set(
@@ -128,7 +140,7 @@ class GroupStore {
     });
   }
 
-  setUserGroups(userGroupData){
+  @action setUserGroups(userGroupData){
     this.usersGroups.clear();
     userGroupData.forEach((group) => {
       this.usersGroups.set(
@@ -147,6 +159,9 @@ class GroupStore {
       return this.saveNewGroup();
     }
     else {
+      if (this.currentGroup.userId === '' || this.currentGroup.userId === undefined){
+        this.currentGroup.userId = userStore.currentUser.userId;
+      }
       return this.editGroup();
     }
   }
@@ -163,50 +178,81 @@ class GroupStore {
 
     return agent.Groups
       .createNew(saveData)
-      .catch(action((err) => {
+      .then(action('saveNewGroup then', (data) => {
+        console.log('saving group', data);
+        this.addGroupToUserSet(this.usersGroups, data.result);
+        if (userStore.isSuperAdmin){
+          this.addGroupToUserSet(this.allGroups, data.result);
+        }
+      }))
+      .catch(action('saveNewGroup error', (err) => {
         this.isSavingGroup = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action(() => {
+      .finally(action('saveNewGroup finally', () => {
         this.clearNewSaveData();
-        this.loadUsersGroups()
-          .finally(() => {
-            this.isSavingGroup = false;
-          });
+        this.isSavingGroup = false;
+        console.log('post saving group allGroups', this.allGroups.values());
+        console.log('post saving group userGroups', this.usersGroups.values());
       }));
+  }
+
+  @action addGroupToUserSet(userGroup, groupData){
+    console.log('addGroupToUserSet groupData', groupData);
+    userGroup.set(
+      groupData._id,
+      new Group(
+        groupData._id,
+        groupData.groupName,
+        groupData.numGLSlots,
+        groupData.department
+      ));
+    console.log('adding group to set', userGroup);
   }
 
   @action editGroup(){
     this.isSavingGroup = true;
     return agent.Groups
       .editGroup(this.currentGroup.groupId, this.currentGroup)
-      .catch(action((err) => {
+      .catch(action('editGroup error', (err) => {
         this.isSavingGroup = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action(() => {
-        this.isSavingGroup = false;
+      .finally(action('editGroup finally', () => {
+        if (userStore.isUser){
+          this.loadUsersGroups()
+            .finally(action('editGroup fianlly loadUsersGroups finally', () => {
+              this.isSavingGroup = false;
+            }));
+        }
+        else if (userStore.isSuperAdmin){
+          this.loadAllGroups()
+            .finally(action('editGroup fianlly loadAllGroups finally', () => {
+              this.isSavingGroup = false;
+            }));
+        }
       }));
   }
 
   @action deleteGroup(){
+    this.deletingGroup = true;
     return agent.Groups
       .deleteGroup(this.deleteGroupId)
-      .catch(action((err) => {
+      .catch(action('deleteGroup error',(err) => {
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action(() => {
-        // if (this.deleteGroupId === this.currentGroup.groupId){
-        //   this.clearCurrentGroup();
-        // }
+      .finally(action('deleteGroup finally',() => {
+        this.deletingGroup = false;
+        this.allGroups.delete(this.deleteGroupId);
+        messagingStore.successfullyDeletedGroup = true;
         this.deleteGroupId = '';
       }));
   }
 
-  clearNewSaveData(){
+  @action clearNewSaveData(){
     this.newGroup = {
       groupName: '',
       numGLSlots: 0,
@@ -214,7 +260,7 @@ class GroupStore {
     };
   }
 
-  clearCurrentGroup(){
+  @action clearCurrentGroup(){
     this.currentGroup = {};
   }
 
