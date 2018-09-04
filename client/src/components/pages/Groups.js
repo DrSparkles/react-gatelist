@@ -4,12 +4,11 @@
 import React from "react";
 import { inject, observer } from 'mobx-react';
 import { GroupForm, GroupList } from "../Groups";
+import { computed } from 'mobx';
 
 @inject('groupStore')
 @observer
 export default class Groups extends React.Component {
-
-  groups = [];
 
   setupMessageText(numGroups){
     const message = {hasMessage: false, text: ''};
@@ -26,20 +25,27 @@ export default class Groups extends React.Component {
     return message;
   }
 
+  @computed get numGroups(){
+    return this.props.groupStore.getNumUserGroups;
+  }
+
+  @computed get userGroups(){
+    return this.props.groupStore.getUserGroups;
+  }
+
   /**
    * Render our document!
    * @returns {*}
    */
   render(){
-    this.groups = this.props.groupStore.getUserGroups;
-    const numGroups = this.props.groupStore.getNumUserGroups;
-    console.log('Groups this.setupMessageText(numGroups)', this.setupMessageText(numGroups));
+    console.log('Groups in render of Groups', this.props.groupStore.getUserGroups);
+    console.log('Groups this.setupMessageText(numGroups)', this.setupMessageText(this.numGroups));
     return (
       <div id='Group'>
         <h2>My Groups</h2>
-        <CreateGroupMessage displayMessage={this.setupMessageText(numGroups)} />
+        <CreateGroupMessage displayMessage={this.setupMessageText(this.numGroups)} />
         <GroupForm />
-        <GroupList groups={this.groups} />
+        <GroupList groups={this.userGroups} />
       </div>
     );
   }

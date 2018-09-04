@@ -21,9 +21,12 @@ class GroupStore {
     userId: ''
   };
 
-  @observable usersGroups = observable.map();
+  // @observable usersGroups = observable.map();
+  // @observable allGroups = observable.map();
 
-  @observable allGroups = observable.map();
+  @observable usersGroups = {hash: {}, list: []};
+
+  @observable allGroups = {hash: {}, list: []};
 
   @observable newGroup = {
     groupName: '',
@@ -38,19 +41,19 @@ class GroupStore {
   @observable deleteGroupId = '';
 
   @computed get getNumUserGroups(){
-    return this.usersGroups.size;
+    return this.usersGroups.list.length;
   }
 
   @computed get getUserGroups(){
-    return values(this.usersGroups);
+    return this.usersGroups.list;
   }
 
   @computed get getNumAllGroups() {
-    return this.allGroups.size;
+    return this.allGroups.list.length;
   }
 
   @computed get getAllGroups(){
-    return values(this.allGroups);
+    return this.allGroups.list;
   }
 
   /**
@@ -66,11 +69,11 @@ class GroupStore {
         userId: ''
       };
     }
-    else if (userStore.isSuperAdmin && this.allGroups.get(groupId) !== undefined){
-      this.currentGroup = this.allGroups.get(groupId);
+    else if (userStore.isSuperAdmin && this.allGroups.hash[groupId] !== undefined){
+      this.currentGroup = this.allGroups.hash[groupId];
     }
-    else if (userStore.isUser && this.usersGroups.get(groupId) !== undefined){
-      this.currentGroup = this.usersGroups.get(groupId);
+    else if (userStore.isUser && this.usersGroups.hash[groupId] !== undefined){
+      this.currentGroup = this.usersGroups.hash[groupId];
     }
     else {
       return false;
@@ -83,7 +86,8 @@ class GroupStore {
    */
   @action loadAllGroups() {
     this.loadingGroups = true;
-    this.allGroups.clear();
+    // this.allGroups.clear();
+    this.clearAllGroups();
     return agent.Groups
       .getAllGroups()
       .then(action('loadAllGroups groups', (groups) => {
@@ -108,7 +112,8 @@ class GroupStore {
    */
   @action loadUsersGroups() {
     this.loadingGroups = true;
-    this.usersGroups.clear();
+    // this.usersGroups.clear();
+    this.clearUsersGroups();
     return agent.Groups
       .getUsersGroups()
       .then(action('loadUsersGroups then', (groups) => {
@@ -127,30 +132,60 @@ class GroupStore {
   }
 
   @action setAllGroups(groupData){
-    this.allGroups.clear();
+    // this.allGroups.clear();
+    this.clearAllGroups();
     groupData.forEach((group) => {
-      this.allGroups.set(
-        group._id,
-        new Group(
+
+      if (this.allGroups.hash[group._id] === undefined){
+
+        const groupObj = new Group(
           group._id,
           group.groupName,
           group.numGLSlots,
           group.department
-        ));
+        );
+
+        this.allGroups.hash[group._id] = groupObj;
+        this.allGroups.list.push(groupObj);
+      }
+
+      // this.allGroups.set(
+      //   group._id,
+      //   new Group(
+      //     group._id,
+      //     group.groupName,
+      //     group.numGLSlots,
+      //     group.department
+      //   ));
     });
   }
 
   @action setUserGroups(userGroupData){
-    this.usersGroups.clear();
+    // this.usersGroups.clear();
+    this.clearUsersGroups();
     userGroupData.forEach((group) => {
-      this.usersGroups.set(
-        group._id,
-        new Group(
+
+      if (this.usersGroups.hash[group._id] === undefined){
+
+        const groupObj = new Group(
           group._id,
           group.groupName,
           group.numGLSlots,
           group.department
-        ));
+        );
+
+        this.usersGroups.hash[group._id] = groupObj;
+        this.usersGroups.list.push(groupObj);
+      }
+
+      // this.usersGroups.set(
+      //   group._id,
+      //   new Group(
+      //     group._id,
+      //     group.groupName,
+      //     group.numGLSlots,
+      //     group.department
+      //   ));
     });
   }
 
@@ -193,22 +228,43 @@ class GroupStore {
       .finally(action('saveNewGroup finally', () => {
         this.clearNewSaveData();
         this.isSavingGroup = false;
-        console.log('post saving group allGroups', this.allGroups.values());
-        console.log('post saving group userGroups', this.usersGroups.values());
+        console.log('post saving group allGroups', values(this.allGroups));
+        console.log('post saving group userGroups', values(this.usersGroups));
       }));
   }
 
   @action addGroupToUserSet(userGroup, groupData){
     console.log('addGroupToUserSet groupData', groupData);
-    userGroup.set(
+
+    const group = new Group(
       groupData._id,
-      new Group(
-        groupData._id,
-        groupData.groupName,
-        groupData.numGLSlots,
-        groupData.department
-      ));
+      groupData.groupName,
+      groupData.numGLSlots,
+      groupData.department
+    );
+
+    if (userGroup.hash[groupData._id] === undefined){
+      userGroup.hash[groupData._id] = group;
+      userGroup.list.push(group);
+    }
+    else {
+      const newList = userGroup.list.filter((filterGroup) => {
+        return filterGroup.groupId !== groupData._id;
+      });
+      userGroup.hash[groupData._id] = group;
+      userGroup.list = newList;
+    }
+
+    // userGroup.set(
+    //   groupData._id,
+    //   new Group(
+    //     groupData._id,
+    //     groupData.groupName,
+    //     groupData.numGLSlots,
+    //     groupData.department
+    //   ));
     console.log('adding group to set', userGroup);
+    return userGroup;
   }
 
   @action editGroup(){
@@ -246,10 +302,19 @@ class GroupStore {
       }))
       .finally(action('deleteGroup finally',() => {
         this.deletingGroup = false;
-        this.allGroups.delete(this.deleteGroupId);
+        // this.allGroups.delete(this.deleteGroupId);
+        this.removeFromGroupList(this.allGroups, this.deleteGroupId);
         messagingStore.successfullyDeletedGroup = true;
         this.deleteGroupId = '';
       }));
+  }
+
+  @action removeFromGroupList(groupList, groupId){
+    delete groupList.hash[groupId];
+    const filtered = groupList.list.filter((group) => {
+      return group.groupId !== groupId;
+    });
+    groupList.list = filtered;
   }
 
   @action clearNewSaveData(){
@@ -262,6 +327,14 @@ class GroupStore {
 
   @action clearCurrentGroup(){
     this.currentGroup = {};
+  }
+
+  @action clearUsersGroups(){
+    this.usersGroups = {hash: {}, list: []};
+  }
+
+  @action clearAllGroups(){
+    this.allGroups = {hash: {}, list: []};
   }
 
 }

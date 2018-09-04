@@ -10,8 +10,6 @@ export default class AdminManageGroups extends React.Component {
 
   weeks = getGatelistWeeks(this.props.settingStore.settingValues.startWeekend, this.props.settingStore.settingValues.numWeeks);
 
-  groups = [];
-
   componentDidMount() {
     this.props.groupStore.loadAllGroups();
   }
@@ -23,10 +21,10 @@ export default class AdminManageGroups extends React.Component {
       );
     }
     else {
-      this.groups = this.props.groupStore.getAllGroups;
+      console.log('Admin Manage Groups this.props.groupStore.getAllGroups', this.props.groupStore.getAllGroups);
       return (
         <div>
-          <GroupList groups={this.groups} isAdmin={this.props.userStore.isSuperAdmin} />
+          <GroupList groups={this.props.groupStore.getAllGroups} isAdmin={this.props.userStore.isSuperAdmin} />
         </div>
       );
     }

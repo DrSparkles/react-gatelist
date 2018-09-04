@@ -1,18 +1,20 @@
 import React from "react";
 import { inject, observer } from 'mobx-react';
 import { GroupListItem } from "../Groups";
+import { computed } from 'mobx';
 
 @inject('groupStore', 'routerStore', 'userStore')
 @observer
 export class GroupList extends React.Component {
 
-  groups = this.props.groups;
-
   render(){
-    console.log('GroupList groups', this.groups);
-    console.log('GroupList groups length', this.groups.length);
 
-    const groupRows = this.groups.map((group, index) => {
+    const { groups } = this.props;
+
+    console.log('GroupList groups', groups);
+    console.log('GroupList groups length', groups.length);
+
+    const groupRows = groups.map((group, index) => {
       return <GroupListItem key={group.groupId} index={index} groupRow={group} />;
     });
 
