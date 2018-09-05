@@ -23,6 +23,7 @@ import Footer from "../../Footer/Footer";
 import AdminGatelist from "../AdminGatelist";
 import AdminUsers from '../AdminUsers';
 import AdminManageGroups from "../AdminManageGroups";
+import AdminSettings from "../AdminSettings";
 import DevTools from "mobx-react-devtools";
 
 @inject('commonStore', 'userStore', 'settingStore')
@@ -68,6 +69,7 @@ export default class Layout extends React.Component {
               <PrivateRoute path="/admin/gatelist/:groupId?" component={AdminGatelist} />
               <PrivateRoute path="/admin/users" component={AdminUsers} />
               <PrivateRoute path="/admin/manage-groups" component={AdminManageGroups} />
+              <PrivateRoute path="/admin/settings" component={AdminSettings} />
               <Route path="/home" component={Home} />
               <Route path="/" component={Home} />
             </Switch>

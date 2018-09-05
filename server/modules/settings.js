@@ -49,6 +49,9 @@ class Settings {
 
     const { startWeekend, numWeeks, defaultNumGLSlots } = values;
 
+    console.log('settingId', settingId);
+    console.log('updateSetting', values);
+
     if (settingId === undefined || settingId === '' ||
         startWeekend === undefined || startWeekend === '' ||
         numWeeks === undefined || numWeeks === '' ||
@@ -64,6 +67,9 @@ class Settings {
         defaultNumGLSlots: defaultNumGLSlots
       }
     };
+
+    console.log('updateQuery', updateQuery);
+
     this.settings_collection.update(query, updateQuery, (err, doc) => {
       if (err) return returnSimpleError(err, 400, cb);
       return returnSimpleResult(err, doc, cb);

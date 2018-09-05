@@ -1,7 +1,7 @@
 import React from "react";
 import { inject, observer } from 'mobx-react';
 import { GroupListItem } from "../Groups";
-import { computed } from 'mobx';
+
 
 @inject('groupStore', 'routerStore', 'userStore')
 @observer

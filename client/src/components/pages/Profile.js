@@ -3,7 +3,6 @@
  */
 
 import React from "react";
-// import moment from "moment";
 import { inject, observer } from 'mobx-react';
 import UserDetailsForm from "../UserDetailsForm/UserDetailsForm";
 

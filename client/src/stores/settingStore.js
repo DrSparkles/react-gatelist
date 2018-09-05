@@ -1,10 +1,18 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import agent from '../agent';
+import moment from "moment";
 
 class SettingStore {
 
   @observable loadingSettings = false;
   @observable isSavingSettings = false;
+
+  @observable newSettingValues = {
+    settingsId: '',
+    startWeekend: '',
+    numWeeks: '',
+    defaultNumGLSlots: ''
+  };
 
   @observable settingValues = {
     settingsId: '',
@@ -14,6 +22,17 @@ class SettingStore {
   };
 
   @observable errors;
+
+  @computed get simpleNewStartWeek(){
+    return moment(this.settingValues.startWeekend).format('YYYY-MM-DD');
+  }
+
+  @action setNewSettingValues(){
+    this.newSettingValues.settingsId = this.settingValues.settingsId;
+    this.newSettingValues.startWeekend = this.settingValues.startWeekend;
+    this.newSettingValues.numWeeks = this.settingValues.numWeeks;
+    this.newSettingValues.defaultNumGLSlots = this.settingValues.defaultNumGLSlots;
+  }
 
   /**
    * @returns {Promise<any>}
@@ -36,6 +55,7 @@ class SettingStore {
       }))
       .finally(action('loadSettings finally', () => {
         this.loadingSettings = false;
+        this.setNewSettingValues();
         console.log('finished loading settings', this.settingValues);
         console.log(this.settingValues.defaultNumGLSlots);
       }));
@@ -48,16 +68,16 @@ class SettingStore {
     this.settingValues.defaultNumGLSlots = settingData.defaultNumGLSlots;
   }
 
-  @action saveSettings() {
+  @action editSettings() {
     this.isSavingSettings = true;
     return agent.Settings
-      .editSettings(this.settingValues.settingsId, this.settingValues)
-      .catch(action('saveSettings error', (err) => {
+      .editSettings(this.settingValues.settingsId, this.newSettingValues)
+      .catch(action('editSettings error', (err) => {
         this.isSavingSettings = false;
         this.errors = err.response && err.response.body && err.response.body.message;
         throw err;
       }))
-      .finally(action('saveSettings finally', () => {
+      .finally(action('editSettings finally', () => {
         this.isSavingSettings = false;
       }));
   }
