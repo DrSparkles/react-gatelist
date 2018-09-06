@@ -33,7 +33,9 @@ class UserStore {
 
   @observable password;
 
-  @observable editingUser = {
+  @observable editingUser = false;
+
+  @observable userForEdit = {
     userId: '',
     firstName: '',
     lastName: '',
@@ -42,12 +44,28 @@ class UserStore {
     userType: ''
   };
 
+  @action loadSelectedUser(userId){
+    console.log('loadSelectedUser userId', userId);
+    const user = this.users.filter((u) => {
+      console.log('u.userId === userId', u.userId === userId);
+      return u.userId === userId;
+    });
+
+    console.log('user', user);
+    if (user.length && user.length === 1){
+      console.log('userObj', this.getUserObject(user[0]));
+      this.userForEdit = this.getUserObject(user[0]);
+    }
+
+    return this.userForEdit;
+  }
+
   @action setEditingUserFromCurrentUser(){
-    this.editingUser.userId = this.currentUser.userId;
-    this.editingUser.firstName = this.currentUser.firstName;
-    this.editingUser.lastName = this.currentUser.lastName;
-    this.editingUser.email = this.currentUser.email;
-    this.editingUser.userType = this.currentUser.userType;
+    this.userForEdit.userId = this.currentUser.userId;
+    this.userForEdit.firstName = this.currentUser.firstName;
+    this.userForEdit.lastName = this.currentUser.lastName;
+    this.userForEdit.email = this.currentUser.email;
+    this.userForEdit.userType = this.currentUser.userType;
   }
 
   @computed get isUser(){
@@ -60,6 +78,15 @@ class UserStore {
 
   @computed get isSuperAdmin(){
     return this.currentUser && this.currentUser.userType !== undefined && this.currentUser.userType === 'superadmin';
+  }
+
+  getUserTypeLabel(userType){
+    const userTypes = {
+      user: 'User',
+      admin: 'Admin',
+      superadmin: 'Super Admin'
+    };
+    return userTypes[userType];
   }
 
   @action loadAllUsers(){
@@ -142,7 +169,7 @@ class UserStore {
 
       // this.currentUser = results.user.result.user;
 
-      this.currentUser = this.setCurrentUser(results.user.result.user);
+      this.currentUser = this.getUserObject(results.user.result.user);
 
       console.log('pull user current user', this.currentUser);
 
@@ -158,20 +185,21 @@ class UserStore {
   @action saveUser(){
     this.loading = true;
     const user = {
-      userId: this.editingUser.userId,
-      firstName: this.editingUser.firstName,
-      lastName: this.editingUser.lastName,
-      email: this.editingUser.email
+      userId: this.userForEdit.userId,
+      firstName: this.userForEdit.firstName,
+      lastName: this.userForEdit.lastName,
+      email: this.userForEdit.email
     };
 
-    if (this.editingUser.userType){
-      user.userType = this.editingUser.userType;
+    if (this.userForEdit.userType){
+      user.userType = this.userForEdit.userType;
     }
 
-    if (this.editingUser.password !== ''){
-      user.password = this.editingUser.password;
+    if (this.userForEdit.password !== ''){
+      user.password = this.userForEdit.password;
     }
-    console.log('this.editingUser', this.editingUser);
+    console.log('this.userForEdit', this.userForEdit);
+    console.log('this.currentUser', this.currentUser);
     return agent.Users
       .save(this.currentUser.userId, this.currentUser, user)
       .catch(action('saveUser error', (err) => {
@@ -188,7 +216,38 @@ class UserStore {
       }));
   }
 
-  @action setCurrentUser(userData){
+  @action adminEditUser(){
+    this.loading = true;
+    const user = {
+      userId: this.userForEdit.userId,
+      firstName: this.userForEdit.firstName,
+      lastName: this.userForEdit.lastName,
+      email: this.userForEdit.email
+    };
+
+    if (this.userForEdit.userType){
+      user.userType = this.userForEdit.userType;
+    }
+
+    console.log('this.userForEdit', this.userForEdit);
+    console.log('this.currentUser', this.currentUser);
+
+    return agent.Users
+      .adminEdit(this.userForEdit.userId, user)
+      .catch(action('saveUser error', (err) => {
+        this.loading = false;
+        this.errors = err.response && err.response.body && err.response.body.message;
+        throw err;
+      }))
+      .finally(action('saveUser finally', () => {
+        this.loadAllUsers()
+          .finally(action('saveUser finally pullUser finally', () => {
+            this.loading = false;
+          }));
+      }));
+  }
+
+  getUserObject(userData){
     const currentUser = {};
     currentUser.userId = (userData._id) ? userData._id : userData.userId;
     currentUser.firstName = userData.firstName;
@@ -199,7 +258,7 @@ class UserStore {
   }
 
   @action clearEditingUser(){
-    this.editingUser = {
+    this.userForEdit = {
       userId: '',
       firstName: '',
       lastName: '',

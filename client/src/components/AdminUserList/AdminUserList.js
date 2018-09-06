@@ -21,6 +21,7 @@ export class AdminUserList extends React.Component {
     else {
 
       const userRows = this.props.userStore.users.map((user, index) => {
+        console.log('user for user row', user);
         return <AdminUserListItem user={user} key={index} />
       });
 
@@ -29,11 +30,11 @@ export class AdminUserList extends React.Component {
           <table className='table gatelist-table'>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>User Type</th>
-                <th>Groups</th>
-                <th>&nbsp;</th>
+                <th width='20%'>Name</th>
+                <th width='20%'>Email</th>
+                <th width='20%'>User Type</th>
+                <th width='20%'>Groups</th>
+                <th width='20%'>&nbsp;</th>
               </tr>
             </thead>
             <tbody>

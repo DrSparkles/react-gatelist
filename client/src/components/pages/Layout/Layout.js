@@ -53,7 +53,7 @@ export default class Layout extends React.Component {
     if (this.props.commonStore.appLoaded) {
       return (
         <div id='layout'>
-          <DevTools/>
+          {/*<DevTools/>*/}
           <Header />
           <div id='content'>
             <Switch>

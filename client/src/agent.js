@@ -110,6 +110,10 @@ const Users = {
     const url = "/users/" + userId;
     return requests.put(url, { originalUser, newUser });
   },
+  adminEdit: (userId, userData) => {
+    const url = "/users/admin/" + userId;
+    return requests.put(url, userData);
+  },
   getAllUsers: () => {
     const url = "/users";
     return requests.get(url);

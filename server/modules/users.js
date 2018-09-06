@@ -63,7 +63,7 @@ class User {
 
   saveUser(userId, originalUserData, newUesrData, cb){
 
-    const { originalFirstName, originalLastName, originalEmail } = originalUserData;
+    const { originalEmail } = originalUserData;
     const { firstName, lastName, email, password, userType } = newUesrData;
 
     // make sure our values are set
@@ -107,6 +107,39 @@ class User {
         if (err) return returnSimpleError(err, 400, cb);
         return returnSimpleResult(err, doc, cb);
       });
+    });
+  }
+
+  adminEditUser(userId, userData, cb){
+
+    const { firstName, lastName, email, userType } = userData;
+
+    // make sure our values are set
+    if (firstName === undefined || firstName === "" ||
+        lastName === undefined || lastName === "" ||
+        email === undefined || email === ""){
+      return returnSimpleError("all fields are required.", 400, cb);
+    }
+
+    const insertQuery = {
+      firstName,
+      lastName,
+      email
+    };
+
+    if (userType !== undefined){
+      insertQuery.userType = userType;
+    }
+
+    const query = {_id: getId(userId)};
+
+    const updateQuery = {
+      $set: insertQuery
+    };
+
+    this.user_collection.update(query, updateQuery, (err, doc) => {
+      if (err) return returnSimpleError(err, 400, cb);
+      return returnSimpleResult(err, doc, cb);
     });
   }
 

@@ -64,6 +64,18 @@ router.route('/:_id')
     });
   });
 
+router.route('/admin/:_id')
+  .put((req, res) => {
+    const userId = req.params._id;
+    const body = req.body;
+    console.log('userId', userId);
+    console.log('body', body);
+    usersModule.adminEditUser(userId, body, (err, docs) => {
+      if (err) return errorHandler(err, res);
+      return res.json(docs);
+    });
+  });
+
 /**
  * Get user account
  */

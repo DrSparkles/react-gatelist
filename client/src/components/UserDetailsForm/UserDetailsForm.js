@@ -59,7 +59,7 @@ class UserDetailsForm extends React.Component {
   handleFirstNameChange = (ev) => {
     if (this.editingProfile){
       console.log('trying to edit firstname', ev.target.value);
-      this.props.userStore.editingUser.firstName = ev.target.value;
+      this.props.userStore.userForEdit.firstName = ev.target.value;
     }
     else {
       this.props.authStore.setFirstName(ev.target.value);
@@ -68,7 +68,7 @@ class UserDetailsForm extends React.Component {
 
   handleLastNameChange = (ev) => {
     if (this.editingProfile){
-      this.props.userStore.editingUser.lastName = ev.target.value;
+      this.props.userStore.userForEdit.lastName = ev.target.value;
     }
     else {
       this.props.authStore.setLastName(ev.target.value);
@@ -77,7 +77,7 @@ class UserDetailsForm extends React.Component {
 
   handleEmailChange = (ev) => {
     if (this.editingProfile){
-      this.props.userStore.editingUser.email = ev.target.value;
+      this.props.userStore.userForEdit.email = ev.target.value;
     }
     else {
       this.props.authStore.setEmail(ev.target.value);
@@ -89,7 +89,7 @@ class UserDetailsForm extends React.Component {
 
     if (this.editingProfile){
       this.props.userStore.password = ev.target.value;
-      this.props.userStore.editingUser.password = ev.target.value;
+      this.props.userStore.userForEdit.password = ev.target.value;
     }
     else {
       this.props.authStore.setPassword(ev.target.value);
@@ -117,10 +117,10 @@ class UserDetailsForm extends React.Component {
     let loading;
     if (this.editingProfile){
       console.log('setting user var');
-      firstName = this.props.userStore.editingUser.firstName;
-      lastName = this.props.userStore.editingUser.lastName;
-      email = this.props.userStore.editingUser.email;
-      password = this.props.userStore.editingUser.password;
+      firstName = this.props.userStore.userForEdit.firstName;
+      lastName = this.props.userStore.userForEdit.lastName;
+      email = this.props.userStore.userForEdit.email;
+      password = this.props.userStore.userForEdit.password;
       loading = this.props.userStore.loading;
     }
     else {
@@ -131,7 +131,7 @@ class UserDetailsForm extends React.Component {
       loading = this.props.authStore.loading;
     }
 
-    console.log('this.props.userStore.editingUser', this.props.userStore.editingUser);
+    console.log('this.props.userStore.userForEdit', this.props.userStore.userForEdit);
     console.log('firstName, lastName, email, loading', firstName, lastName, email, loading);
 
     return (
