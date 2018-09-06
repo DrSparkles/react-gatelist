@@ -10,7 +10,7 @@ export default class AdminUsers extends React.Component {
 
     return (
       <div id='Users'>
-        <h2>Users</h2>
+        <h2>Manage Users</h2>
         <AdminUserList />
       </div>
     );

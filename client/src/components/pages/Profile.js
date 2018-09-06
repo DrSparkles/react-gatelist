@@ -32,7 +32,7 @@ export default class Profile extends React.Component {
 
     return (
       <div id='Profile'>
-        <h2>Profile</h2>
+        <h2>My Profile</h2>
         <div className='profile-container'>
           <UserDetailsForm editableUser={user} handleSaveUser={this.handleSaveUser} />
         </div>

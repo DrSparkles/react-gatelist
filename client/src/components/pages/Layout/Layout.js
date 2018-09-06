@@ -8,6 +8,12 @@ import { inject, observer } from 'mobx-react';
 
 import '../../../styles/masterStyle.css';
 
+/*
+import Settings from "../Settings";
+import Users from "../Users";
+import ManageGroups from "../ManageGroups";
+*/
+
 import Header from '../../Header';
 import Home from '../Home';
 import Login from '../Login';
@@ -15,10 +21,7 @@ import Register from '../Register';
 import PrivateRoute from "../../PrivateRoute";
 import Groups from "../Groups";
 import Profile from "../Profile";
-import Settings from "../Settings";
-import Users from "../Users";
 import Gatelist from "../Gatelist";
-import ManageGroups from "../ManageGroups";
 import Footer from "../../Footer/Footer";
 import AdminGatelist from "../AdminGatelist";
 import AdminUsers from '../AdminUsers';
@@ -59,12 +62,8 @@ export default class Layout extends React.Component {
             <Switch>
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
-              <PrivateRoute path="/add-group" component={Groups} />
               <PrivateRoute path="/groups/:groupId?" component={Groups} />
               <PrivateRoute path="/profile" component={Profile} />
-              <PrivateRoute path="/manage-groups/:groupId?" component={ManageGroups} />
-              <PrivateRoute path="/settings" component={Settings} />
-              <PrivateRoute path="/users" component={Users} />
               <PrivateRoute path="/gatelist/:groupId?" component={Gatelist} />
               <PrivateRoute path="/admin/gatelist/:groupId?" component={AdminGatelist} />
               <PrivateRoute path="/admin/users" component={AdminUsers} />

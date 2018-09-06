@@ -23,7 +23,8 @@ export default class AdminManageGroups extends React.Component {
     else {
       console.log('Admin Manage Groups this.props.groupStore.getAllGroups', this.props.groupStore.getAllGroups);
       return (
-        <div>
+        <div id='manage-groups'>
+          <h2>Manage Groups</h2>
           <GroupList groups={this.props.groupStore.getAllGroups} isAdmin={this.props.userStore.isSuperAdmin} />
         </div>
       );

@@ -78,7 +78,7 @@ const SuperAdminOptions = props => {
     return (
       <div className='nav-list-container'>
         <ul className={props.navClass}>
-          <li><Link to='/admin/users'>Users</Link></li>
+          <li><Link to='/admin/users'>Manage Users</Link></li>
           <li><Link to='/admin/manage-groups'>Manage Groups</Link></li>
           <li><Link to='/admin/settings'>Settings</Link></li>
         </ul>

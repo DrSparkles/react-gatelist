@@ -13,6 +13,7 @@ export default class AdminSettings extends React.Component {
   render(){
     return (
       <div id='AdminSettings'>
+        <h2>Manage Settings</h2>
         <SettingsForm />
       </div>
     );
