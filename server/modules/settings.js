@@ -96,46 +96,31 @@ class Settings {
   }
 
   /**
-   * Create a new setting after checking that all required values are present and a user
-   * with that name doesn't already exist
-   * @param userId
+   * Create the starting settings object
    * @param settingValues
    * @param cb
    * @returns {*}
+   */
+   createNew(settingValues, cb){
+    const { startWeekend, numWeeks, defaultNumGLSlots } = settingValues;
 
-   createNew(userId, settingValues, cb){
-    const { settingName, numGLSlots, department } = settingValues;
-
-    if (userId === undefined || userId === '' ||
-        settingName === undefined || settingName === '' ||
-        numGLSlots === undefined || numGLSlots === '' ||
-        department === undefined || department === ''){
-      return returnSimpleError("all fields are required.", 400, cb);
+    if (startWeekend === undefined || startWeekend === '' ||
+        numWeeks === undefined || numWeeks === '' ||
+        defaultNumGLSlots === undefined || defaultNumGLSlots === ''){
+      return returnSimpleError("Missing required information to create settings", 400, cb);
     }
 
-    this.settings_collection.find({settingName}, (err, settingsDoc) => {
+    const insertQuery = {
+      startWeekend: startWeekend,
+      numWeeks: numWeeks,
+      defaultNumGLSlots: defaultNumGLSlots
+    };
 
+    this.settings_collection.insert(insertQuery, (err, doc) => {
       if (err) return returnSimpleError(err, 400, cb);
-
-      if (settingsDoc.length){
-        return returnSimpleError("That setting already exists!", 400, cb);
-      }
-
-      const insertQuery = {
-        userId,
-        settingName,
-        numGLSlots,
-        department
-      };
-
-      this.settings_collection.insert(insertQuery, (err, doc) => {
-        if (err) return returnSimpleError(err, 400, cb);
-        return returnSimpleResult(null, doc, cb);
-      });
-
+      return returnSimpleResult(err, doc, cb);
     });
   }
-   */
 
 }
 

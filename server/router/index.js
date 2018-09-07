@@ -9,4 +9,6 @@ module.exports = function(app){
   app.use('/api/settings', require('./routes/settings'));
   app.use('/api/gatelist', require('./routes/gatelist'));
 
+  app.use('/script/setup', require('./routes/setup'));
+
 };

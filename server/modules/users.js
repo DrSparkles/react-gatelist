@@ -24,7 +24,7 @@ class User {
    * @returns {*}
    */
   createNew(userValues, cb){
-    const { firstName, lastName, email, password } = userValues;
+    const { firstName, lastName, email, password, userType } = userValues;
 
     // make sure our values are set
     if (firstName === undefined || firstName === "" ||
@@ -52,6 +52,10 @@ class User {
         password: hash,
         userType: 'user',
       };
+
+      if (userType !== undefined){
+        insertQuery.userType = userType;
+      }
 
       // save our user with hashed password
       this.user_collection.insert(insertQuery, (err, doc) => {
