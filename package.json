@@ -12,7 +12,8 @@
     "start-server": "npm-run-all -s build server",
     "server": "nodemon build/server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run start-server\" \"npm run client\"",
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js",
+    "start": "concurrently --kill-others-on-fail \"npm run start-server\" \"npm run client\""
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
