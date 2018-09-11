@@ -9,11 +9,12 @@
   "license": "SEE LICENSE IN license.md",
   "scripts": {
     "client": "cd client && npm start",
+    "install-and-run-client": "cd client && npm install && npm start",
     "start-server": "npm-run-all -s build server",
     "server": "nodemon build/server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run start-server\" \"npm run client\"",
     "build": "webpack --config webpack.config.js",
-    "start": "concurrently --kill-others-on-fail \"npm run start-server\" \"npm run client\""
+    "start": "concurrently --kill-others-on-fail \"npm run start-server\" \"npm run install-and-run-client\""
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
