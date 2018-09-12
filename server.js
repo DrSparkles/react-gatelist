@@ -11,7 +11,9 @@ import path from 'path';
 
 import authConfig from './server/config/auth.config';
 
-const { NODE_ENV = 'development', PORT = 8080 } = process.env;
+const PORT = 8080;
+
+const { NODE_ENV = 'development' } = process.env;
 
 const app = express();
 
