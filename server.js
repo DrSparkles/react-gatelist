@@ -11,7 +11,9 @@ import path from 'path';
 
 import authConfig from './server/config/auth.config';
 
-const { NODE_ENV = 'development', PORT = 8080 } = process.env;
+const PORT = 8080;
+
+const { NODE_ENV = 'development' } = process.env;
 
 const app = express();
 
@@ -35,14 +37,5 @@ import {routes as apiRouter} from './server/router';
 apiRouter(app);
 
 app.use(historyFallback());
-
-if (process.env.NODE_ENV === 'production') {
-  // Serve any static files
-  app.use(express.static(path.join(__dirname, 'client/build')));
-  // Handle React routing, return all requests to React app
-  app.get('*', function(req, res) {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-  });
-}
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
