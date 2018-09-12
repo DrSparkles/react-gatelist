@@ -1,5 +1,7 @@
 // load environment variables
-require('dotenv').config();
+//require('dotenv').config();
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -27,7 +29,9 @@ app.get('/api/hello', (req, res) => {
 });
 
 // set up routing
-var apiRouter = require('./server/router')(app);
+//var apiRouter = require('./server/router')(app);
+import {routes as apiRouter} from './server/router';
+apiRouter(app);
 
 app.use(historyFallback());
 
