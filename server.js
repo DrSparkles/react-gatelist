@@ -7,6 +7,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import historyFallback from 'connect-history-api-fallback';
 import morgan from 'morgan';
+import path from 'path';
 
 import authConfig from './server/config/auth.config';
 
