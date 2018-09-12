@@ -99,4 +99,5 @@ router.route('/all')
     });
   });
 
-module.exports = router;
+//module.exports = router;
+export { router };

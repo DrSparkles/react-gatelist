@@ -1,11 +1,14 @@
 import dbConfig from '../config/db.config';
-import mongo from 'mongodb';
 import monk from 'monk';
+import mongo from 'mongodb';
 
 /**
  * Connect to our database
  * @type {Promise<"monk".IMonkManager> & "monk".IMonkManager}
  */
+// console.log('dbConfig.connection.host', dbConfig);
+// console.log('dbConfig.connection.host', dbConfig.connection);
+// console.log('dbConfig.connection.host', dbConfig.connection.host);
 export const db = monk(dbConfig.connection.host);
 
 /**

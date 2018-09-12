@@ -75,4 +75,5 @@ router.route('/:_id')
     });
   });
 
-module.exports = router;
+//module.exports = router;
+export { router };

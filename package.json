@@ -17,6 +17,8 @@
     "start": "concurrently --kill-others-on-fail \"npm run start-server\" \"npm run install-and-run-client\""
   },
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
+    "babel-loader": "^8.0.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "connect-history-api-fallback": "^1.5.0",
@@ -35,9 +37,10 @@
     "superagent-promise": "^1.1.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
     "async": "^2.6.1",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
     "chai": "^4.1.2",
     "concurrently": "^3.6.0",
     "mocha": "^5.2.0",
