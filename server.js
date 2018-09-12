@@ -10,9 +10,9 @@ import morgan from 'morgan';
 
 import authConfig from './server/config/auth.config';
 
-const PORT = 47261;
+//const PORT = 47261;
 
-const { NODE_ENV = 'development' } = process.env;
+const { NODE_ENV = 'development', PORT = 8080 } = process.env;
 
 const app = express();
 

@@ -14,7 +14,8 @@
     "server": "nodemon build/server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run start-server\" \"npm run client\"",
     "build": "webpack --config webpack.config.js",
-    "start": "concurrently --kill-others-on-fail \"npm run start-server\" \"npm run install-and-run-client\""
+    "start": "npm run start-server",
+    "heroku-postbuild": "cd client && npm install && npm start"
   },
   "dependencies": {
     "@babel/cli": "^7.0.0",
