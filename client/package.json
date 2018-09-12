@@ -52,5 +52,5 @@
     "semantic-ui-react": "^0.82.3",
     "url-parse": "^1.4.3"
   },
-  "proxy": "http://localhost:47261/"
+  "proxy": "http://localhost:8080/"
 }
