@@ -50,8 +50,6 @@
     "semantic-ui-react": "^0.82.3",
     "url-parse": "^1.4.3"
   },
-  "devDependencies": {
-
-  },
+  "devDependencies": {},
   "proxy": "http://localhost:8080/"
 }
